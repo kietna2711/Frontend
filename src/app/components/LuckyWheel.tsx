@@ -90,8 +90,12 @@ const LuckyWheel: React.FC<{ visible: boolean; onClose: () => void }> = ({
 
   useEffect(() => {
     Promise.all([
-      fetch("http://localhost:3000/products").then((res) => res.json()),
-      fetch("http://localhost:3000/vouchers").then((res) => res.json()),
+      fetch("https://deploy-nodejs-vqqq.onrender.com/products").then((res) =>
+        res.json()
+      ),
+      fetch("https://deploy-nodejs-vqqq.onrender.com/vouchers").then((res) =>
+        res.json()
+      ),
     ]).then(([products, vouchers]: [Product[], Voucher[]]) => {
       const now = new Date();
 
@@ -257,17 +261,20 @@ const LuckyWheel: React.FC<{ visible: boolean; onClose: () => void }> = ({
 
   // Gửi mail khi trúng voucher
   const sendVoucherMail = async (email: string, voucher: any) => {
-    await fetch("http://localhost:3000/users/send-voucher-mail", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        email,
-        voucherCode: voucher.code || voucher.discountCode,
-        voucherName: voucher.label,
-        description: voucher.description || "",
-        productIds: voucher.productIds, // truyền thêm productIds
-      }),
-    });
+    await fetch(
+      "https://deploy-nodejs-vqqq.onrender.com/users/send-voucher-mail",
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email,
+          voucherCode: voucher.code || voucher.discountCode,
+          voucherName: voucher.label,
+          description: voucher.description || "",
+          productIds: voucher.productIds, // truyền thêm productIds
+        }),
+      }
+    );
   };
 
   // ...existing code...

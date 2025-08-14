@@ -34,7 +34,7 @@ export default function Verify() {
       return;
     }
     // Gửi lại OTP cho đăng ký
-    await fetch("http://localhost:3000/users/send-otp", {
+    await fetch("https://deploy-nodejs-vqqq.onrender.com/users/send-otp", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email, type: "register" }),
@@ -85,11 +85,14 @@ export default function Verify() {
       return;
     }
     // Gửi OTP lên backend để xác thực email đăng ký
-    const res = await fetch("http://localhost:3000/users/verify-otp-register", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, otp }),
-    });
+    const res = await fetch(
+      "https://deploy-nodejs-vqqq.onrender.com/users/verify-otp-register",
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, otp }),
+      }
+    );
     const data = await res.json();
     if (res.ok) {
       showMessage.success("Xác thực email thành công! Bạn có thể đăng nhập.");

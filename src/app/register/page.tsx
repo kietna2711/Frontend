@@ -84,19 +84,22 @@ export default function Register() {
 
     try {
       // Thay đổi URL backend đúng với server của bạn
-      const res = await fetch("http://localhost:3000/users/register", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email,
-          password,
-          firstName,
-          lastName,
-          username,
-        }),
-      });
+      const res = await fetch(
+        "https://deploy-nodejs-vqqq.onrender.com/users/register",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            email,
+            password,
+            firstName,
+            lastName,
+            username,
+          }),
+        }
+      );
 
       const data = await res.json();
 
@@ -257,7 +260,7 @@ export default function Register() {
               type="button"
               onClick={() =>
                 (window.location.href =
-                  "http://localhost:3000/users/auth/google")
+                  "https://deploy-nodejs-vqqq.onrender.com/users/auth/google")
               }
             >
               <img

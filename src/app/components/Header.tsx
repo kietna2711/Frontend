@@ -239,7 +239,7 @@ const Header: React.FC<Props> = ({ categories, onOpenWheel }) => {
           <div className={styles["logo-wrap"]}>
             <a href="/">
               <img
-                src="http://localhost:3000/images/logoXP.png"
+                src="https://deploy-nodejs-vqqq.onrender.com/images/logoXP.png"
                 alt="Mimi Bear Logo"
               />
             </a>
@@ -275,7 +275,7 @@ const Header: React.FC<Props> = ({ categories, onOpenWheel }) => {
                       onMouseDown={() => handleSuggestionClick(prod._id)}
                     >
                       <img
-                        src={`http://localhost:3000/images/${prod.images[0]}`}
+                        src={`https://deploy-nodejs-vqqq.onrender.com/images/${prod.images[0]}`}
                         alt={prod.name}
                         className={styles.suggestionImg}
                       />
@@ -580,7 +580,7 @@ const Header: React.FC<Props> = ({ categories, onOpenWheel }) => {
                     onClick={() => handleSuggestionClick(prod._id)}
                   >
                     <img
-                      src={`http://localhost:3000/images/${prod.images[0]}`}
+                      src={`https://deploy-nodejs-vqqq.onrender.com/images/${prod.images[0]}`}
                       alt={prod.name}
                       className={styles.suggestionImg}
                     />

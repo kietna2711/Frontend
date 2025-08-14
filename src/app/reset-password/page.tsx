@@ -67,11 +67,14 @@ export default function ResetPassword() {
     // Debug log
     console.log("RESET PASSWORD gửi:", { email, otp, password });
 
-    const res = await fetch("http://localhost:3000/users/reset-password", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, otp, password }),
-    });
+    const res = await fetch(
+      "https://deploy-nodejs-vqqq.onrender.com/users/reset-password",
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, otp, password }),
+      }
+    );
     const data = await res.json();
     if (res.ok) {
       setMessage({

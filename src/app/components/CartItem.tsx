@@ -54,7 +54,7 @@ export default function CartItem({ item }: CartItemProps) {
         >
           <div style={{ position: "relative", display: "inline-block" }}>
             <img
-              src={`http://localhost:3000/images/${product.images[0]}`}
+              src={`https://deploy-nodejs-vqqq.onrender.com/images/${product.images[0]}`}
               alt={product.name}
               className={styles.productImg}
             />

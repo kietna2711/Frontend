@@ -36,14 +36,17 @@ const ReviewForm = ({ productId }: { productId: string }) => {
     }
 
     try {
-      const res = await fetch("http://localhost:3000/reviews", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({ productId, rating, comment }),
-      });
+      const res = await fetch(
+        "https://deploy-nodejs-vqqq.onrender.com/reviews",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ productId, rating, comment }),
+        }
+      );
 
       if (res.ok) {
         toast.success("Cảm ơn bạn đã gửi đánh giá >.<", {

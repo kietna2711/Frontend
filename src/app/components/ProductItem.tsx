@@ -88,9 +88,12 @@ export default function ProductItem({ product }: { product: Products }) {
   // Load trạng thái yêu thích
   useEffect(() => {
     if (isLoggedIn && userId && token) {
-      fetch(`http://localhost:3000/favorites?userId=${userId}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      })
+      fetch(
+        `https://deploy-nodejs-vqqq.onrender.com/favorites?userId=${userId}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      )
         .then((res) => (res.ok ? res.json() : []))
         .then((favList) => {
           setIsFavorite(
@@ -115,7 +118,7 @@ export default function ProductItem({ product }: { product: Products }) {
     userId: string,
     token: string
   ) => {
-    await fetch("http://localhost:3000/favorites", {
+    await fetch("https://deploy-nodejs-vqqq.onrender.com/favorites", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -132,7 +135,7 @@ export default function ProductItem({ product }: { product: Products }) {
     token: string
   ) => {
     await fetch(
-      `http://localhost:3000/favorites/${productId}?userId=${userId}`,
+      `https://deploy-nodejs-vqqq.onrender.com/favorites/${productId}?userId=${userId}`,
       {
         method: "DELETE",
         headers: {
@@ -197,16 +200,16 @@ export default function ProductItem({ product }: { product: Products }) {
         <a href={`/products/${product._id}`}>
           <div className={styles.image_link}>
             <img
-              src={`http://localhost:3000/images/${product.images[0]}`}
+              src={`https://deploy-nodejs-vqqq.onrender.com/images/${product.images[0]}`}
               alt={product.name}
             />
             <img
-              src={`http://localhost:3000/images/${product.images[1]}`}
+              src={`https://deploy-nodejs-vqqq.onrender.com/images/${product.images[1]}`}
               className={styles.image_hover}
               alt={`${product.name} Hover`}
             />
             <img
-              src="http://localhost:3000/images/logoXP.png"
+              src="https://deploy-nodejs-vqqq.onrender.com/images/logoXP.png"
               className={styles.logo_left}
               alt="Logo"
             />
@@ -215,13 +218,13 @@ export default function ProductItem({ product }: { product: Products }) {
 
         <button className={styles.buy_now_btn} onClick={handleBuyNow}>
           <img
-            src="http://localhost:3000/images/button.png"
+            src="https://deploy-nodejs-vqqq.onrender.com/images/button.png"
             className={styles.bear_left}
             alt="Bear Left"
           />
           MUA NGAY
           <img
-            src="http://localhost:3000/images/button.png"
+            src="https://deploy-nodejs-vqqq.onrender.com/images/button.png"
             className={styles.bear_right}
             alt="Bear Right"
           />
@@ -237,11 +240,11 @@ export default function ProductItem({ product }: { product: Products }) {
           {selectedPrice.toLocaleString("vi-VN")} đ
         </div>
         {/* Nếu có nhiều biến thể và giá khác nhau thì hiển thị giá cũ */}
-        {hasVariants && minPrice !== maxPrice && (
+        {/* {hasVariants && minPrice !== maxPrice && (
           <div className={styles.price_sale}>
             {maxPrice.toLocaleString("vi-VN")} đ
           </div>
-        )}
+        )} */}
       </div>
 
       {/* Size chỉ hiển thị nếu có variants */}

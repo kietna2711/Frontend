@@ -8,7 +8,7 @@ export default function Footer() {
         {/* Cột 1 */}
         <div className={styles["footer-col"]}>
           <img
-            src="http://localhost:3000/images/logoXP.png"
+            src="https://deploy-nodejs-vqqq.onrender.com/images/logoXP.png"
             alt="MiMiBear Logo"
             className={styles["footer-logo"]}
           />
@@ -40,26 +40,32 @@ export default function Footer() {
           <div className={styles["social-icons"]}>
             <a href="#">
               <img
-                src="http://localhost:3000/images/iconfb.png"
+                src="https://deploy-nodejs-vqqq.onrender.com/images/iconfb.png"
                 alt="Facebook"
               />
             </a>
             <a href="#">
-              <img src="http://localhost:3000/images/iconzalo.png" alt="Zalo" />
-            </a>
-            <a href="#">
-              <img src="http://localhost:3000/images/icontt.png" alt="TikTok" />
+              <img
+                src="https://deploy-nodejs-vqqq.onrender.com/images/iconzalo.png"
+                alt="Zalo"
+              />
             </a>
             <a href="#">
               <img
-                src="http://localhost:3000/images/iconyt.png"
+                src="https://deploy-nodejs-vqqq.onrender.com/images/icontt.png"
+                alt="TikTok"
+              />
+            </a>
+            <a href="#">
+              <img
+                src="https://deploy-nodejs-vqqq.onrender.com/images/iconyt.png"
                 alt="YouTube"
               />
             </a>
           </div>
           <a href="#">
             <img
-              src="http://localhost:3000/images/bct.webp"
+              src="https://deploy-nodejs-vqqq.onrender.com/images/bct.webp"
               alt="Đã thông báo Bộ Công Thương"
               className={styles["bct-logo"]}
             />
@@ -83,7 +89,7 @@ export default function Footer() {
           <h3>PHƯƠNG THỨC THANH TOÁN</h3>
           <div className={styles["payment-icons"]}>
             <img
-              src="http://localhost:3000/images/thanhtoan.png"
+              src="https://deploy-nodejs-vqqq.onrender.com/images/thanhtoan.png"
               alt="Thanh toán"
             />
           </div>

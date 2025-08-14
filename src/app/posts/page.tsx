@@ -25,9 +25,12 @@ export default function AllPostsPage() {
   useEffect(() => {
     const fetchAllPosts = async () => {
       try {
-        const res = await fetch("http://localhost:3000/api/posts", {
-          cache: "no-store",
-        });
+        const res = await fetch(
+          "https://deploy-nodejs-vqqq.onrender.com/api/posts",
+          {
+            cache: "no-store",
+          }
+        );
 
         if (!res.ok) throw new Error("Failed to fetch posts");
 
@@ -59,7 +62,7 @@ export default function AllPostsPage() {
             <div key={post._id} className="service-card">
               <img
                 className="service-img"
-                src={`http://localhost:3000/images/${
+                src={`https://deploy-nodejs-vqqq.onrender.com/images/${
                   post.img || "default.jpg"
                 }`}
                 alt={post.title}

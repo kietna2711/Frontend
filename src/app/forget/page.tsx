@@ -27,11 +27,14 @@ export default function Forget() {
     validateField("email", email);
     if (errors.email) return;
 
-    const res = await fetch("http://localhost:3000/users/forgot-password", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email }),
-    });
+    const res = await fetch(
+      "https://deploy-nodejs-vqqq.onrender.com/users/forgot-password",
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      }
+    );
     const data = await res.json();
     if (res.ok) {
       showMessage.success("Đã gửi mã xác thực về email!");

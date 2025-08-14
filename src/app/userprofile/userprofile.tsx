@@ -376,12 +376,15 @@ const UserProfile: React.FC = () => {
     }
 
     // Gọi API để luôn lấy user + profile mới nhất từ server
-    fetch(`http://localhost:3000/api/usersProfile/username/${username}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-    })
+    fetch(
+      `https://deploy-nodejs-vqqq.onrender.com/api/usersProfile/username/${username}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      }
+    )
       .then((res) => {
         if (!res.ok) throw new Error("Không thể lấy thông tin người dùng");
         return res.json();
@@ -724,14 +727,17 @@ const UserProfile: React.FC = () => {
 
     const method = hasProfile ? "PUT" : "POST";
 
-    fetch(`http://localhost:3000/api/usersProfile/${username}`, {
-      method,
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify(profilePayload),
-    })
+    fetch(
+      `https://deploy-nodejs-vqqq.onrender.com/api/usersProfile/${username}`,
+      {
+        method,
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(profilePayload),
+      }
+    )
       .then(async (res) => {
         if (!res.ok) {
           const err = await res.json().catch(() => ({}));
@@ -742,7 +748,7 @@ const UserProfile: React.FC = () => {
       .then(() => {
         // ✅ Gọi lại API để lấy user mới nhất từ server
         return fetch(
-          `http://localhost:3000/api/usersProfile/username/${username}`,
+          `https://deploy-nodejs-vqqq.onrender.com/api/usersProfile/username/${username}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -801,7 +807,7 @@ const UserProfile: React.FC = () => {
       return;
     }
 
-    fetch(`http://localhost:3000/users/change-password`, {
+    fetch(`https://deploy-nodejs-vqqq.onrender.com/users/change-password`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

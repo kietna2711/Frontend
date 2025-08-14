@@ -38,11 +38,15 @@ const ReviewList: React.FC<ReviewListProps> = ({ productId }) => {
     const fetchReviews = () => {
       if (isFirstLoad.current) setLoading(true);
 
-      fetch("http://localhost:3000/reviews?productId=" + productId, {
-        headers: {
-          Authorization: "Bearer " + localStorage.getItem("token"),
-        },
-      })
+      fetch(
+        "https://deploy-nodejs-vqqq.onrender.com/reviews?productId=" +
+          productId,
+        {
+          headers: {
+            Authorization: "Bearer " + localStorage.getItem("token"),
+          },
+        }
+      )
         .then((res) => res.json())
         .then((data) => {
           // Đảm bảo data.reviews luôn là mảng, tránh lỗi .length của undefined
@@ -113,7 +117,7 @@ const ReviewList: React.FC<ReviewListProps> = ({ productId }) => {
             {reviewsToShow.length === 0 && (
               <div style={{ margin: "auto", textAlign: "center" }}>
                 <img
-                  src="http://localhost:3000/images/binhluan.jpg"
+                  src="https://deploy-nodejs-vqqq.onrender.com/images/binhluan.jpg"
                   alt=""
                   width={400}
                 />

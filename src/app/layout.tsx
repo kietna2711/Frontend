@@ -22,7 +22,9 @@ export default function RootLayout({
   useEffect(() => {
     async function fetchCategories() {
       try {
-        const res = await fetch("http://localhost:3000/categories");
+        const res = await fetch(
+          "https://deploy-nodejs-vqqq.onrender.com/categories"
+        );
         if (!res.ok) throw new Error("Failed to fetch");
         const data = await res.json();
         setCategories(data);
@@ -38,7 +40,10 @@ export default function RootLayout({
     <html lang="vi">
       <head>
         <title>MimiBear Shop</title>
-        <link rel="icon" href="http://localhost:3000/images/logoXP.png" />
+        <link
+          rel="icon"
+          href="https://deploy-nodejs-vqqq.onrender.com/images/logoXP.png"
+        />
       </head>
       <body>
         <Providers>
@@ -73,7 +78,7 @@ export default function RootLayout({
             title="Vòng quay may mắn"
           >
             <img
-              src="http://localhost:3000/images/vqmm.png"
+              src="https://deploy-nodejs-vqqq.onrender.com/images/vqmm.png"
               alt="Vòng quay may mắn"
               style={{ width: 56, height: 56 }}
             />

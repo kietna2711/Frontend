@@ -57,7 +57,7 @@ export default function ReportManagement() {
   const [ordersCountByMonth, setOrdersCountByMonth] = useState<number[]>([]);
 
   useEffect(() => {
-    fetch("http://localhost:3000/orders")
+    fetch("https://deploy-nodejs-vqqq.onrender.com/orders")
       .then((res) => res.json())
       .then((data) => {
         setOrders(data);
@@ -106,7 +106,7 @@ export default function ReportManagement() {
   };
 
   useEffect(() => {
-    fetch("http://localhost:3000/api/statistics/revenue")
+    fetch("https://deploy-nodejs-vqqq.onrender.com/api/statistics/revenue")
       .then((res) => res.json())
       .then((data) => {
         // Lấy tháng hiện tại
@@ -124,16 +124,16 @@ export default function ReportManagement() {
   }, []);
 
   useEffect(() => {
-    fetch("http://localhost:3000/products")
+    fetch("https://deploy-nodejs-vqqq.onrender.com/products")
       .then((res) => res.json())
       .then((data) => {
         setProducts(data);
         setOutOfStockProducts(data.filter((p: any) => p.quantity === 0));
       });
-    fetch("http://localhost:3000/users")
+    fetch("https://deploy-nodejs-vqqq.onrender.com/users")
       .then((res) => res.json())
       .then(setUsers);
-    fetch("http://localhost:3000/orders")
+    fetch("https://deploy-nodejs-vqqq.onrender.com/orders")
       .then((res) => res.json())
       .then((data) => {
         setOrders(data);
@@ -172,7 +172,7 @@ export default function ReportManagement() {
   }, [users]);
 
   useEffect(() => {
-    fetch("http://localhost:3000/orderdetails")
+    fetch("https://deploy-nodejs-vqqq.onrender.com/orderdetails")
       .then((res) => res.json())
       .then((data) => {
         console.log("orderdetails api data:", data);

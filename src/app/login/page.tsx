@@ -31,11 +31,14 @@ export default function Login() {
     }
 
     try {
-      const res = await fetch("http://localhost:3000/users/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
-      });
+      const res = await fetch(
+        "https://deploy-nodejs-vqqq.onrender.com/users/login",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, password }),
+        }
+      );
       const data = await res.json();
 
       if (!res.ok) {
@@ -140,7 +143,8 @@ export default function Login() {
             className="google-btn"
             type="button"
             onClick={() =>
-              (window.location.href = "http://localhost:3000/users/auth/google")
+              (window.location.href =
+                "https://deploy-nodejs-vqqq.onrender.com/users/auth/google")
             }
           >
             <img

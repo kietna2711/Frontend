@@ -81,7 +81,7 @@ export default function UserManagement() {
 
   // Lấy danh sách user từ backend
   useEffect(() => {
-    fetch("http://localhost:3000/users") // Sửa đúng port backend
+    fetch("https://deploy-nodejs-vqqq.onrender.com/users") // Sửa đúng port backend
       .then((res) => res.json())
       .then((data) => {
         // Nếu user từ backend không có các trường checked/status/dob/username thì cần xử lý thêm
@@ -107,7 +107,7 @@ export default function UserManagement() {
     const user = users[idx];
     try {
       const res = await fetch(
-        `http://localhost:3000/users/${user._id}/toggle-visibility`,
+        `https://deploy-nodejs-vqqq.onrender.com/users/${user._id}/toggle-visibility`,
         {
           method: "PATCH",
           headers: { "Content-Type": "application/json" },
@@ -127,13 +127,16 @@ export default function UserManagement() {
 
   const handleToggleRole = async (userId: string, currentRole: string) => {
     try {
-      const res = await fetch(`http://localhost:3000/users/${userId}/role`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          role: currentRole === "admin" ? "user" : "admin",
-        }),
-      });
+      const res = await fetch(
+        `https://deploy-nodejs-vqqq.onrender.com/users/${userId}/role`,
+        {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            role: currentRole === "admin" ? "user" : "admin",
+          }),
+        }
+      );
       if (!res.ok) throw new Error("Cập nhật quyền thất bại");
       const data = await res.json();
       setUsers((users) =>

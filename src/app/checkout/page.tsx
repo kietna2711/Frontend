@@ -75,7 +75,7 @@ const CheckoutPage: React.FC = () => {
 
   useEffect(() => {
     if (productId) {
-      fetch(`http://localhost:3000/products/${productId}`)
+      fetch(`https://deploy-nodejs-vqqq.onrender.com/products/${productId}`)
         .then((res) => res.json())
         .then((data) => {
           setLuckyProduct({
@@ -128,7 +128,7 @@ const CheckoutPage: React.FC = () => {
         setFullName(parsedUser.username || "");
 
         fetch(
-          `http://localhost:3000/api/usersProfile/username/${parsedUser.username}`,
+          `https://deploy-nodejs-vqqq.onrender.com/api/usersProfile/username/${parsedUser.username}`,
           {
             headers: { Authorization: `Bearer ${token}` },
           }
@@ -291,7 +291,7 @@ const CheckoutPage: React.FC = () => {
     const token = localStorage.getItem("token");
     // Gửi API POST lên backend (có gửi token)
     const res = await axios.post(
-      "http://localhost:3000/orders",
+      "https://deploy-nodejs-vqqq.onrender.com/orders",
       {
         items,
         shippingInfo,
@@ -342,7 +342,7 @@ const CheckoutPage: React.FC = () => {
 
     try {
       const res = await axios.post(
-        "http://localhost:3000/payment/momo",
+        "https://deploy-nodejs-vqqq.onrender.com/payment/momo",
         {
           amount: totalWithShipping,
           orderId, // Dùng biến này!
@@ -393,7 +393,7 @@ const CheckoutPage: React.FC = () => {
 
     try {
       const res = await axios.post(
-        "http://localhost:3000/payment/vnpay/create_payment",
+        "https://deploy-nodejs-vqqq.onrender.com/payment/vnpay/create_payment",
         {
           amount: totalWithShipping,
           orderId,
@@ -418,7 +418,7 @@ const CheckoutPage: React.FC = () => {
   const handleVNPayPayment = async () => {
     try {
       const res = await axios.post(
-        "http://localhost:3000/payment/create_payment_url",
+        "https://deploy-nodejs-vqqq.onrender.com/payment/create_payment_url",
         {
           amount: 100000, // ❗Thay bằng tổng đơn hàng nếu cần
           bankCode: "NCB",

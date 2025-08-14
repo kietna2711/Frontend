@@ -22,7 +22,7 @@ const PaymentReturnPage: React.FC = () => {
       try {
         // Gọi backend để kiểm tra trạng thái đơn hàng
         const res = await axios.get(
-          `http://localhost:3000/orders/status/${orderId}?resultCode=${resultCode}`
+          `https://deploy-nodejs-vqqq.onrender.com/orders/status/${orderId}?resultCode=${resultCode}`
         );
         const { status } = res.data;
         if (status === "paid") {

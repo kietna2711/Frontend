@@ -34,11 +34,14 @@ export default function Verify() {
       return;
     }
     // Gọi API gửi lại OTP
-    const res = await fetch("http://localhost:3000/users/forgot-password", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email }),
-    });
+    const res = await fetch(
+      "https://deploy-nodejs-vqqq.onrender.com/users/forgot-password",
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      }
+    );
     const data = await res.json();
     if (res.ok) {
       showMessage.success("Đã gửi lại mã xác thực!");
@@ -86,11 +89,14 @@ export default function Verify() {
 
     const email = new URLSearchParams(window.location.search).get("email");
     // Gửi OTP lên backend để xác thực (không gửi email)
-    const res = await fetch("http://localhost:3000/users/verify-otp", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, otp }),
-    });
+    const res = await fetch(
+      "https://deploy-nodejs-vqqq.onrender.com/users/verify-otp",
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, otp }),
+      }
+    );
     const data = await res.json();
     if (res.ok) {
       showMessage.success("Xác thực thành công!");

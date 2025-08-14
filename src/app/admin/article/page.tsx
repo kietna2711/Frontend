@@ -54,7 +54,7 @@ export default function PostManagement() {
   useEffect(() => {
     const token = localStorage.getItem("token"); // hoặc từ cookie nếu bạn dùng cookie
 
-    fetch("http://localhost:3000/api/postscategories", {
+    fetch("https://deploy-nodejs-vqqq.onrender.com/api/postscategories", {
       headers: {
         Authorization: `Bearer ${token || ""}`,
       },
@@ -83,7 +83,7 @@ export default function PostManagement() {
   // Fetch posts
   const fetchPosts = () => {
     setLoading(true);
-    fetch("http://localhost:3000/api/posts")
+    fetch("https://deploy-nodejs-vqqq.onrender.com/api/posts")
       .then((res) => res.json())
       .then((data) => {
         let arr: Post[] = Array.isArray(data) ? data : data.items || [];
@@ -157,7 +157,7 @@ export default function PostManagement() {
     const isVisible =
       typeof post.visible === "boolean" ? post.visible : !post.hidden;
 
-    await fetch(`http://localhost:3000/api/posts/${id}`, {
+    await fetch(`https://deploy-nodejs-vqqq.onrender.com/api/posts/${id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -177,9 +177,12 @@ export default function PostManagement() {
   // Xác nhận xóa bài viết
   const confirmDeletePost = async () => {
     if (!postToDelete) return;
-    await fetch(`http://localhost:3000/api/posts/${postToDelete._id}`, {
-      method: "DELETE",
-    });
+    await fetch(
+      `https://deploy-nodejs-vqqq.onrender.com/api/posts/${postToDelete._id}`,
+      {
+        method: "DELETE",
+      }
+    );
     showMessage.success("Đã xóa bài viết");
     setShowDeleteConfirm(false);
     setPostToDelete(null);
@@ -244,13 +247,16 @@ export default function PostManagement() {
     });
 
     if (editingId) {
-      await fetch(`http://localhost:3000/api/posts/${editingId}`, {
-        method: "PUT",
-        body: formData,
-      });
+      await fetch(
+        `https://deploy-nodejs-vqqq.onrender.com/api/posts/${editingId}`,
+        {
+          method: "PUT",
+          body: formData,
+        }
+      );
       showMessage.success("Cập nhật bài viết thành công");
     } else {
-      await fetch("http://localhost:3000/api/posts", {
+      await fetch("https://deploy-nodejs-vqqq.onrender.com/api/posts", {
         method: "POST",
         body: formData,
       });

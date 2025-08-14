@@ -22,7 +22,9 @@ export default function PostCategoriesPage() {
 
   const fetchCategories = async () => {
     try {
-      const res = await fetch("http://localhost:3000/api/postscategories");
+      const res = await fetch(
+        "https://deploy-nodejs-vqqq.onrender.com/api/postscategories"
+      );
       const data = await res.json();
       setCategories(data);
     } catch (err) {
@@ -40,8 +42,8 @@ export default function PostCategoriesPage() {
 
     const method = editingId ? "PUT" : "POST";
     const url = editingId
-      ? `http://localhost:3000/api/postscategories/${editingId}`
-      : "http://localhost:3000/api/postscategories";
+      ? `https://deploy-nodejs-vqqq.onrender.com/api/postscategories/${editingId}`
+      : "https://deploy-nodejs-vqqq.onrender.com/api/postscategories";
 
     const body = JSON.stringify({ title });
 
@@ -69,7 +71,7 @@ export default function PostCategoriesPage() {
   const handleEdit = async (id: string) => {
     try {
       const res = await fetch(
-        `http://localhost:3000/api/postscategories/${id}`
+        `https://deploy-nodejs-vqqq.onrender.com/api/postscategories/${id}`
       );
       const data = await res.json();
       setTitle(data.title);
@@ -86,7 +88,7 @@ export default function PostCategoriesPage() {
   ) => {
     try {
       const res = await fetch(
-        `http://localhost:3000/api/postscategories/${id}`,
+        `https://deploy-nodejs-vqqq.onrender.com/api/postscategories/${id}`,
         {
           method: "PUT",
           headers: { "Content-Type": "application/json" },

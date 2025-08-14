@@ -5,9 +5,12 @@ export async function getFavoritesByUser(
   userId: string,
   token: string
 ): Promise<Products[]> {
-  const res = await fetch(`http://localhost:3000/favorites?userId=${userId}`, {
-    headers: { Authorization: `Bearer ${token}` },
-  });
+  const res = await fetch(
+    `https://deploy-nodejs-vqqq.onrender.com/favorites?userId=${userId}`,
+    {
+      headers: { Authorization: `Bearer ${token}` },
+    }
+  );
   if (!res.ok) throw new Error("Lỗi lấy danh sách yêu thích trên server");
   return await res.json();
 }
@@ -18,7 +21,7 @@ export async function addFavorite(
   userId: string,
   token: string
 ) {
-  const res = await fetch("http://localhost:3000/favorites", {
+  const res = await fetch("https://deploy-nodejs-vqqq.onrender.com/favorites", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -37,7 +40,7 @@ export async function removeFavorite(
   token: string
 ) {
   const res = await fetch(
-    `http://localhost:3000/favorites/${productId}?userId=${userId}`,
+    `https://deploy-nodejs-vqqq.onrender.com/favorites/${productId}?userId=${userId}`,
     {
       method: "DELETE",
       headers: { Authorization: `Bearer ${token}` },

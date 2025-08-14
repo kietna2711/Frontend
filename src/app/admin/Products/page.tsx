@@ -77,7 +77,9 @@ export default function ProductManagement() {
   const fetchProducts = async () => {
     try {
       // SỬA DÒNG NÀY: thêm ?all=true để lấy cả sản phẩm Ẩn
-      const res = await fetch("http://localhost:3000/products?all=true");
+      const res = await fetch(
+        "https://deploy-nodejs-vqqq.onrender.com/products?all=true"
+      );
       const data = await res.json();
       console.log("Raw data from API:", data);
 
@@ -95,7 +97,7 @@ export default function ProductManagement() {
             : prod.quantity || 0, // lấy từ sản phẩm chính nếu không có variant
         image:
           prod.images && prod.images.length > 0
-            ? `http://localhost:3000/images/${prod.images[0]}`
+            ? `https://deploy-nodejs-vqqq.onrender.com/images/${prod.images[0]}`
             : "",
         images: prod.images,
         desc: prod.description,
@@ -125,7 +127,9 @@ export default function ProductManagement() {
   useEffect(() => {
     async function fetchCategories() {
       try {
-        const res = await fetch("http://localhost:3000/categories");
+        const res = await fetch(
+          "https://deploy-nodejs-vqqq.onrender.com/categories"
+        );
         const data = await res.json();
         setCategories(data);
       } catch (error) {
@@ -178,7 +182,7 @@ export default function ProductManagement() {
       p.images && p.images.length > 0
         ? p.images[0].startsWith("http")
           ? p.images[0]
-          : `http://localhost:3000/images/${p.images[0]}`
+          : `https://deploy-nodejs-vqqq.onrender.com/images/${p.images[0]}`
         : ""
     );
     setForm({
@@ -196,7 +200,7 @@ export default function ProductManagement() {
       p.images?.slice(1).map((img: string) => ({
         url: img.startsWith("http")
           ? img
-          : `http://localhost:3000/images/${img}`,
+          : `https://deploy-nodejs-vqqq.onrender.com/images/${img}`,
         name: img,
         file: null,
         isNew: false,
@@ -327,13 +331,16 @@ export default function ProductManagement() {
     formData.append("oldThumbnails", JSON.stringify(oldThumbs));
 
     // Gửi request PATCH
-    const res = await fetch(`http://localhost:3000/products/${form.id}`, {
-      method: "PATCH",
-      body: formData,
-      headers: {
-        Authorization: "Bearer " + localStorage.getItem("token"),
-      },
-    });
+    const res = await fetch(
+      `https://deploy-nodejs-vqqq.onrender.com/products/${form.id}`,
+      {
+        method: "PATCH",
+        body: formData,
+        headers: {
+          Authorization: "Bearer " + localStorage.getItem("token"),
+        },
+      }
+    );
 
     if (res.ok) {
       notify("Cập nhật sản phẩm thành công!", "");
@@ -347,14 +354,17 @@ export default function ProductManagement() {
   const toggleProductStatus = async (id: string, currentStatus: string) => {
     try {
       const newStatus = currentStatus === "Ẩn" ? "Còn hàng" : "Ẩn";
-      const res = await fetch(`http://localhost:3000/products/${id}`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + localStorage.getItem("token"),
-        },
-        body: JSON.stringify({ status: newStatus }),
-      });
+      const res = await fetch(
+        `https://deploy-nodejs-vqqq.onrender.com/products/${id}`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + localStorage.getItem("token"),
+          },
+          body: JSON.stringify({ status: newStatus }),
+        }
+      );
       if (res.ok) {
         notify(`Đã chuyển sang trạng thái "${newStatus}"!`, "");
         fetchProducts(); // cập nhật lại danh sách
@@ -848,7 +858,7 @@ export default function ProductManagement() {
                             });
 
                             const res = await fetch(
-                              "http://localhost:3000/products",
+                              "https://deploy-nodejs-vqqq.onrender.com/products",
                               {
                                 method: "POST",
                                 body: formData,
@@ -1243,7 +1253,7 @@ export default function ProductManagement() {
                       src={
                         detailProduct.images[0].startsWith("http")
                           ? detailProduct.images[0]
-                          : `http://localhost:3000/images/${detailProduct.images[0]}`
+                          : `https://deploy-nodejs-vqqq.onrender.com/images/${detailProduct.images[0]}`
                       }
                       alt="Ảnh chính"
                       width={100}
@@ -1259,25 +1269,23 @@ export default function ProductManagement() {
                   <b>Ảnh thumbnail:</b>
                   <br />
                   {detailProduct.images && detailProduct.images.length > 1 ? (
-                    detailProduct.images
-                      .slice(1)
-                      .map((img, idx) => (
-                        <img
-                          key={idx}
-                          src={
-                            img.startsWith("http")
-                              ? img
-                              : `http://localhost:3000/images/${img}`
-                          }
-                          alt={`thumb-${idx}`}
-                          width={60}
-                          style={{
-                            marginRight: 8,
-                            marginBottom: 8,
-                            border: "1px solid #ccc",
-                          }}
-                        />
-                      ))
+                    detailProduct.images.slice(1).map((img, idx) => (
+                      <img
+                        key={idx}
+                        src={
+                          img.startsWith("http")
+                            ? img
+                            : `https://deploy-nodejs-vqqq.onrender.com/images/${img}`
+                        }
+                        alt={`thumb-${idx}`}
+                        width={60}
+                        style={{
+                          marginRight: 8,
+                          marginBottom: 8,
+                          border: "1px solid #ccc",
+                        }}
+                      />
+                    ))
                   ) : (
                     <span>Không có</span>
                   )}
