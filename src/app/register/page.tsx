@@ -60,7 +60,8 @@ export default function Register() {
     if (!lastName.trim()) newErrors.lastName = "Vui lòng nhập họ!";
     if (!username.trim()) newErrors.username = "Vui lòng nhập tên đăng nhập!";
     else if (!/^[a-zA-Z0-9_]{4,}$/.test(username))
-      newErrors.username = "Tên đăng nhập phải từ 4 ký tự, không ký tự đặc biệt!";
+      newErrors.username =
+        "Tên đăng nhập phải từ 4 ký tự, không ký tự đặc biệt!";
     if (!email.trim()) newErrors.email = "Vui lòng nhập email!";
     else if (!email.match(/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/))
       newErrors.email = "Email không hợp lệ!";
@@ -83,7 +84,7 @@ export default function Register() {
 
     try {
       // Thay đổi URL backend đúng với server của bạn
-      const res = await fetch("https://deploy-nodejs-vqqq.onrender.com/users/register", {
+      const res = await fetch("http://localhost:3000/users/register", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -102,10 +103,14 @@ export default function Register() {
       // Nếu lỗi từ backend (ví dụ trùng email):
       if (!res.ok) {
         if (data?.message === "Email đã tồn tại") {
-          setErrors({ email: "Email này đã được đăng ký. Vui lòng dùng email khác!" });
+          setErrors({
+            email: "Email này đã được đăng ký. Vui lòng dùng email khác!",
+          });
         } else {
           showMessage.error(
-            `Đăng ký thất bại: ${data?.message || JSON.stringify(data) || "Lỗi server"}`
+            `Đăng ký thất bại: ${
+              data?.message || JSON.stringify(data) || "Lỗi server"
+            }`
           );
         }
       } else {
@@ -144,7 +149,7 @@ export default function Register() {
                 placeholder="Tên *"
                 required
                 value={firstName}
-                onChange={e => {
+                onChange={(e) => {
                   setFirstName(e.target.value);
                   validateField("firstName", e.target.value);
                 }}
@@ -159,7 +164,7 @@ export default function Register() {
                 placeholder="Họ *"
                 required
                 value={lastName}
-                onChange={e => {
+                onChange={(e) => {
                   setLastName(e.target.value);
                   validateField("lastName", e.target.value);
                 }}
@@ -174,19 +179,21 @@ export default function Register() {
             placeholder="Tên đăng nhập *"
             required
             value={username}
-            onChange={e => {
+            onChange={(e) => {
               setUsername(e.target.value);
               validateField("username", e.target.value);
             }}
           />
-          {errors.username && <div className="input-error">{errors.username}</div>}
+          {errors.username && (
+            <div className="input-error">{errors.username}</div>
+          )}
 
           <input
             type="email"
             placeholder="Địa chỉ Email"
             required
             value={email}
-            onChange={e => {
+            onChange={(e) => {
               setEmail(e.target.value);
               validateField("email", e.target.value);
             }}
@@ -199,26 +206,30 @@ export default function Register() {
             placeholder="Mật khẩu"
             required
             value={password}
-            onChange={e => {
+            onChange={(e) => {
               setPassword(e.target.value);
               validateField("password", e.target.value);
             }}
             autoComplete="new-password"
           />
-          {errors.password && <div className="input-error">{errors.password}</div>}
+          {errors.password && (
+            <div className="input-error">{errors.password}</div>
+          )}
 
           <input
             type="password"
             placeholder="Nhập lại mật khẩu"
             required
             value={confirm}
-            onChange={e => {
+            onChange={(e) => {
               setConfirm(e.target.value);
               validateField("confirm", e.target.value);
             }}
             autoComplete="new-password"
           />
-          {errors.confirm && <div className="input-error">{errors.confirm}</div>}
+          {errors.confirm && (
+            <div className="input-error">{errors.confirm}</div>
+          )}
 
           <div className="login-options">
             <label className="remember-me">
@@ -245,7 +256,8 @@ export default function Register() {
               className="google-btn"
               type="button"
               onClick={() =>
-                (window.location.href = "https://deploy-nodejs-vqqq.onrender.com/users/auth/google")
+                (window.location.href =
+                  "http://localhost:3000/users/auth/google")
               }
             >
               <img
@@ -254,7 +266,6 @@ export default function Register() {
               />
               Google
             </button>
-           
           </div>
           <a href="/login" className="register-link">
             Đã có tài khoản? Đăng nhập

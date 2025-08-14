@@ -27,7 +27,7 @@ export default function Forget() {
     validateField("email", email);
     if (errors.email) return;
 
-    const res = await fetch("https://deploy-nodejs-vqqq.onrender.com/users/forgot-password", {
+    const res = await fetch("http://localhost:3000/users/forgot-password", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email }),
@@ -60,14 +60,16 @@ export default function Forget() {
             placeholder="Nhập email của bạn"
             required
             value={email}
-            onChange={e => {
+            onChange={(e) => {
               setEmail(e.target.value);
               validateField("email", e.target.value);
             }}
           />
           {errors.email && <div className="input-error">{errors.email}</div>}
           <button type="submit">Gửi mã xác thực</button>
-          <a href="/login" className="register-link">Quay lại đăng nhập</a>
+          <a href="/login" className="register-link">
+            Quay lại đăng nhập
+          </a>
         </form>
       </div>
     </div>

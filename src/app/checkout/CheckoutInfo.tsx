@@ -83,8 +83,8 @@ const CheckoutInfo: React.FC<Props> = ({
   // Khi focus vào một trường, đánh dấu các trường phía trên là touched nếu chưa nhập
   const handleFocus = (fieldKey: string) => {
     setFocused(fieldKey);
-    const idx = fields.findIndex(f => f.key === fieldKey);
-    setTouched(prev => {
+    const idx = fields.findIndex((f) => f.key === fieldKey);
+    setTouched((prev) => {
       const updated = { ...prev };
       for (let i = 0; i < idx; i++) {
         const prevField = fields[i].key;
@@ -97,16 +97,12 @@ const CheckoutInfo: React.FC<Props> = ({
   // Khi blur khỏi một trường, nếu chưa nhập thì hiện lỗi
   const handleBlur = (fieldKey: string) => {
     setFocused(null);
-    setTouched(prev => ({ ...prev, [fieldKey]: true }));
+    setTouched((prev) => ({ ...prev, [fieldKey]: true }));
   };
 
   // Hàm render lỗi: chỉ hiện nếu trường bị bỏ qua (touched), chưa nhập, và không phải ô đang focus
   const showFieldError = (fieldKey: string, message: string) => {
-    if (
-      touched[fieldKey] &&
-      !getFieldValue(fieldKey) &&
-      focused !== fieldKey
-    ) {
+    if (touched[fieldKey] && !getFieldValue(fieldKey) && focused !== fieldKey) {
       return <div className="error">{message}</div>;
     }
     return null;
@@ -119,7 +115,7 @@ const CheckoutInfo: React.FC<Props> = ({
         {!isLoggedIn && (
           <div className="log-dn">
             <a href="#" tabIndex={-1}>
-              <img src="https://deploy-nodejs-vqqq.onrender.com/images/icon-dn.png" alt="" />
+              <img src="http://localhost:3000/images/icon-dn.png" alt="" />
             </a>
             <button type="button" onClick={handleLoginRedirect}>
               Đăng nhập
@@ -128,7 +124,10 @@ const CheckoutInfo: React.FC<Props> = ({
         )}
       </div>
       {/* Họ và tên */}
-      {showFieldError("fullName", "Vui lòng nhập họ và tên hợp lệ (chỉ gồm chữ cái)")}
+      {showFieldError(
+        "fullName",
+        "Vui lòng nhập họ và tên hợp lệ (chỉ gồm chữ cái)"
+      )}
 
       <input
         type="text"
@@ -144,7 +143,10 @@ const CheckoutInfo: React.FC<Props> = ({
         readOnly={!!isLoggedIn && !!userInfo?.username}
       />
       {/* Số điện thoại */}
-      {showFieldError("phone", "Vui lòng nhập số điện thoại hợp lệ (10 chữ số)")}
+      {showFieldError(
+        "phone",
+        "Vui lòng nhập số điện thoại hợp lệ (10 chữ số)"
+      )}
       <input
         type="tel"
         placeholder="Số điện thoại"
@@ -166,7 +168,7 @@ const CheckoutInfo: React.FC<Props> = ({
         type="text"
         placeholder="Địa chỉ (số nhà, tên đường...)"
         value={address}
-        onChange={e => setAddress(e.target.value)}
+        onChange={(e) => setAddress(e.target.value)}
         onFocus={() => handleFocus("address")}
         onBlur={() => handleBlur("address")}
       />
@@ -177,12 +179,12 @@ const CheckoutInfo: React.FC<Props> = ({
           className="form-control"
           id="city"
           value={selectedCity}
-          onChange={e => setSelectedCity(e.target.value)}
+          onChange={(e) => setSelectedCity(e.target.value)}
           onFocus={() => handleFocus("city")}
           onBlur={() => handleBlur("city")}
         >
           <option value="">Chọn Tỉnh/Thành</option>
-          {cities.map(city => (
+          {cities.map((city) => (
             <option key={city.Id} value={city.Id}>
               {city.Name}
             </option>
@@ -196,13 +198,13 @@ const CheckoutInfo: React.FC<Props> = ({
           className="form-control"
           id="district"
           value={selectedDistrict}
-          onChange={e => setSelectedDistrict(e.target.value)}
+          onChange={(e) => setSelectedDistrict(e.target.value)}
           onFocus={() => handleFocus("district")}
           onBlur={() => handleBlur("district")}
           disabled={!selectedCity}
         >
           <option value="">Chọn Quận/Huyện</option>
-          {districts.map(district => (
+          {districts.map((district) => (
             <option key={district.Id} value={district.Id}>
               {district.Name}
             </option>
@@ -216,13 +218,13 @@ const CheckoutInfo: React.FC<Props> = ({
           className="form-control"
           id="ward"
           value={selectedWard}
-          onChange={e => setSelectedWard(e.target.value)}
+          onChange={(e) => setSelectedWard(e.target.value)}
           onFocus={() => handleFocus("ward")}
           onBlur={() => handleBlur("ward")}
           disabled={!selectedDistrict}
         >
           <option value="">Chọn Phường/Xã</option>
-          {wards.map(ward => (
+          {wards.map((ward) => (
             <option key={ward.Id} value={ward.Id}>
               {ward.Name}
             </option>
@@ -234,7 +236,7 @@ const CheckoutInfo: React.FC<Props> = ({
         placeholder="Ghi chú (tùy chọn)"
         rows={4}
         value={note}
-        onChange={e => setNote(e.target.value)}
+        onChange={(e) => setNote(e.target.value)}
       />
     </div>
   );

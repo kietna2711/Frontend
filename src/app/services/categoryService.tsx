@@ -1,6 +1,6 @@
 import { Category } from "../types/categoryD";
 
-const API_URL = "https://deploy-nodejs-vqqq.onrender.com/categories";
+const API_URL = "http://localhost:3000/categories";
 
 // Lấy toàn bộ danh mục (R)
 export const getCategories = async (): Promise<Category[]> => {
@@ -17,7 +17,9 @@ export const getCategoryById = async (_id: string): Promise<Category> => {
 };
 
 // Thêm danh mục mới (C)
-export const createCategory = async (data: Omit<Category, "_id">): Promise<Category> => {
+export const createCategory = async (
+  data: Omit<Category, "_id">
+): Promise<Category> => {
   const res = await fetch(API_URL, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -28,7 +30,10 @@ export const createCategory = async (data: Omit<Category, "_id">): Promise<Categ
 };
 
 // Cập nhật danh mục (U)
-export const updateCategory = async (_id: string, data: Partial<Category>): Promise<Category> => {
+export const updateCategory = async (
+  _id: string,
+  data: Partial<Category>
+): Promise<Category> => {
   const res = await fetch(`${API_URL}/${_id}`, {
     method: "PATCH",
     headers: { "Content-Type": "application/json" },
@@ -37,4 +42,3 @@ export const updateCategory = async (_id: string, data: Partial<Category>): Prom
   if (!res.ok) throw new Error("Lỗi khi cập nhật danh mục");
   return res.json();
 };
-

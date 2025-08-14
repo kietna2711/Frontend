@@ -10,7 +10,9 @@ export default function Verify() {
   const [resendSeconds, setResendSeconds] = useState(0);
   const [resendLoading, setResendLoading] = useState(false);
   const showMessage = useShowMessage("verify-otp", "user");
-  const inputs = Array.from({ length: 6 }, () => useRef<HTMLInputElement>(null));
+  const inputs = Array.from({ length: 6 }, () =>
+    useRef<HTMLInputElement>(null)
+  );
 
   useEffect(() => {
     if (resendSeconds > 0) {
@@ -32,7 +34,7 @@ export default function Verify() {
       return;
     }
     // Gọi API gửi lại OTP
-    const res = await fetch("https://deploy-nodejs-vqqq.onrender.com/users/forgot-password", {
+    const res = await fetch("http://localhost:3000/users/forgot-password", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email }),
@@ -58,7 +60,10 @@ export default function Verify() {
       }
     }
   };
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>, idx: number) => {
+  const handleKeyDown = (
+    e: React.KeyboardEvent<HTMLInputElement>,
+    idx: number
+  ) => {
     if (e.key === "Backspace" && !e.currentTarget.value && idx > 0) {
       inputs[idx - 1].current?.focus();
     }
@@ -67,21 +72,21 @@ export default function Verify() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
-    const otpArr = inputs.map(ref => ref.current?.value || "");
+    const otpArr = inputs.map((ref) => ref.current?.value || "");
     const otp = otpArr.join("");
 
     if (otp.length !== 6) {
       setError("Mã OTP phải đủ 6 số!");
       return;
     }
-    if (!otpArr.every(char => /^\d$/.test(char))) {
+    if (!otpArr.every((char) => /^\d$/.test(char))) {
       setError("Mã OTP chỉ được nhập số!");
       return;
     }
 
     const email = new URLSearchParams(window.location.search).get("email");
     // Gửi OTP lên backend để xác thực (không gửi email)
-    const res = await fetch("https://deploy-nodejs-vqqq.onrender.com/users/verify-otp", {
+    const res = await fetch("http://localhost:3000/users/verify-otp", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email, otp }),
@@ -121,13 +126,18 @@ export default function Verify() {
                 pattern="[0-9]*"
                 inputMode="numeric"
                 required
-                onInput={e => handleInput(e as React.ChangeEvent<HTMLInputElement>, idx)}
-                onKeyDown={e => handleKeyDown(e, idx)}
+                onInput={(e) =>
+                  handleInput(e as React.ChangeEvent<HTMLInputElement>, idx)
+                }
+                onKeyDown={(e) => handleKeyDown(e, idx)}
               />
             ))}
           </div>
           {error && (
-            <div className="input-error" style={{ textAlign: "center", margin: "8px 0" }}>
+            <div
+              className="input-error"
+              style={{ textAlign: "center", margin: "8px 0" }}
+            >
               {error}
             </div>
           )}
@@ -136,7 +146,8 @@ export default function Verify() {
             href="#"
             className="register-link"
             style={{
-              pointerEvents: resendSeconds > 0 || resendLoading ? "none" : "auto",
+              pointerEvents:
+                resendSeconds > 0 || resendLoading ? "none" : "auto",
               color: resendSeconds > 0 || resendLoading ? "#aaa" : "#d16ba5",
               marginLeft: 16,
               userSelect: "none",
@@ -148,9 +159,9 @@ export default function Verify() {
               : resendLoading
               ? "Đang gửi..."
               : "Gửi lại mã"}
-                </a>
-              </form>
-            </div>
-          </div> 
-      );
-    }
+          </a>
+        </form>
+      </div>
+    </div>
+  );
+}

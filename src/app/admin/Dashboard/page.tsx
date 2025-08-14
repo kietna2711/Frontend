@@ -56,87 +56,86 @@ export default function ReportManagement() {
   const [monthLabels, setMonthLabels] = useState<string[]>([]);
   const [ordersCountByMonth, setOrdersCountByMonth] = useState<number[]>([]);
 
-useEffect(() => {
-  fetch("https://deploy-nodejs-vqqq.onrender.com/orders")
-    .then(res => res.json())
-    .then(data => {
-      setOrders(data);
+  useEffect(() => {
+    fetch("http://localhost:3000/orders")
+      .then((res) => res.json())
+      .then((data) => {
+        setOrders(data);
 
-      // Tính số đơn hàng đã giao từng tháng
-      const now = new Date();
-      const currentMonth = now.getMonth() + 1;
-      const months = Array.from({ length: currentMonth }, (_, i) => i + 1);
-      const counts = months.map(month => {
-        return data.filter((order: { createdAt: string | number | Date; }) => {
-          const orderDate = new Date(order.createdAt);
-          return orderDate.getMonth() + 1 === month;
-        }).length;
+        // Tính số đơn hàng đã giao từng tháng
+        const now = new Date();
+        const currentMonth = now.getMonth() + 1;
+        const months = Array.from({ length: currentMonth }, (_, i) => i + 1);
+        const counts = months.map((month) => {
+          return data.filter((order: { createdAt: string | number | Date }) => {
+            const orderDate = new Date(order.createdAt);
+            return orderDate.getMonth() + 1 === month;
+          }).length;
+        });
+
+        setOrdersCountByMonth(counts);
+        setMonthLabels(months.map((m) => `Tháng ${m}`));
       });
+  }, []);
 
-      setOrdersCountByMonth(counts);
-      setMonthLabels(months.map(m => `Tháng ${m}`));
-    });
-}, []);
-
-const lineData = {
-  labels: monthLabels,
-  datasets: [
-    {
-      label: "Đơn hàng",
-      data: ordersCountByMonth,
-      borderColor: "#007bff",
-      backgroundColor: "rgba(0,123,255,0.2)",
-      tension: 0.4,
-    },
-  ],
-};
-
-const lineOptions = {
-  scales: {
-    y: {
-      ticks: {
-        stepSize: 1, // Hiển thị số nguyên
-        callback: function (value: number | string) {
-          return Number(value); // Loại bỏ phần thập phân
-        }
+  const lineData = {
+    labels: monthLabels,
+    datasets: [
+      {
+        label: "Đơn hàng",
+        data: ordersCountByMonth,
+        borderColor: "#007bff",
+        backgroundColor: "rgba(0,123,255,0.2)",
+        tension: 0.4,
       },
-      beginAtZero: true
-    }
-  }
-};
+    ],
+  };
 
+  const lineOptions = {
+    scales: {
+      y: {
+        ticks: {
+          stepSize: 1, // Hiển thị số nguyên
+          callback: function (value: number | string) {
+            return Number(value); // Loại bỏ phần thập phân
+          },
+        },
+        beginAtZero: true,
+      },
+    },
+  };
 
   useEffect(() => {
-    fetch("https://deploy-nodejs-vqqq.onrender.com/api/statistics/revenue")
-      .then(res => res.json())
-      .then(data => {
+    fetch("http://localhost:3000/api/statistics/revenue")
+      .then((res) => res.json())
+      .then((data) => {
         // Lấy tháng hiện tại
         const now = new Date();
         const currentMonth = now.getMonth() + 1;
         const months = Array.from({ length: currentMonth }, (_, i) => i + 1);
         // Map doanh thu từng tháng, nếu không có thì là 0
-        const revenueArr = months.map(month => {
+        const revenueArr = months.map((month) => {
           const found = data.find((item: any) => item.month === month);
           return found ? found.total / 1000000 : 0; // đổi sang triệu
         });
         setRevenueData(revenueArr);
-        setLabels(months.map(m => `Tháng ${m}`));
+        setLabels(months.map((m) => `Tháng ${m}`));
       });
   }, []);
 
   useEffect(() => {
-    fetch("https://deploy-nodejs-vqqq.onrender.com/products")
-      .then(res => res.json())
-      .then(data => {
+    fetch("http://localhost:3000/products")
+      .then((res) => res.json())
+      .then((data) => {
         setProducts(data);
         setOutOfStockProducts(data.filter((p: any) => p.quantity === 0));
       });
-    fetch("https://deploy-nodejs-vqqq.onrender.com/users")
-      .then(res => res.json())
+    fetch("http://localhost:3000/users")
+      .then((res) => res.json())
       .then(setUsers);
-    fetch("https://deploy-nodejs-vqqq.onrender.com/orders")
-      .then(res => res.json())
-      .then(data => {
+    fetch("http://localhost:3000/orders")
+      .then((res) => res.json())
+      .then((data) => {
         setOrders(data);
 
         // Tính sản phẩm bán chạy từ orders
@@ -169,13 +168,13 @@ const lineOptions = {
     // Lọc khách hàng mới trong 7 ngày gần nhất
     const weekAgo = new Date();
     weekAgo.setDate(weekAgo.getDate() - 7);
-    setNewCustomers(users.filter(u => new Date(u.createdAt) >= weekAgo));
+    setNewCustomers(users.filter((u) => new Date(u.createdAt) >= weekAgo));
   }, [users]);
 
   useEffect(() => {
-    fetch("https://deploy-nodejs-vqqq.onrender.com/orderdetails")
-      .then(res => res.json())
-      .then(data => {
+    fetch("http://localhost:3000/orderdetails")
+      .then((res) => res.json())
+      .then((data) => {
         console.log("orderdetails api data:", data);
         setOrderDetails(Array.isArray(data) ? data : []);
       });
@@ -194,9 +193,11 @@ const lineOptions = {
 
   // Sau khi đã setOrders(data) trong useEffect fetch orders
   const totalRevenue = orders
-    .filter(order => order.orderStatus === "delivered")
+    .filter((order) => order.orderStatus === "delivered")
     .reduce((sum, order) => sum + (order.totalPrice || 0), 0);
-  const totalDeliveredOrders = orders.filter(order => order.orderStatus === "Đã giao").length;
+  const totalDeliveredOrders = orders.filter(
+    (order) => order.orderStatus === "Đã giao"
+  ).length;
 
   function getQuantity(orderId: string, productId: string) {
     const detail = orderDetails.find(
@@ -209,10 +210,10 @@ const lineOptions = {
 
   function getOrderDetailList(orderId: string) {
     return orderDetails
-      .filter(od => String(od.orderId) === String(orderId))
-      .map(od => ({
+      .filter((od) => String(od.orderId) === String(orderId))
+      .map((od) => ({
         name: od.productName,
-        quantity: od.quantity
+        quantity: od.quantity,
       }));
   }
 
@@ -222,7 +223,9 @@ const lineOptions = {
         <div className="col-md-12">
           <div className="app-title">
             <ul className="app-breadcrumb breadcrumb">
-              <li className="breadcrumb-item"><b>Báo cáo doanh thu</b></li>
+              <li className="breadcrumb-item">
+                <b>Báo cáo doanh thu</b>
+              </li>
             </ul>
             <div id="clock"></div>
           </div>
@@ -235,7 +238,9 @@ const lineOptions = {
             <i className="icon bx bxs-user fa-3x"></i>
             <div className="info">
               <h4>TỔNG KHÁCH HÀNG</h4>
-              <p><b>{users.length} khách hàng</b></p>
+              <p>
+                <b>{users.length} khách hàng</b>
+              </p>
             </div>
           </div>
         </div>
@@ -244,7 +249,9 @@ const lineOptions = {
             <i className="icon bx bxs-purchase-tag-alt fa-3x"></i>
             <div className="info">
               <h4>TỔNG SẢN PHẨM</h4>
-              <p><b>{products.length} sản phẩm</b></p>
+              <p>
+                <b>{products.length} sản phẩm</b>
+              </p>
             </div>
           </div>
         </div>
@@ -253,7 +260,9 @@ const lineOptions = {
             <i className="icon bx bxs-shopping-bag-alt fa-3x"></i>
             <div className="info">
               <h4>TỔNG ĐƠN HÀNG</h4>
-              <p><b>{orders.length} đơn hàng</b></p>
+              <p>
+                <b>{orders.length} đơn hàng</b>
+              </p>
             </div>
           </div>
         </div>
@@ -262,7 +271,9 @@ const lineOptions = {
             <i className="icon bx bxs-tag-x fa-3x"></i>
             <div className="info">
               <h4>HẾT HÀNG</h4>
-              <p><b>{outOfStockProducts.length} sản phẩm</b></p>
+              <p>
+                <b>{outOfStockProducts.length} sản phẩm</b>
+              </p>
             </div>
           </div>
         </div>
@@ -274,7 +285,9 @@ const lineOptions = {
             <i className="icon fa-3x bx bxs-chart"></i>
             <div className="info">
               <h4>Tổng thu nhập</h4>
-              <p><b>{totalRevenue.toLocaleString()} đ</b></p>
+              <p>
+                <b>{totalRevenue.toLocaleString()} đ</b>
+              </p>
             </div>
           </div>
         </div>
@@ -283,7 +296,9 @@ const lineOptions = {
             <i className="icon fa-3x bx bxs-user-badge"></i>
             <div className="info">
               <h4>KHÁCH HÀNG MỚI</h4>
-              <p><b>{newCustomers.length} khách hàng</b></p>
+              <p>
+                <b>{newCustomers.length} khách hàng</b>
+              </p>
             </div>
           </div>
         </div>
@@ -294,14 +309,18 @@ const lineOptions = {
               <h4>Đơn hàng hủy</h4>
               <p>
                 <b>
-                  {orders.filter(order => order.orderStatus === "cancelled").length} đơn hàng
+                  {
+                    orders.filter((order) => order.orderStatus === "cancelled")
+                      .length
+                  }{" "}
+                  đơn hàng
                 </b>
               </p>
             </div>
           </div>
         </div>
       </div>
-     
+
       {/* Orders */}
       <div className="row">
         <div className="col-md-12">
@@ -322,37 +341,63 @@ const lineOptions = {
                 </thead>
                 <tbody>
                   {orders
-                    .filter(order => order.orderStatus === "delivered")
-                    .map(order => (
+                    .filter((order) => order.orderStatus === "delivered")
+                    .map((order) => (
                       <tr key={order._id || order.id}>
                         <td>{order._id || order.id}</td>
-                        <td>{order.shippingInfo?.name || order.customerName || order.customer || order.user?.username || order.user?.email}</td>
+                        <td>
+                          {order.shippingInfo?.name ||
+                            order.customerName ||
+                            order.customer ||
+                            order.user?.username ||
+                            order.user?.email}
+                        </td>
                         <td>
                           {(Array.isArray(orderDetails) ? orderDetails : [])
-                            .filter(od => String(od.orderId) === String(order._id || order.id))
-                            .map(od => od.productName)
+                            .filter(
+                              (od) =>
+                                String(od.orderId) ===
+                                String(order._id || order.id)
+                            )
+                            .map((od) => od.productName)
                             .join(", ")}
                         </td>
                         <td>
                           {(Array.isArray(orderDetails) ? orderDetails : [])
-                            .filter(od => String(od.orderId) === String(order._id || order.id))
-                            .map(od => od.quantity)
+                            .filter(
+                              (od) =>
+                                String(od.orderId) ===
+                                String(order._id || order.id)
+                            )
+                            .map((od) => od.quantity)
                             .join(", ")}
                         </td>
-                        <td>{order.totalPrice?.toLocaleString() || order.total?.toLocaleString()} đ</td>
+                        <td>
+                          {order.totalPrice?.toLocaleString() ||
+                            order.total?.toLocaleString()}{" "}
+                          đ
+                        </td>
                         <td>
                           <span className="badge bg-success">Đã giao</span>
                         </td>
-                        <td>{order.createdAt ? new Date(order.createdAt).toLocaleDateString() : ""}</td>
+                        <td>
+                          {order.createdAt
+                            ? new Date(order.createdAt).toLocaleDateString()
+                            : ""}
+                        </td>
                       </tr>
                     ))}
                   <tr>
                     <th colSpan={4}>Tổng cộng:</th>
                     <td colSpan={3}>
                       {orders
-                        .filter(order => order.orderStatus === "delivered")
-                        .reduce((sum, order) => sum + (order.totalPrice || 0), 0)
-                        .toLocaleString()} đ
+                        .filter((order) => order.orderStatus === "delivered")
+                        .reduce(
+                          (sum, order) => sum + (order.totalPrice || 0),
+                          0
+                        )
+                        .toLocaleString()}{" "}
+                      đ
                     </td>
                   </tr>
                 </tbody>
@@ -361,7 +406,7 @@ const lineOptions = {
           </div>
         </div>
       </div>
-  
+
       {/* New customers */}
       <div className="row">
         <div className="col-md-12">
@@ -381,7 +426,11 @@ const lineOptions = {
                     <tr key={idx}>
                       <td>{c.name || c.username || c.email}</td>
                       <td>{c.email}</td>
-                      <td>{c.createdAt ? new Date(c.createdAt).toLocaleDateString() : ""}</td>
+                      <td>
+                        {c.createdAt
+                          ? new Date(c.createdAt).toLocaleDateString()
+                          : ""}
+                      </td>
                     </tr>
                   ))}
                 </tbody>
@@ -394,20 +443,31 @@ const lineOptions = {
       <div className="row">
         <div className="col-md-6">
           <div className="tile">
-                <h3 className="tile-title" style={{ textAlign: "center", marginTop: 12 }}>DỮ LIỆU HÀNG THÁNG</h3>
+            <h3
+              className="tile-title"
+              style={{ textAlign: "center", marginTop: 12 }}
+            >
+              DỮ LIỆU HÀNG THÁNG
+            </h3>
             <Line data={lineData} options={lineOptions} />
           </div>
         </div>
         <div className="col-md-6">
           <div className="tile">
-             <h3 className="tile-title" style={{ textAlign: "center", marginTop: 12 }}>THỐNG KÊ DOANH THU THEO THÁNG</h3>
+            <h3
+              className="tile-title"
+              style={{ textAlign: "center", marginTop: 12 }}
+            >
+              THỐNG KÊ DOANH THU THEO THÁNG
+            </h3>
             <Bar data={updatedBarData} />
-           
           </div>
         </div>
       </div>
       <div className="text-right" style={{ fontSize: 12 }}>
-        <p><b>Hệ thống quản lý V2.0 | Code by Trường</b></p>
+        <p>
+          <b>Hệ thống quản lý V2.0 | Code by Trường</b>
+        </p>
       </div>
     </main>
   );

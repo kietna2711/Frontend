@@ -1,4 +1,4 @@
-'use client'
+"use client";
 import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import Header from "./components/Header";
@@ -9,7 +9,11 @@ import "./globals.css";
 import AIChatBox from "@/components/AIChatBox";
 import LuckyWheel from "./components/LuckyWheel";
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   const [categories, setCategories] = useState<Category[]>([]);
   const [showWheel, setShowWheel] = useState(false);
   const pathname = usePathname();
@@ -18,7 +22,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   useEffect(() => {
     async function fetchCategories() {
       try {
-        const res = await fetch("https://deploy-nodejs-vqqq.onrender.com/categories");
+        const res = await fetch("http://localhost:3000/categories");
         if (!res.ok) throw new Error("Failed to fetch");
         const data = await res.json();
         setCategories(data);
@@ -34,11 +38,16 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="vi">
       <head>
         <title>MimiBear Shop</title>
-        <link rel="icon" href="https://deploy-nodejs-vqqq.onrender.com/images/logoXP.png" />
+        <link rel="icon" href="http://localhost:3000/images/logoXP.png" />
       </head>
       <body>
         <Providers>
-          {!isAdmin && <Header categories={categories} onOpenWheel={() => setShowWheel(true)} />}
+          {!isAdmin && (
+            <Header
+              categories={categories}
+              onOpenWheel={() => setShowWheel(true)}
+            />
+          )}
           <main>{children}</main>
           {!isAdmin && <Footer />}
           <LuckyWheel visible={showWheel} onClose={() => setShowWheel(false)} />
@@ -49,8 +58,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             onClick={() => setShowWheel(true)}
             style={{
               position: "fixed",
-              bottom: 32,      // Đặt giống AIChatBox
-              left: 20,        // Góc trái
+              bottom: 32, // Đặt giống AIChatBox
+              left: 20, // Góc trái
               zIndex: 9999,
               padding: 0,
               border: "none",
@@ -64,7 +73,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             title="Vòng quay may mắn"
           >
             <img
-              src="https://deploy-nodejs-vqqq.onrender.com/images/vqmm.png"
+              src="http://localhost:3000/images/vqmm.png"
               alt="Vòng quay may mắn"
               style={{ width: 56, height: 56 }}
             />

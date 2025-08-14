@@ -32,8 +32,8 @@ function renderStars(stars: number) {
       ))}
       {[...Array(empty)].map((_, i) => (
         <i key={"empty" + i} className="far fa-star"></i>
-      ))}
-      {" "}({stars})
+      ))}{" "}
+      ({stars})
     </span>
   );
 }
@@ -52,7 +52,13 @@ function calculateAverageRating(reviews: Review[]) {
   return parseFloat((total / reviews.length).toFixed(1));
 }
 
-function ReviewDetailModal({ productId, onClose }: { productId: string; onClose: () => void; }) {
+function ReviewDetailModal({
+  productId,
+  onClose,
+}: {
+  productId: string;
+  onClose: () => void;
+}) {
   const [details, setDetails] = useState<ReviewDetail[]>([]);
   const [productName, setProductName] = useState<string>("");
   const [loading, setLoading] = useState(true);
@@ -62,20 +68,30 @@ function ReviewDetailModal({ productId, onClose }: { productId: string; onClose:
     async function fetchDetails() {
       setLoading(true);
       try {
-        const res = await fetch(`https://deploy-nodejs-vqqq.onrender.com/reviews/admin?productId=${productId}`, {
-          headers: {
-            Authorization: "Bearer " + (localStorage.getItem("token") || ""),
+        const res = await fetch(
+          `http://localhost:3000/reviews/admin?productId=${productId}`,
+          {
+            headers: {
+              Authorization: "Bearer " + (localStorage.getItem("token") || ""),
+            },
           }
-        });
+        );
         if (!res.ok) throw new Error("Lỗi mạng!");
         const data = await res.json();
         let reviews = Array.isArray(data.reviews) ? data.reviews : [];
-        reviews = reviews.sort((a: { createdAt: string | number | Date; }, b: { createdAt: string | number | Date; }) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+        reviews = reviews.sort(
+          (
+            a: { createdAt: string | number | Date },
+            b: { createdAt: string | number | Date }
+          ) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+        );
         if (!ignore) setDetails(reviews);
         if (reviews[0] && reviews[0].productName) {
           setProductName(reviews[0].productName);
         } else {
-          fetchProductName(productId).then(name => { if (!ignore) setProductName(name); });
+          fetchProductName(productId).then((name) => {
+            if (!ignore) setProductName(name);
+          });
         }
       } catch (err) {
         if (!ignore) {
@@ -86,12 +102,14 @@ function ReviewDetailModal({ productId, onClose }: { productId: string; onClose:
       setLoading(false);
     }
     fetchDetails();
-    return () => { ignore = true; };
+    return () => {
+      ignore = true;
+    };
   }, [productId]);
 
   async function fetchProductName(productId: string): Promise<string> {
     try {
-      const res = await fetch(`https://deploy-nodejs-vqqq.onrender.com/products/${productId}`);
+      const res = await fetch(`http://localhost:3000/products/${productId}`);
       if (!res.ok) return productId;
       const data = await res.json();
       return data.product?.name || productId;
@@ -102,28 +120,32 @@ function ReviewDetailModal({ productId, onClose }: { productId: string; onClose:
 
   const handleToggleVisibility = async (reviewId: string) => {
     try {
-      const res = await fetch(`https://deploy-nodejs-vqqq.onrender.com/reviews/${reviewId}/toggle-status`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + (localStorage.getItem("token") || ""),
+      const res = await fetch(
+        `http://localhost:3000/reviews/${reviewId}/toggle-status`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + (localStorage.getItem("token") || ""),
+          },
         }
-      });
+      );
 
       const data = await res.json();
 
       if (!res.ok) {
-
         if (res.status === 403) {
-          toast.error(data.error || "Bạn không có quyền thực hiện thao tác này!");
+          toast.error(
+            data.error || "Bạn không có quyền thực hiện thao tác này!"
+          );
         } else {
           toast.error(data.error || "Không thể đổi trạng thái review!");
         }
         return;
       }
 
-      setDetails(reviews =>
-        reviews.map(r =>
+      setDetails((reviews) =>
+        reviews.map((r) =>
           r._id === reviewId ? { ...r, status: data.status } : r
         )
       );
@@ -138,20 +160,28 @@ function ReviewDetailModal({ productId, onClose }: { productId: string; onClose:
     }
   };
 
-
   return (
-    <div className="modal show" style={{ display: "block", background: "rgba(0,0,0,0.3)" }}>
+    <div
+      className="modal show"
+      style={{ display: "block", background: "rgba(0,0,0,0.3)" }}
+    >
       <div className="modal-dialog modal-lg">
         <div className="modal-content">
           <div className="modal-header">
             <h5 className="modal-title">
               Chi tiết đánh giá sản phẩm: {productName || productId}
             </h5>
-            <button type="button" className="btn-close" onClick={onClose}></button>
+            <button
+              type="button"
+              className="btn-close"
+              onClick={onClose}
+            ></button>
           </div>
           <div className="modal-body">
             <div className="mb-3">
-              <strong>⭐ Trung bình sao:</strong> {calculateAverageRating(details)}<br />
+              <strong>⭐ Trung bình sao:</strong>{" "}
+              {calculateAverageRating(details)}
+              <br />
               <strong>📝 Số lượt đánh giá:</strong> {details.length}
             </div>
             {loading ? (
@@ -168,9 +198,13 @@ function ReviewDetailModal({ productId, onClose }: { productId: string; onClose:
                   </tr>
                 </thead>
                 <tbody>
-                  {details.map(review => (
+                  {details.map((review) => (
                     <tr key={review._id}>
-                      <td>{review.username ? review.username : review.name || "Ẩn danh"}</td>
+                      <td>
+                        {review.username
+                          ? review.username
+                          : review.name || "Ẩn danh"}
+                      </td>
                       <td>{renderStars(review.rating)}</td>
                       <td>{review.comment}</td>
                       <td>{formatDate(review.createdAt)}</td>
@@ -181,14 +215,22 @@ function ReviewDetailModal({ productId, onClose }: { productId: string; onClose:
                           title="Ẩn/Hiện"
                           onClick={() => handleToggleVisibility(review._id)}
                         >
-                          <i className={`fas ${review.status === "visible" ? "fa-eye" : "fa-eye-slash"}`}></i>
+                          <i
+                            className={`fas ${
+                              review.status === "visible"
+                                ? "fa-eye"
+                                : "fa-eye-slash"
+                            }`}
+                          ></i>
                         </button>
                       </td>
                     </tr>
                   ))}
                   {details.length === 0 && (
                     <tr>
-                      <td colSpan={5} className="text-center">Không có đánh giá nào.</td>
+                      <td colSpan={5} className="text-center">
+                        Không có đánh giá nào.
+                      </td>
                     </tr>
                   )}
                 </tbody>
@@ -205,28 +247,45 @@ export default function ReviewManagement() {
   const [reviews, setReviews] = useState<Review[]>([]);
   const [loading, setLoading] = useState(true);
   const [clock, setClock] = useState("");
-  const [selectedProductId, setSelectedProductId] = useState<string | null>(null);
+  const [selectedProductId, setSelectedProductId] = useState<string | null>(
+    null
+  );
   const [firstLoad, setFirstLoad] = useState(true);
   const reviewsRef = useRef<Review[]>([]);
 
   // Hàm fetchReviews chỉ cập nhật khi có thay đổi thực sự (tránh "dựt")
   const fetchReviews = async () => {
     try {
-      const res = await fetch('https://deploy-nodejs-vqqq.onrender.com/reviews/admin/reviews-latest', {
-        headers: {
-          Authorization: "Bearer " + (localStorage.getItem("token") || ""),
+      const res = await fetch(
+        "http://localhost:3000/reviews/admin/reviews-latest",
+        {
+          headers: {
+            Authorization: "Bearer " + (localStorage.getItem("token") || ""),
+          },
         }
-      });
+      );
       if (!res.ok) throw new Error("Lỗi mạng!");
       const data = await res.json();
       let newReviews = Array.isArray(data.reviews) ? data.reviews : [];
       // Bình luận mới nhất lên đầu
       newReviews = newReviews.sort(
-        (a: { createdAt: string | number | Date; }, b: { createdAt: string | number | Date; }) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+        (
+          a: { createdAt: string | number | Date },
+          b: { createdAt: string | number | Date }
+        ) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
       );
       // Chỉ setReviews nếu dữ liệu thực sự thay đổi
-      const oldString = JSON.stringify(reviewsRef.current.map(r => r._id + r.status + r.comment + r.createdAt));
-      const newString = JSON.stringify(newReviews.map((r: { _id: any; status: any; comment: any; createdAt: any; }) => r._id + r.status + r.comment + r.createdAt));
+      const oldString = JSON.stringify(
+        reviewsRef.current.map(
+          (r) => r._id + r.status + r.comment + r.createdAt
+        )
+      );
+      const newString = JSON.stringify(
+        newReviews.map(
+          (r: { _id: any; status: any; comment: any; createdAt: any }) =>
+            r._id + r.status + r.comment + r.createdAt
+        )
+      );
       if (firstLoad || oldString !== newString) {
         setReviews(newReviews);
         reviewsRef.current = newReviews;
@@ -255,7 +314,13 @@ export default function ReviewManagement() {
     function updateClock() {
       const today = new Date();
       const weekday = [
-        "Chủ Nhật", "Thứ Hai", "Thứ Ba", "Thứ Tư", "Thứ Năm", "Thứ Sáu", "Thứ Bảy"
+        "Chủ Nhật",
+        "Thứ Hai",
+        "Thứ Ba",
+        "Thứ Tư",
+        "Thứ Năm",
+        "Thứ Sáu",
+        "Thứ Bảy",
       ];
       const day = weekday[today.getDay()];
       let dd: string | number = today.getDate();
@@ -287,7 +352,9 @@ export default function ReviewManagement() {
       <div className="app-title">
         <ul className="app-breadcrumb breadcrumb side">
           <li className="breadcrumb-item active">
-            <a href="#"><b>Quản lý đánh giá</b></a>
+            <a href="#">
+              <b>Quản lý đánh giá</b>
+            </a>
           </li>
         </ul>
         <div id="clock">{clock}</div>
@@ -311,13 +378,19 @@ export default function ReviewManagement() {
                     </tr>
                   </thead>
                   <tbody>
-                    {reviews.map(review => (
+                    {reviews.map((review) => (
                       <tr key={review._id}>
-                        <td>{review.username ? review.username : review.name || "Ẩn danh"}</td>
                         <td>
-                          {review.productName
-                            ? review.productName
-                            : <span className="text-muted">Đang tải...</span>}
+                          {review.username
+                            ? review.username
+                            : review.name || "Ẩn danh"}
+                        </td>
+                        <td>
+                          {review.productName ? (
+                            review.productName
+                          ) : (
+                            <span className="text-muted">Đang tải...</span>
+                          )}
                         </td>
                         <td>{renderStars(review.rating)}</td>
                         <td>{review.comment}</td>
@@ -336,7 +409,9 @@ export default function ReviewManagement() {
                     ))}
                     {reviews.length === 0 && !loading && (
                       <tr>
-                        <td colSpan={6} className="text-center">Không có đánh giá nào.</td>
+                        <td colSpan={6} className="text-center">
+                          Không có đánh giá nào.
+                        </td>
                       </tr>
                     )}
                   </tbody>

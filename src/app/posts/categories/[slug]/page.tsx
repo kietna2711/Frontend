@@ -1,7 +1,7 @@
-'use client';
-import { use, useEffect, useState } from 'react';
-import './categorypage.css';
-import InstagramSection from '../../../components/InstagramSection'; 
+"use client";
+import { use, useEffect, useState } from "react";
+import "./categorypage.css";
+import InstagramSection from "../../../components/InstagramSection";
 
 interface Post {
   _id: string;
@@ -12,21 +12,28 @@ interface Post {
   hidden?: boolean; // 👈 Thêm trường này để kiểm tra bài viết bị ẩn
 }
 
-export default function CategoryPage({ params }: { params: Promise<{ slug: string }> }) {
+export default function CategoryPage({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
   const { slug } = use(params); // ✅ unwrap Promise
 
   const [posts, setPosts] = useState<Post[]>([]);
-  const [categoryTitle, setCategoryTitle] = useState('');
-  const [error, setError] = useState('');
+  const [categoryTitle, setCategoryTitle] = useState("");
+  const [error, setError] = useState("");
 
   useEffect(() => {
     const fetchPostsByCategory = async () => {
       try {
-        const res = await fetch(`https://deploy-nodejs-vqqq.onrender.com/api/posts/by-category-slug/${slug}`, {
-          cache: 'no-store',
-        });
+        const res = await fetch(
+          `http://localhost:3000/api/posts/by-category-slug/${slug}`,
+          {
+            cache: "no-store",
+          }
+        );
 
-        if (!res.ok) throw new Error('Failed to fetch posts');
+        if (!res.ok) throw new Error("Failed to fetch posts");
 
         const data = await res.json();
 
@@ -34,9 +41,9 @@ export default function CategoryPage({ params }: { params: Promise<{ slug: strin
         const visiblePosts = data.items.filter((post: Post) => !post.hidden);
 
         setPosts(visiblePosts);
-        setCategoryTitle(data.categoryTitle || '');
+        setCategoryTitle(data.categoryTitle || "");
       } catch (err: any) {
-        setError(err.message || 'Đã xảy ra lỗi');
+        setError(err.message || "Đã xảy ra lỗi");
       }
     };
 
@@ -50,17 +57,22 @@ export default function CategoryPage({ params }: { params: Promise<{ slug: strin
           Bài viết: {categoryTitle || decodeURIComponent(slug)}
         </h2>
 
-        {error && <div style={{ color: 'red' }}>{error}</div>}
+        {error && <div style={{ color: "red" }}>{error}</div>}
 
         <div className="services-grid">
           {posts.map((post) => (
             <div key={post._id} className="service-card">
               <img
                 className="service-img"
-                src={`https://deploy-nodejs-vqqq.onrender.com/images/${post.img || 'default.jpg'}`}
+                src={`http://localhost:3000/images/${
+                  post.img || "default.jpg"
+                }`}
                 alt={post.title}
               />
-              <a href={`/posts/detail/${post.slug}`} style={{ textDecoration: 'none' }}>
+              <a
+                href={`/posts/detail/${post.slug}`}
+                style={{ textDecoration: "none" }}
+              >
                 <div className="service-desc">{post.shortDesc}</div>
               </a>
               <div className="service-link-wrap">

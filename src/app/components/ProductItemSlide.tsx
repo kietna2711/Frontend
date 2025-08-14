@@ -10,7 +10,8 @@ import { useShowMessage } from "../utils/useShowMessage";
 import { HeartOutlined, HeartFilled } from "@ant-design/icons";
 
 export default function ProductItemSlide({ product }: { product: Products }) {
-  const hasVariants = Array.isArray(product.variants) && product.variants.length > 0;
+  const hasVariants =
+    Array.isArray(product.variants) && product.variants.length > 0;
   const [selectedIdx, setSelectedIdx] = useState(0);
   const dispatch = useAppDispatch();
   const { success, error } = useShowMessage("product", "user");
@@ -18,8 +19,10 @@ export default function ProductItemSlide({ product }: { product: Products }) {
 
   const [isFavorite, setIsFavorite] = useState(false);
   const productId = (product._id ?? product.id)?.toString();
-  const userStr = typeof window !== "undefined" ? localStorage.getItem("user") : null;
-  const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
+  const userStr =
+    typeof window !== "undefined" ? localStorage.getItem("user") : null;
+  const token =
+    typeof window !== "undefined" ? localStorage.getItem("token") : null;
 
   const prices = hasVariants
     ? product.variants.map((v) => Number(v.price) || 0)
@@ -31,13 +34,17 @@ export default function ProductItemSlide({ product }: { product: Products }) {
     : Number(product.price) || 0;
 
   const handleBuyNow = () => {
-      //hàm bấm nút mua ngay chuyển qua thanh toán
-    const selectedVariant = hasVariants ? product.variants[selectedIdx] : undefined;
+    //hàm bấm nút mua ngay chuyển qua thanh toán
+    const selectedVariant = hasVariants
+      ? product.variants[selectedIdx]
+      : undefined;
     const buyNowItem = {
       product: {
         ...product,
         createdAt: new Date(product.createdAt).toISOString(),
-        updatedAt: product.updatedAt ? new Date(product.updatedAt).toISOString() : undefined,
+        updatedAt: product.updatedAt
+          ? new Date(product.updatedAt).toISOString()
+          : undefined,
       },
       selectedVariant,
       quantity: 1,
@@ -60,22 +67,33 @@ export default function ProductItemSlide({ product }: { product: Products }) {
 
   useEffect(() => {
     if (isLoggedIn && userId && token) {
-      fetch(`https://deploy-nodejs-vqqq.onrender.com/favorites?userId=${userId}`, {
+      fetch(`http://localhost:3000/favorites?userId=${userId}`, {
         headers: { Authorization: `Bearer ${token}` },
       })
         .then((res) => (res.ok ? res.json() : []))
         .then((favList) => {
-          setIsFavorite(favList.some((item: Products) => ((item._id ?? item.id)?.toString() === productId)));
+          setIsFavorite(
+            favList.some(
+              (item: Products) =>
+                (item._id ?? item.id)?.toString() === productId
+            )
+          );
         });
     } else {
       const favorites = JSON.parse(localStorage.getItem("favorites") || "[]");
-      const exists = favorites.some((item: Products) => ((item._id ?? item.id)?.toString() === productId));
+      const exists = favorites.some(
+        (item: Products) => (item._id ?? item.id)?.toString() === productId
+      );
       setIsFavorite(exists);
     }
   }, [productId, isLoggedIn, userId, token]);
 
-  const addFavorite = async (productId: string, userId: string, token: string) => {
-    await fetch("https://deploy-nodejs-vqqq.onrender.com/favorites", {
+  const addFavorite = async (
+    productId: string,
+    userId: string,
+    token: string
+  ) => {
+    await fetch("http://localhost:3000/favorites", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -85,13 +103,20 @@ export default function ProductItemSlide({ product }: { product: Products }) {
     });
   };
 
-  const removeFavorite = async (productId: string, userId: string, token: string) => {
-    await fetch(`https://deploy-nodejs-vqqq.onrender.com/favorites/${productId}?userId=${userId}`, {
-      method: "DELETE",
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+  const removeFavorite = async (
+    productId: string,
+    userId: string,
+    token: string
+  ) => {
+    await fetch(
+      `http://localhost:3000/favorites/${productId}?userId=${userId}`,
+      {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
   };
 
   const toggleFavorite = async () => {
@@ -108,10 +133,14 @@ export default function ProductItemSlide({ product }: { product: Products }) {
       window.dispatchEvent(new Event("favoriteChanged"));
     } else {
       const favorites = JSON.parse(localStorage.getItem("favorites") || "[]");
-      const exists = favorites.some((item: Products) => ((item._id ?? item.id)?.toString() === productId));
+      const exists = favorites.some(
+        (item: Products) => (item._id ?? item.id)?.toString() === productId
+      );
       let updatedFavorites;
       if (exists) {
-        updatedFavorites = favorites.filter((item: Products) => ((item._id ?? item.id)?.toString() !== productId));
+        updatedFavorites = favorites.filter(
+          (item: Products) => (item._id ?? item.id)?.toString() !== productId
+        );
         setIsFavorite(false);
         error("Đã xóa khỏi yêu thích");
       } else {
@@ -143,30 +172,32 @@ export default function ProductItemSlide({ product }: { product: Products }) {
 
         <a href={`/products/${product._id}`}>
           <div className={styles.mimi_image_link}>
-            <img src={`https://deploy-nodejs-vqqq.onrender.com/images/${product.images[0]}`} alt={product.name} />
             <img
-              src={`https://deploy-nodejs-vqqq.onrender.com/images/${product.images[1]}`}
+              src={`http://localhost:3000/images/${product.images[0]}`}
+              alt={product.name}
+            />
+            <img
+              src={`http://localhost:3000/images/${product.images[1]}`}
               className={styles.mimi_image_hover}
               alt={`${product.name} Hover`}
             />
             <img
-              src="https://deploy-nodejs-vqqq.onrender.com/images/logoXP.png"
+              src="http://localhost:3000/images/logoXP.png"
               className={styles.mimi_logo_left}
               alt="Logo"
             />
-           
           </div>
         </a>
 
         <button className={styles.mimi_buy_now_btn} onClick={handleBuyNow}>
           <img
-            src="https://deploy-nodejs-vqqq.onrender.com/images/button.png"
+            src="http://localhost:3000/images/button.png"
             className={styles.mimi_bear_left}
             alt="Bear Left"
           />
           MUA NGAY
           <img
-            src="https://deploy-nodejs-vqqq.onrender.com/images/button.png"
+            src="http://localhost:3000/images/button.png"
             className={styles.mimi_bear_right}
             alt="Bear Right"
           />
@@ -193,7 +224,9 @@ export default function ProductItemSlide({ product }: { product: Products }) {
           {product.variants.map((variant, idx) => (
             <span
               key={variant.size}
-              className={`${styles.mimi_size_box} ${idx === selectedIdx ? styles.active : ""}`}
+              className={`${styles.mimi_size_box} ${
+                idx === selectedIdx ? styles.active : ""
+              }`}
               onClick={() => setSelectedIdx(idx)}
             >
               {variant.size}

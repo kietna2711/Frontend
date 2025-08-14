@@ -1,4 +1,4 @@
-import { PostCategory } from '../types/postscategory';
+import { PostCategory } from "../types/postscategory";
 
 interface RawPostCategory {
   _id: string;
@@ -9,9 +9,9 @@ interface RawPostCategory {
 
 export const getPostCategories = async (): Promise<PostCategory[]> => {
   try {
-    const res = await fetch('https://deploy-nodejs-vqqq.onrender.com/api/postscategories');
+    const res = await fetch("http://localhost:3000/api/postscategories");
     if (!res.ok) {
-      throw new Error('Lỗi khi fetch danh mục bài viết');
+      throw new Error("Lỗi khi fetch danh mục bài viết");
     }
 
     const data: RawPostCategory[] = await res.json();
@@ -27,7 +27,7 @@ export const getPostCategories = async (): Promise<PostCategory[]> => {
 
     return formatted;
   } catch (error) {
-    console.error('Lỗi khi tải danh mục bài viết:', error);
+    console.error("Lỗi khi tải danh mục bài viết:", error);
     return [];
   }
 };

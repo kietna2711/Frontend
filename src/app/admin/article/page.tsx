@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { useShowMessage } from '@/app/utils/useShowMessage';
+import { useShowMessage } from "@/app/utils/useShowMessage";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import "boxicons/css/boxicons.min.css";
@@ -51,40 +51,39 @@ export default function PostManagement() {
   const [loading, setLoading] = useState(false);
 
   // Fetch categories
-useEffect(() => {
-  const token = localStorage.getItem("token"); // hoặc từ cookie nếu bạn dùng cookie
+  useEffect(() => {
+    const token = localStorage.getItem("token"); // hoặc từ cookie nếu bạn dùng cookie
 
-  fetch("https://deploy-nodejs-vqqq.onrender.com/api/postscategories", {
-    headers: {
-      Authorization: `Bearer ${token || ""}`
-    }
-  })
-    .then((res) => res.json())
-    .then((data) => {
-      let arr: Category[] = [];
-      if (Array.isArray(data)) {
-        arr = data;
-      } else if (data.categories && Array.isArray(data.categories)) {
-        arr = data.categories;
-      } else if (data.data && Array.isArray(data.data)) {
-        arr = data.data;
-      }
-      setCategories(arr);
+    fetch("http://localhost:3000/api/postscategories", {
+      headers: {
+        Authorization: `Bearer ${token || ""}`,
+      },
     })
-    .catch(() => setCategories([]));
-}, []);
-  
+      .then((res) => res.json())
+      .then((data) => {
+        let arr: Category[] = [];
+        if (Array.isArray(data)) {
+          arr = data;
+        } else if (data.categories && Array.isArray(data.categories)) {
+          arr = data.categories;
+        } else if (data.data && Array.isArray(data.data)) {
+          arr = data.data;
+        }
+        setCategories(arr);
+      })
+      .catch(() => setCategories([]));
+  }, []);
+
   // Hiển thị thông báo
-  const showMessage = useShowMessage('', '');
+  const showMessage = useShowMessage("", "");
   // thong báo xác nhận xóa bài viết
   const [postToDelete, setPostToDelete] = useState<Post | null>(null);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
-
   // Fetch posts
   const fetchPosts = () => {
     setLoading(true);
-    fetch("https://deploy-nodejs-vqqq.onrender.com/api/posts")
+    fetch("http://localhost:3000/api/posts")
       .then((res) => res.json())
       .then((data) => {
         let arr: Post[] = Array.isArray(data) ? data : data.items || [];
@@ -119,57 +118,56 @@ useEffect(() => {
   // Khi chọn ảnh mới
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files || []);
-    setForm(prev => ({
+    setForm((prev) => ({
       ...prev,
-      images: [...(prev.images || []), ...files]
+      images: [...(prev.images || []), ...files],
     }));
   };
 
-  // Xóa ảnh 
+  // Xóa ảnh
   const handleRemoveImage = (indexToRemove: number) => {
     const removed = form.images[indexToRemove];
     setForm((prev) => ({
       ...prev,
       images: prev.images.filter((_, index) => index !== indexToRemove),
     }));
-    showMessage.info(`Đã xóa ảnh ${typeof removed === 'string' ? removed : removed.name}`);
+    showMessage.info(
+      `Đã xóa ảnh ${typeof removed === "string" ? removed : removed.name}`
+    );
   };
 
-
-//  // Xóa ảnh đại diện
-//   const handleMainImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-//     const file = e.target.files?.[0];
-//     if (file) {
-//       setForm(prev => ({ ...prev, img: file }));
-//     }
-//   };
+  //  // Xóa ảnh đại diện
+  //   const handleMainImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //     const file = e.target.files?.[0];
+  //     if (file) {
+  //       setForm(prev => ({ ...prev, img: file }));
+  //     }
+  //   };
 
   const handleRemoveMainImage = () => {
-    setForm(prev => ({ ...prev, img: null }));
+    setForm((prev) => ({ ...prev, img: null }));
     showMessage.info("Đã xóa ảnh đại diện");
   };
 
-
   // Toggle ẩn/hiện
-const handleToggleVisibility = async (id: string) => {
-  const post = posts.find(p => p._id === id);
-  if (!post) return;
+  const handleToggleVisibility = async (id: string) => {
+    const post = posts.find((p) => p._id === id);
+    if (!post) return;
 
-  const isVisible = typeof post.visible === 'boolean' ? post.visible : !post.hidden;
+    const isVisible =
+      typeof post.visible === "boolean" ? post.visible : !post.hidden;
 
-  await fetch(`https://deploy-nodejs-vqqq.onrender.com/api/posts/${id}`, {
-    method: 'PUT',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      visible: !isVisible,
-      hidden: isVisible,
-    }),
-  });
+    await fetch(`http://localhost:3000/api/posts/${id}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        visible: !isVisible,
+        hidden: isVisible,
+      }),
+    });
 
-  fetchPosts();
-};
-
-
+    fetchPosts();
+  };
 
   // Xóa bài viết
   const handleDeletePost = (post: Post) => {
@@ -177,9 +175,9 @@ const handleToggleVisibility = async (id: string) => {
     setShowDeleteConfirm(true);
   };
   // Xác nhận xóa bài viết
-    const confirmDeletePost = async () => {
+  const confirmDeletePost = async () => {
     if (!postToDelete) return;
-    await fetch(`https://deploy-nodejs-vqqq.onrender.com/api/posts/${postToDelete._id}`, {
+    await fetch(`http://localhost:3000/api/posts/${postToDelete._id}`, {
       method: "DELETE",
     });
     showMessage.success("Đã xóa bài viết");
@@ -188,81 +186,81 @@ const handleToggleVisibility = async (id: string) => {
     fetchPosts();
   };
 
+  const handleChange = (
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >
+  ) => {
+    const { name, value, type, checked, files } = e.target as any;
 
-
-const handleChange = (
-  e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
-) => {
-  const { name, value, type, checked, files } = e.target as any;
-
-  if (type === "checkbox") {
-    setForm((prev) => ({ ...prev, [name]: checked }));
-  } else if (type === "file") {
-    if (name === "img") {
-      setForm((prev) => ({ ...prev, img: files[0] }));
-    } else if (name === "images") {
-      const newFiles = Array.from(files) as File[];
-      setForm((prevForm) => ({
-        ...prevForm,
-        images: [...((prevForm.images || []) as (File | string)[]), ...newFiles],
-      }));
+    if (type === "checkbox") {
+      setForm((prev) => ({ ...prev, [name]: checked }));
+    } else if (type === "file") {
+      if (name === "img") {
+        setForm((prev) => ({ ...prev, img: files[0] }));
+      } else if (name === "images") {
+        const newFiles = Array.from(files) as File[];
+        setForm((prevForm) => ({
+          ...prevForm,
+          images: [
+            ...((prevForm.images || []) as (File | string)[]),
+            ...newFiles,
+          ],
+        }));
+      }
+    } else {
+      setForm((prev) => ({ ...prev, [name]: value }));
     }
-  } else {
-    setForm((prev) => ({ ...prev, [name]: value }));
-  }
-};
-
-
+  };
 
   // Thêm hoặc cập nhật bài viết
-const handleSubmit = async (e: React.FormEvent) => {
-  e.preventDefault();
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
 
-  const formData = new FormData();
-  formData.append("title", form.title);
-  formData.append("date", form.date);
-  formData.append("categoryId", form.categoryId);
-  formData.append("tags", form.tags || "");
-  formData.append("content", form.content || "");
-  formData.append("description", form.description || "");
-  formData.append("shortDesc", form.description || "");
-  formData.append("priority", form.priority ? "true" : "false");
+    const formData = new FormData();
+    formData.append("title", form.title);
+    formData.append("date", form.date);
+    formData.append("categoryId", form.categoryId);
+    formData.append("tags", form.tags || "");
+    formData.append("content", form.content || "");
+    formData.append("description", form.description || "");
+    formData.append("shortDesc", form.description || "");
+    formData.append("priority", form.priority ? "true" : "false");
 
-  // Ảnh chính
-  if (form.img && typeof form.img !== "string") {
-    formData.append("img", form.img); // file mới
-  } else if (typeof form.img === "string") {
-    formData.append("existingImg", form.img); // giữ ảnh cũ
-  }
-
-  // Ảnh phụ
-  form.images.forEach((img) => {
-    if (typeof img === "string") {
-      formData.append("existingImages", img); // giữ ảnh cũ
-    } else {
-      formData.append("images", img); // thêm ảnh mới
+    // Ảnh chính
+    if (form.img && typeof form.img !== "string") {
+      formData.append("img", form.img); // file mới
+    } else if (typeof form.img === "string") {
+      formData.append("existingImg", form.img); // giữ ảnh cũ
     }
-  });
 
-  if (editingId) {
-    await fetch(`https://deploy-nodejs-vqqq.onrender.com/api/posts/${editingId}`, {
-      method: "PUT",
-      body: formData,
+    // Ảnh phụ
+    form.images.forEach((img) => {
+      if (typeof img === "string") {
+        formData.append("existingImages", img); // giữ ảnh cũ
+      } else {
+        formData.append("images", img); // thêm ảnh mới
+      }
     });
-    showMessage.success("Cập nhật bài viết thành công");
-  } else {
-    await fetch("https://deploy-nodejs-vqqq.onrender.com/api/posts", {
-      method: "POST",
-      body: formData,
-    });
-    showMessage.success("Thêm bài viết thành công");
-  }
 
-  setForm({ ...emptyForm });
-  setEditingId(null);
-  fetchPosts();
-};
+    if (editingId) {
+      await fetch(`http://localhost:3000/api/posts/${editingId}`, {
+        method: "PUT",
+        body: formData,
+      });
+      showMessage.success("Cập nhật bài viết thành công");
+    } else {
+      await fetch("http://localhost:3000/api/posts", {
+        method: "POST",
+        body: formData,
+      });
+      showMessage.success("Thêm bài viết thành công");
+    }
 
+    setForm({ ...emptyForm });
+    setEditingId(null);
+    fetchPosts();
+  };
 
   // Hủy bỏ form
   const handleCancel = () => {
@@ -272,7 +270,7 @@ const handleSubmit = async (e: React.FormEvent) => {
 
   // Lấy tên danh mục từ id
   const getCategoryTitle = (categoryId: string) => {
-    return categories.find(cat => cat._id === categoryId)?.title || "";
+    return categories.find((cat) => cat._id === categoryId)?.title || "";
   };
 
   return (
@@ -292,7 +290,12 @@ const handleSubmit = async (e: React.FormEvent) => {
               {editingId ? "Sửa bài viết" : "Tạo mới bài viết"}
             </h3>
             <div className="tile-body">
-              <form className="row" onSubmit={handleSubmit} autoComplete="off" encType="multipart/form-data">
+              <form
+                className="row"
+                onSubmit={handleSubmit}
+                autoComplete="off"
+                encType="multipart/form-data"
+              >
                 <div className="form-group col-md-6">
                   <label className="control-label">Tiêu đề bài viết</label>
                   <input
@@ -324,12 +327,14 @@ const handleSubmit = async (e: React.FormEvent) => {
                     name="img"
                     accept="image/*"
                     onChange={handleChange}
-                    required={!editingId && !form.img} 
+                    required={!editingId && !form.img}
                   />
                   {form.img && (
                     <div className="mt-2 d-flex align-items-center gap-2">
                       <span>
-                        {typeof form.img === "string" ? form.img : form.img.name}
+                        {typeof form.img === "string"
+                          ? form.img
+                          : form.img.name}
                       </span>
                       <button
                         type="button"
@@ -342,7 +347,9 @@ const handleSubmit = async (e: React.FormEvent) => {
                   )}
                 </div>
                 <div className="form-group col-md-6">
-                  <label className="control-label">Ảnh mô tả (nhiều ảnh/images)</label>
+                  <label className="control-label">
+                    Ảnh mô tả (nhiều ảnh/images)
+                  </label>
                   <input
                     className="form-control"
                     type="file"
@@ -356,7 +363,10 @@ const handleSubmit = async (e: React.FormEvent) => {
                       <b>Ảnh đã thêm:</b>
                       <ul style={{ paddingLeft: 20 }}>
                         {form.images.map((img, idx) => (
-                          <li key={idx} className="d-flex align-items-center gap-2">
+                          <li
+                            key={idx}
+                            className="d-flex align-items-center gap-2"
+                          >
                             {typeof img === "string" ? img : img.name}
                             <button
                               type="button"
@@ -390,17 +400,19 @@ const handleSubmit = async (e: React.FormEvent) => {
                   </select>
                 </div>
                 <div className="form-group col-md-6">
-                <label className="control-label">Tags (phân tách bằng dấu phẩy)</label>
-                <input
-                  className="form-control"
-                  type="text"
-                  name="tags"
-                  value={(form as any).tags || ""}
-                  onChange={handleChange}
-                  placeholder="VD: tin tức, công nghệ, react"
-                  required
-                />
-              </div>
+                  <label className="control-label">
+                    Tags (phân tách bằng dấu phẩy)
+                  </label>
+                  <input
+                    className="form-control"
+                    type="text"
+                    name="tags"
+                    value={(form as any).tags || ""}
+                    onChange={handleChange}
+                    placeholder="VD: tin tức, công nghệ, react"
+                    required
+                  />
+                </div>
                 <div className="form-group col-md-12">
                   <label className="control-label">Nội dung bài viết</label>
                   <textarea
@@ -409,7 +421,7 @@ const handleSubmit = async (e: React.FormEvent) => {
                     value={form.content}
                     onChange={handleChange}
                     placeholder="Nhập nội dung bài viết"
-                    style={{ minHeight: "200px" }} 
+                    style={{ minHeight: "200px" }}
                     required
                   />
                 </div>
@@ -474,9 +486,10 @@ const handleSubmit = async (e: React.FormEvent) => {
                     </tr>
                   ) : (
                     posts.map((post) => {
-                      const isVisible = typeof post.visible === "boolean"
-                        ? post.visible
-                        : !post.hidden;
+                      const isVisible =
+                        typeof post.visible === "boolean"
+                          ? post.visible
+                          : !post.hidden;
                       return (
                         <tr key={post._id}>
                           <td>{post._id}</td>
@@ -488,29 +501,37 @@ const handleSubmit = async (e: React.FormEvent) => {
                               ""}
                           </td>
                           <td>
-                            <span className={`badge ${isVisible ? "bg-success" : "bg-secondary"}`}>
+                            <span
+                              className={`badge ${
+                                isVisible ? "bg-success" : "bg-secondary"
+                              }`}
+                            >
                               {isVisible ? "Hiển thị" : "Đã ẩn"}
                             </span>
                           </td>
                           <td>
-                          <div className="d-flex gap-1">
-                            <button
-                              className="btn btn-light btn-sm toggle-visibility"
-                              type="button"
-                              title="Ẩn/Hiện"
-                              onClick={() => handleToggleVisibility(post._id)}
-                            >
-                              <i className={`fas ${isVisible ? "fa-eye" : "fa-eye-slash"}`}></i>
-                            </button>
-                            <button
-                              className="btn btn-info btn-sm"
-                              type="button"
-                              title="Sửa"
-                              onClick={() => handleEditPost(post)}
-                            >
-                              <i className="fas fa-edit"></i>
-                            </button>
-                            {/* <button
+                            <div className="d-flex gap-1">
+                              <button
+                                className="btn btn-light btn-sm toggle-visibility"
+                                type="button"
+                                title="Ẩn/Hiện"
+                                onClick={() => handleToggleVisibility(post._id)}
+                              >
+                                <i
+                                  className={`fas ${
+                                    isVisible ? "fa-eye" : "fa-eye-slash"
+                                  }`}
+                                ></i>
+                              </button>
+                              <button
+                                className="btn btn-info btn-sm"
+                                type="button"
+                                title="Sửa"
+                                onClick={() => handleEditPost(post)}
+                              >
+                                <i className="fas fa-edit"></i>
+                              </button>
+                              {/* <button
                               className="btn btn-danger btn-sm"
                               type="button"
                               title="Xóa"
@@ -518,9 +539,8 @@ const handleSubmit = async (e: React.FormEvent) => {
                             >
                               <i className="fas fa-trash-alt"></i>
                             </button> */}
-                          </div>
-                        </td>
-
+                            </div>
+                          </td>
                         </tr>
                       );
                     })
@@ -532,7 +552,7 @@ const handleSubmit = async (e: React.FormEvent) => {
         </div>
       </div>
       {/* Modal xác nhận xoá */}
-     {/* {showDeleteConfirm && postToDelete && (
+      {/* {showDeleteConfirm && postToDelete && (
     <div
       className="modal fade show d-block"
       tabIndex={-1}
@@ -570,8 +590,6 @@ const handleSubmit = async (e: React.FormEvent) => {
       </div>
     </div>
   )} */}
-
-
     </main>
   );
 }

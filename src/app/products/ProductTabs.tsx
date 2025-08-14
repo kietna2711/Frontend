@@ -69,7 +69,7 @@ const ProductTabs: React.FC<Props> = ({ product }) => {
           className={styles.productInfoImage}
           src={
             Array.isArray(product.images) && product.images.length > 0
-              ? `https://deploy-nodejs-vqqq.onrender.com/images/${product.images[0]}`
+              ? `http://localhost:3000/images/${product.images[0]}`
               : ""
           }
           alt={product.name}
@@ -112,7 +112,7 @@ const ProductTabs: React.FC<Props> = ({ product }) => {
           {Array.isArray(product.images) && product.images.length > 1 && (
             <img
               className={styles.productInfoImage}
-              src={`https://deploy-nodejs-vqqq.onrender.com/images/${product.images[1]}`}
+              src={`http://localhost:3000/images/${product.images[1]}`}
               alt={product.name}
             />
           )}
@@ -193,7 +193,7 @@ const ProductTabs: React.FC<Props> = ({ product }) => {
               Zalo 0373828100
             </a>
             &nbsp;|&nbsp;
-            <a  href="https://zalo.me/0373828100">Gọi 0373828100</a>
+            <a href="https://zalo.me/0373828100">Gọi 0373828100</a>
           </div>
         </div>
       </div>

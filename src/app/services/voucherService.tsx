@@ -1,6 +1,6 @@
 import { Voucher } from "../types/voucherD";
 
-const API_URL = "https://deploy-nodejs-vqqq.onrender.com/vouchers";
+const API_URL = "http://localhost:3000/vouchers";
 
 // Lấy toàn bộ Voucher (GET /vouchers)
 export const getVouchers = async (): Promise<Voucher[]> => {
@@ -17,7 +17,9 @@ export const getVoucherById = async (id: string): Promise<Voucher> => {
 };
 
 // Thêm mới voucher (POST /vouchers)
-export const addVoucher = async (voucher: Omit<Voucher, "_id">): Promise<Voucher> => {
+export const addVoucher = async (
+  voucher: Omit<Voucher, "_id">
+): Promise<Voucher> => {
   const res = await fetch(API_URL, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -28,7 +30,10 @@ export const addVoucher = async (voucher: Omit<Voucher, "_id">): Promise<Voucher
 };
 
 // Sửa voucher (PUT /vouchers/:id)
-export const editVoucher = async (id: string, voucher: Partial<Voucher>): Promise<Voucher> => {
+export const editVoucher = async (
+  id: string,
+  voucher: Partial<Voucher>
+): Promise<Voucher> => {
   const res = await fetch(`${API_URL}/${id}`, {
     method: "PUT",
     headers: { "Content-Type": "application/json" },
@@ -39,7 +44,9 @@ export const editVoucher = async (id: string, voucher: Partial<Voucher>): Promis
 };
 
 // Xóa voucher (DELETE /vouchers/:id)
-export const deleteVoucher = async (id: string): Promise<{ message: string }> => {
+export const deleteVoucher = async (
+  id: string
+): Promise<{ message: string }> => {
   const res = await fetch(`${API_URL}/${id}`, {
     method: "DELETE",
   });

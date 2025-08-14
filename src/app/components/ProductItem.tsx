@@ -1,4 +1,4 @@
-'use client';
+"use client";
 import React, { useState, useEffect } from "react";
 import { Products } from "../types/productD";
 import { Variant } from "../types/variantD";
@@ -9,9 +9,9 @@ import { useRouter } from "next/navigation";
 import { useShowMessage } from "../utils/useShowMessage";
 import { HeartOutlined, HeartFilled } from "@ant-design/icons";
 
-
 export default function ProductItem({ product }: { product: Products }) {
-  const hasVariants = Array.isArray(product.variants) && product.variants.length > 0;
+  const hasVariants =
+    Array.isArray(product.variants) && product.variants.length > 0;
   const [selectedIdx, setSelectedIdx] = useState(0);
   const dispatch = useAppDispatch();
   const { success, error } = useShowMessage("product", "user");
@@ -20,9 +20,10 @@ export default function ProductItem({ product }: { product: Products }) {
   // hàm xử lý sản phẩm yêu thích
   const [isFavorite, setIsFavorite] = useState(false);
   const productId = (product._id ?? product.id)?.toString();
-  const userStr = typeof window !== "undefined" ? localStorage.getItem("user") : null;
-  const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
-
+  const userStr =
+    typeof window !== "undefined" ? localStorage.getItem("user") : null;
+  const token =
+    typeof window !== "undefined" ? localStorage.getItem("token") : null;
 
   const prices = hasVariants
     ? product.variants.map((v) => Number(v.price) || 0)
@@ -52,13 +53,17 @@ export default function ProductItem({ product }: { product: Products }) {
   // };
 
   const handleBuyNow = () => {
-      //hàm bấm nút mua ngay chuyển qua thanh toán
-    const selectedVariant = hasVariants ? product.variants[selectedIdx] : undefined;
+    //hàm bấm nút mua ngay chuyển qua thanh toán
+    const selectedVariant = hasVariants
+      ? product.variants[selectedIdx]
+      : undefined;
     const buyNowItem = {
       product: {
         ...product,
         createdAt: new Date(product.createdAt).toISOString(),
-        updatedAt: product.updatedAt ? new Date(product.updatedAt).toISOString() : undefined,
+        updatedAt: product.updatedAt
+          ? new Date(product.updatedAt).toISOString()
+          : undefined,
       },
       selectedVariant,
       quantity: 1,
@@ -70,116 +75,138 @@ export default function ProductItem({ product }: { product: Products }) {
     router.push("/checkout?buyNow=1");
   };
 
-
-    // Xác định người dùng đã đăng nhập chưa
-    let userId: string | null = null;
-      if (userStr) {
-        try {
-          const userObj = JSON.parse(userStr);
-          userId = userObj._id || userObj.id;
-        } catch {}
-      }
+  // Xác định người dùng đã đăng nhập chưa
+  let userId: string | null = null;
+  if (userStr) {
+    try {
+      const userObj = JSON.parse(userStr);
+      userId = userObj._id || userObj.id;
+    } catch {}
+  }
   const isLoggedIn = !!userId && !!token;
 
   // Load trạng thái yêu thích
-useEffect(() => {
-  if (isLoggedIn && userId && token) {
-    fetch(`https://deploy-nodejs-vqqq.onrender.com/favorites?userId=${userId}`, {
-      headers: { Authorization: `Bearer ${token}` },
-    })
-      .then((res) => res.ok ? res.json() : [])
-      .then((favList) => {
-        setIsFavorite(favList.some((item: Products) => ((item._id ?? item.id)?.toString() === productId)));
-      });
-  } else {
-    const favorites = JSON.parse(localStorage.getItem("favorites") || "[]");
-    const exists = favorites.some((item: Products) => ((item._id ?? item.id)?.toString() === productId));
-    setIsFavorite(exists);
-  }
-}, [productId, isLoggedIn, userId, token]);
-
-  // thêm sản phẩm vào yêu thích 
-const addFavorite = async (productId: string, userId: string, token: string) => {
-  await fetch("https://deploy-nodejs-vqqq.onrender.com/favorites", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-    },
-    body: JSON.stringify({ productId, userId }),
-  });
-};
-
-// xóa sản phẩm yêu thích 
-const removeFavorite = async (productId: string, userId: string, token: string) => {
-  await fetch(`https://deploy-nodejs-vqqq.onrender.com/favorites/${productId}?userId=${userId}`, {
-    method: "DELETE",
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
-};
-
-// xử lý thêm/xóa yêu thích + thông báo
-const toggleFavorite = async () => {
-  if (isLoggedIn && userId && token) {
-    if (isFavorite) {
-      await removeFavorite(productId, userId, token);
-      setIsFavorite(false);
-      error("Đã xóa khỏi yêu thích");
+  useEffect(() => {
+    if (isLoggedIn && userId && token) {
+      fetch(`http://localhost:3000/favorites?userId=${userId}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+        .then((res) => (res.ok ? res.json() : []))
+        .then((favList) => {
+          setIsFavorite(
+            favList.some(
+              (item: Products) =>
+                (item._id ?? item.id)?.toString() === productId
+            )
+          );
+        });
     } else {
-      await addFavorite(productId, userId, token);
-      setIsFavorite(true);
-      success("Đã thêm vào yêu thích");
+      const favorites = JSON.parse(localStorage.getItem("favorites") || "[]");
+      const exists = favorites.some(
+        (item: Products) => (item._id ?? item.id)?.toString() === productId
+      );
+      setIsFavorite(exists);
     }
-    window.dispatchEvent(new Event("favoriteChanged"));
-  } else {
-    const favorites = JSON.parse(localStorage.getItem("favorites") || "[]");
-    const exists = favorites.some((item: Products) => ((item._id ?? item.id)?.toString() === productId));
-    let updatedFavorites;
-    if (exists) {
-      updatedFavorites = favorites.filter((item: Products) => ((item._id ?? item.id)?.toString() !== productId));
-      setIsFavorite(false);
-      error("Đã xóa khỏi yêu thích");
+  }, [productId, isLoggedIn, userId, token]);
+
+  // thêm sản phẩm vào yêu thích
+  const addFavorite = async (
+    productId: string,
+    userId: string,
+    token: string
+  ) => {
+    await fetch("http://localhost:3000/favorites", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ productId, userId }),
+    });
+  };
+
+  // xóa sản phẩm yêu thích
+  const removeFavorite = async (
+    productId: string,
+    userId: string,
+    token: string
+  ) => {
+    await fetch(
+      `http://localhost:3000/favorites/${productId}?userId=${userId}`,
+      {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+  };
+
+  // xử lý thêm/xóa yêu thích + thông báo
+  const toggleFavorite = async () => {
+    if (isLoggedIn && userId && token) {
+      if (isFavorite) {
+        await removeFavorite(productId, userId, token);
+        setIsFavorite(false);
+        error("Đã xóa khỏi yêu thích");
+      } else {
+        await addFavorite(productId, userId, token);
+        setIsFavorite(true);
+        success("Đã thêm vào yêu thích");
+      }
+      window.dispatchEvent(new Event("favoriteChanged"));
     } else {
-      updatedFavorites = [...favorites, product];
-      setIsFavorite(true);
-      success("Đã thêm vào yêu thích");
+      const favorites = JSON.parse(localStorage.getItem("favorites") || "[]");
+      const exists = favorites.some(
+        (item: Products) => (item._id ?? item.id)?.toString() === productId
+      );
+      let updatedFavorites;
+      if (exists) {
+        updatedFavorites = favorites.filter(
+          (item: Products) => (item._id ?? item.id)?.toString() !== productId
+        );
+        setIsFavorite(false);
+        error("Đã xóa khỏi yêu thích");
+      } else {
+        updatedFavorites = [...favorites, product];
+        setIsFavorite(true);
+        success("Đã thêm vào yêu thích");
+      }
+      localStorage.setItem("favorites", JSON.stringify(updatedFavorites));
+      window.dispatchEvent(new Event("favoriteChanged"));
     }
-    localStorage.setItem("favorites", JSON.stringify(updatedFavorites));
-    window.dispatchEvent(new Event("favoriteChanged"));
-  }
-};
-
-
+  };
 
   return (
     <div className={styles.product}>
       <div className={styles.image_wrapper}>
         <span
-    className={styles.heartIcon}
-    onClick={(e) => {
-      e.preventDefault();
-      toggleFavorite();
-    }}
-  >
-    {isFavorite ? (
-      <HeartFilled style={{ color: "red", fontSize: 22 }} />
-    ) : (
-      <HeartOutlined style={{ fontSize: 22 }} />
-    )}
-  </span>
+          className={styles.heartIcon}
+          onClick={(e) => {
+            e.preventDefault();
+            toggleFavorite();
+          }}
+        >
+          {isFavorite ? (
+            <HeartFilled style={{ color: "red", fontSize: 22 }} />
+          ) : (
+            <HeartOutlined style={{ fontSize: 22 }} />
+          )}
+        </span>
 
         <a href={`/products/${product._id}`}>
           <div className={styles.image_link}>
-            <img src={`https://deploy-nodejs-vqqq.onrender.com/images/${product.images[0]}`} alt={product.name} />
             <img
-              src={`https://deploy-nodejs-vqqq.onrender.com/images/${product.images[1]}`}
+              src={`http://localhost:3000/images/${product.images[0]}`}
+              alt={product.name}
+            />
+            <img
+              src={`http://localhost:3000/images/${product.images[1]}`}
               className={styles.image_hover}
               alt={`${product.name} Hover`}
             />
             <img
-              src="https://deploy-nodejs-vqqq.onrender.com/images/logoXP.png"
+              src="http://localhost:3000/images/logoXP.png"
               className={styles.logo_left}
               alt="Logo"
             />
@@ -188,13 +215,13 @@ const toggleFavorite = async () => {
 
         <button className={styles.buy_now_btn} onClick={handleBuyNow}>
           <img
-            src="https://deploy-nodejs-vqqq.onrender.com/images/button.png"
+            src="http://localhost:3000/images/button.png"
             className={styles.bear_left}
             alt="Bear Left"
           />
           MUA NGAY
           <img
-            src="https://deploy-nodejs-vqqq.onrender.com/images/button.png"
+            src="http://localhost:3000/images/button.png"
             className={styles.bear_right}
             alt="Bear Right"
           />
@@ -214,7 +241,7 @@ const toggleFavorite = async () => {
           <div className={styles.price_sale}>
             {maxPrice.toLocaleString("vi-VN")} đ
           </div>
-        )}  
+        )}
       </div>
 
       {/* Size chỉ hiển thị nếu có variants */}
@@ -223,7 +250,9 @@ const toggleFavorite = async () => {
           {product.variants.map((variant, idx) => (
             <span
               key={variant.size}
-              className={`${styles.size_box} ${idx === selectedIdx ? styles.active : ""}`}
+              className={`${styles.size_box} ${
+                idx === selectedIdx ? styles.active : ""
+              }`}
               onClick={() => setSelectedIdx(idx)}
             >
               {variant.size}

@@ -29,8 +29,8 @@ interface Props {
   totalWithShipping: number;
   handleOrder: (e: React.FormEvent) => void;
   onApplyCoupon: () => void; // thêm prop này
-  discount: number;          // thêm prop này
-  voucherMessage: string;    // thêm prop này
+  discount: number; // thêm prop này
+  voucherMessage: string; // thêm prop này
 }
 
 const CheckoutOrderSummary: React.FC<Props> = ({
@@ -50,11 +50,14 @@ const CheckoutOrderSummary: React.FC<Props> = ({
       <h3>Đơn hàng ({cartItems.length} sản phẩm)</h3>
       <div className="order-summary">
         {cartItems.map((item, idx) => (
-          <div className="spTT" key={item.product._id + (item.selectedVariant?.size || '') + idx}>
+          <div
+            className="spTT"
+            key={item.product._id + (item.selectedVariant?.size || "") + idx}
+          >
             <div className="soSP" style={{ position: "relative" }}>
               <img
                 className="anhGH"
-                src={`https://deploy-nodejs-vqqq.onrender.com/images/${item.product.images[0]}`}
+                src={`http://localhost:3000/images/${item.product.images[0]}`}
                 alt={item.product.name}
               />
               <span
@@ -62,17 +65,25 @@ const CheckoutOrderSummary: React.FC<Props> = ({
                 style={{
                   position: "absolute",
                   top: -6,
-                  right: -12
-                }}>
+                  right: -12,
+                }}
+              >
                 {item.quantity}
               </span>
             </div>
             <span>
               {item.product.name}
-              {item.selectedVariant?.size ? ` - Size: ${item.selectedVariant.size}` : ""}
+              {item.selectedVariant?.size
+                ? ` - Size: ${item.selectedVariant.size}`
+                : ""}
             </span>
             <p>
-              {((item.selectedVariant ? item.selectedVariant.price : item.product.price) * item.quantity).toLocaleString('vi-VN')} ₫
+              {(
+                (item.selectedVariant
+                  ? item.selectedVariant.price
+                  : item.product.price) * item.quantity
+              ).toLocaleString("vi-VN")}{" "}
+              ₫
             </p>
           </div>
         ))}
@@ -81,37 +92,47 @@ const CheckoutOrderSummary: React.FC<Props> = ({
             type="text"
             placeholder="Nhập mã giảm giá"
             value={coupon}
-            onChange={e => setCoupon(e.target.value)}
+            onChange={(e) => setCoupon(e.target.value)}
           />
-          <button type="button" onClick={onApplyCoupon}>ÁP DỤNG</button>
+          <button type="button" onClick={onApplyCoupon}>
+            ÁP DỤNG
+          </button>
         </div>
         {voucherMessage && (
-          <div style={{ color: discount > 0 ? "green" : "red", marginBottom: 8 }}>
+          <div
+            style={{ color: discount > 0 ? "green" : "red", marginBottom: 8 }}
+          >
             {voucherMessage}
           </div>
         )}
         <div className="tinhTien">
           <div className="tTien">
             <p>Tạm tính</p>
-            <p>{total.toLocaleString('vi-VN')} ₫</p>
+            <p>{total.toLocaleString("vi-VN")} ₫</p>
           </div>
           <div className="tTien">
             <p>Phí vận chuyển</p>
-            <span>{SHIPPING_FEE.toLocaleString('vi-VN')} ₫</span>
+            <span>{SHIPPING_FEE.toLocaleString("vi-VN")} ₫</span>
           </div>
           {discount > 0 && (
             <div className="tTien">
               <p>Giảm giá</p>
-              <span>-{discount.toLocaleString('vi-VN')} ₫</span>
+              <span>-{discount.toLocaleString("vi-VN")} ₫</span>
             </div>
           )}
         </div>
         <div className="total">
           <p>Tổng cộng</p>
-          <span>{(total + SHIPPING_FEE - discount).toLocaleString('vi-VN')} ₫</span>
+          <span>
+            {(total + SHIPPING_FEE - discount).toLocaleString("vi-VN")} ₫
+          </span>
         </div>
         <div className="actions">
-          <button className="back" type="button" onClick={() => window.history.back()}>
+          <button
+            className="back"
+            type="button"
+            onClick={() => window.history.back()}
+          >
             ◀ Quay về giỏ hàng
           </button>
           <button className="submit" type="submit">

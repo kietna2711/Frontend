@@ -13,9 +13,9 @@ const CategoryProduct = ({ categoryId, limit, title }: Props) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch(`https://deploy-nodejs-vqqq.onrender.com/products?category=${categoryId}`)
-      .then(res => res.json())
-      .then(data => {
+    fetch(`http://localhost:3000/products?category=${categoryId}`)
+      .then((res) => res.json())
+      .then((data) => {
         setProducts(limit ? data.slice(0, limit) : data);
         setLoading(false);
       })

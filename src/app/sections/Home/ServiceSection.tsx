@@ -1,12 +1,12 @@
-"use client"
+"use client";
 
 import React, { useState } from "react";
-import styles from "@/app/styles/productitem.module.css"
+import styles from "@/app/styles/productitem.module.css";
 
 const services = [
   {
     title: "Giặt Gấu",
-    img: "https://deploy-nodejs-vqqq.onrender.com/images/image%2062.png",
+    img: "http://localhost:3000/images/image%2062.png",
     description: `Việc tắm giặt cho các em ý là điều hoàn toàn đơn giản. Bạn chỉ cần cho em đó vào một chiếc vỏ gối hay một chiếc túi vải, cuốn chặt lại, sau đó cho vào máy giặt.
     Sau khi giặt xong, bạn lấy sấy khô hoặc phơi dưới nắng to để đảm bảo em gấu được thơm mùi nắng nhé!`,
     link: "/posts/detail/giat-gau-chuyen-nghiep-cham-soc-gau-yeu",
@@ -14,8 +14,9 @@ const services = [
   },
   {
     title: "Bọc Quà - Tặng Thiệp",
-    img: "https://deploy-nodejs-vqqq.onrender.com/images/thiepmoi.webp",
-    description: "Chúng tôi cung cấp dịch vụ bọc quà và tặng thiệp miễn phí cho mọi đơn hàng.",
+    img: "http://localhost:3000/images/thiepmoi.webp",
+    description:
+      "Chúng tôi cung cấp dịch vụ bọc quà và tặng thiệp miễn phí cho mọi đơn hàng.",
     link: "/posts/detail/tang-thiep-y-nghia",
     linkText: "Xem thêm",
   },
@@ -32,7 +33,7 @@ export default function ServiceSection() {
           <a
             href="#"
             className={active === idx ? styles.active : ""}
-            onClick={e => {
+            onClick={(e) => {
               e.preventDefault();
               setActive(idx);
             }}

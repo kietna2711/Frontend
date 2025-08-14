@@ -10,7 +10,9 @@ export default function Verify() {
   const [resendSeconds, setResendSeconds] = useState(0);
   const [resendLoading, setResendLoading] = useState(false);
   const showMessage = useShowMessage("verify-otp", "user");
-  const inputs = Array.from({ length: 6 }, () => useRef<HTMLInputElement>(null));
+  const inputs = Array.from({ length: 6 }, () =>
+    useRef<HTMLInputElement>(null)
+  );
 
   useEffect(() => {
     if (resendSeconds > 0) {
@@ -32,7 +34,7 @@ export default function Verify() {
       return;
     }
     // Gửi lại OTP cho đăng ký
-    await fetch("https://deploy-nodejs-vqqq.onrender.com/users/send-otp", {
+    await fetch("http://localhost:3000/users/send-otp", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email, type: "register" }),
@@ -53,7 +55,10 @@ export default function Verify() {
       }
     }
   };
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>, idx: number) => {
+  const handleKeyDown = (
+    e: React.KeyboardEvent<HTMLInputElement>,
+    idx: number
+  ) => {
     if (e.key === "Backspace" && !e.currentTarget.value && idx > 0) {
       inputs[idx - 1].current?.focus();
     }
@@ -62,39 +67,39 @@ export default function Verify() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
-    const otpArr = inputs.map(ref => ref.current?.value || "");
+    const otpArr = inputs.map((ref) => ref.current?.value || "");
     const otp = otpArr.join("");
 
     if (otp.length !== 6) {
       setError("Mã OTP phải đủ 6 số!");
       return;
     }
-    if (!otpArr.every(char => /^\d$/.test(char))) {
+    if (!otpArr.every((char) => /^\d$/.test(char))) {
       setError("Mã OTP chỉ được nhập số!");
       return;
     }
 
-  const email = new URLSearchParams(window.location.search).get("email");
-  if (!email) {
-    setError("Không tìm thấy email!");
-    return;
-  }
-  // Gửi OTP lên backend để xác thực email đăng ký
-  const res = await fetch("https://deploy-nodejs-vqqq.onrender.com/users/verify-otp-register", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ email, otp }),
-  });
-  const data = await res.json();
-  if (res.ok) {
-    showMessage.success("Xác thực email thành công! Bạn có thể đăng nhập.");
-    setTimeout(() => {
-      router.push("/login");
-    }, 1200);
-  } else {
-    setError(data.message || "Mã OTP không đúng hoặc đã hết hạn!");
-  }
-};
+    const email = new URLSearchParams(window.location.search).get("email");
+    if (!email) {
+      setError("Không tìm thấy email!");
+      return;
+    }
+    // Gửi OTP lên backend để xác thực email đăng ký
+    const res = await fetch("http://localhost:3000/users/verify-otp-register", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, otp }),
+    });
+    const data = await res.json();
+    if (res.ok) {
+      showMessage.success("Xác thực email thành công! Bạn có thể đăng nhập.");
+      setTimeout(() => {
+        router.push("/login");
+      }, 1200);
+    } else {
+      setError(data.message || "Mã OTP không đúng hoặc đã hết hạn!");
+    }
+  };
 
   return (
     <div className="container">
@@ -120,13 +125,18 @@ export default function Verify() {
                 pattern="[0-9]*"
                 inputMode="numeric"
                 required
-                onInput={e => handleInput(e as React.ChangeEvent<HTMLInputElement>, idx)}
-                onKeyDown={e => handleKeyDown(e, idx)}
+                onInput={(e) =>
+                  handleInput(e as React.ChangeEvent<HTMLInputElement>, idx)
+                }
+                onKeyDown={(e) => handleKeyDown(e, idx)}
               />
             ))}
           </div>
           {error && (
-            <div className="input-error" style={{ textAlign: "center", margin: "8px 0" }}>
+            <div
+              className="input-error"
+              style={{ textAlign: "center", margin: "8px 0" }}
+            >
               {error}
             </div>
           )}
@@ -135,7 +145,8 @@ export default function Verify() {
             href="#"
             className="register-link"
             style={{
-              pointerEvents: resendSeconds > 0 || resendLoading ? "none" : "auto",
+              pointerEvents:
+                resendSeconds > 0 || resendLoading ? "none" : "auto",
               color: resendSeconds > 0 || resendLoading ? "#aaa" : "#d16ba5",
               marginLeft: 16,
               userSelect: "none",

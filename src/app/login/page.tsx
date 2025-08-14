@@ -31,7 +31,7 @@ export default function Login() {
     }
 
     try {
-      const res = await fetch("https://deploy-nodejs-vqqq.onrender.com/users/login", {
+      const res = await fetch("http://localhost:3000/users/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
@@ -118,7 +118,9 @@ export default function Login() {
             validateField("password", e.target.value);
           }}
         />
-         {errors.password && <div className="input-error">{errors.password}</div>}
+        {errors.password && (
+          <div className="input-error">{errors.password}</div>
+        )}
         <div className="login-options">
           <label className="remember-me">
             <input
@@ -138,7 +140,7 @@ export default function Login() {
             className="google-btn"
             type="button"
             onClick={() =>
-              (window.location.href = "https://deploy-nodejs-vqqq.onrender.com/users/auth/google")
+              (window.location.href = "http://localhost:3000/users/auth/google")
             }
           >
             <img
@@ -147,7 +149,6 @@ export default function Login() {
             />
             Google
           </button>
-          
         </div>
         <a href="/register" className="register-link">
           Bạn chưa có tài khoản?

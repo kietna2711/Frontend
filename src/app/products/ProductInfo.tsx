@@ -35,7 +35,7 @@ const ProductInfo = ({ product }: { product: Products }) => {
   useEffect(() => {
     if (isLoggedIn && userId && token) {
       // Kiểm tra từ backend
-      fetch(`https://deploy-nodejs-vqqq.onrender.com/favorites?userId=${userId}`, {
+      fetch(`http://localhost:3000/favorites?userId=${userId}`, {
         headers: { Authorization: `Bearer ${token}` },
       })
         .then((res) => (res.ok ? res.json() : []))
@@ -151,7 +151,6 @@ const ProductInfo = ({ product }: { product: Products }) => {
       router.push("/checkout?buyNow=1");
     }, 350);
   };
-
 
   return (
     <div className={styles.productInfo_v3_noCard}>

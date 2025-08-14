@@ -19,8 +19,8 @@ import { useRouter } from "next/navigation";
 import { Products } from "../types/productD";
 import useFavoriteCount from "../hooks/useFavoriteCount";
 import { useAppSelector } from "../store/store";
-import { PostCategory } from '../types/postscategory';
-import { getPostCategories } from '../services/postscategory';
+import { PostCategory } from "../types/postscategory";
+import { getPostCategories } from "../services/postscategory";
 
 type Props = {
   categories: Category[];
@@ -47,8 +47,8 @@ const Header: React.FC<Props> = ({ categories, onOpenWheel }) => {
     fetchData();
   }, []);
 
-// Lấy số sản phẩm khác nhau trong giỏ hàng (không phải tổng quantity)
-const cartCount = useAppSelector((state) => state.cart.items.length);
+  // Lấy số sản phẩm khác nhau trong giỏ hàng (không phải tổng quantity)
+  const cartCount = useAppSelector((state) => state.cart.items.length);
   // Debounce search input
 
   // Hàm xử lý tìm kiếm
@@ -61,9 +61,8 @@ const cartCount = useAppSelector((state) => state.cart.items.length);
     const handler = setTimeout(async () => {
       try {
         const allProducts = await getProducts();
-        const filtered = allProducts.filter(
-          (product: Products) =>
-            product.name.toLowerCase().includes(searchValue.toLowerCase())
+        const filtered = allProducts.filter((product: Products) =>
+          product.name.toLowerCase().includes(searchValue.toLowerCase())
         );
         setSuggestions(filtered.slice(0, 5));
         setShowSuggestions(true);
@@ -77,7 +76,7 @@ const cartCount = useAppSelector((state) => state.cart.items.length);
   }, [searchValue]);
 
   // Hàm xử lý tìm kiếm khi nhấn Enter hoặc click vào biểu tượng tìm kiếm
-   const handleSearchAction = () => {
+  const handleSearchAction = () => {
     if (searchValue.trim()) {
       router.push(`/products?search=${encodeURIComponent(searchValue.trim())}`);
       setMobileMenuActive(false);
@@ -107,8 +106,6 @@ const cartCount = useAppSelector((state) => state.cart.items.length);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [username, setUsername] = useState<string | null>(null);
   const userMenuRef = useRef<HTMLDivElement>(null);
-
-
 
   const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -140,7 +137,10 @@ const cartCount = useAppSelector((state) => state.cart.items.length);
   // Đóng menu khi click ra ngoài
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
-      if (userMenuRef.current && !userMenuRef.current.contains(event.target as Node)) {
+      if (
+        userMenuRef.current &&
+        !userMenuRef.current.contains(event.target as Node)
+      ) {
         setShowUserMenu(false);
       }
     }
@@ -153,7 +153,6 @@ const cartCount = useAppSelector((state) => state.cart.items.length);
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [showUserMenu]);
-
 
   // Lấy thông tin user từ localStorage khi component mount
   useEffect(() => {
@@ -198,11 +197,11 @@ const cartCount = useAppSelector((state) => state.cart.items.length);
           const userObj = JSON.parse(userStr);
           setUsername(
             userObj.username ||
-            userObj.firstName ||
-            userObj.name ||
-            userObj.displayName ||
-            userObj.email ||
-            null
+              userObj.firstName ||
+              userObj.name ||
+              userObj.displayName ||
+              userObj.email ||
+              null
           );
           setIsLoggedIn(true);
         } catch {
@@ -224,7 +223,7 @@ const cartCount = useAppSelector((state) => state.cart.items.length);
       window.removeEventListener("storage", updateUser);
     };
   }, []);
-//Đăng xuất xóa thông tin người dùng và token ra khỏi localStorage
+  //Đăng xuất xóa thông tin người dùng và token ra khỏi localStorage
   const handleLogout = () => {
     localStorage.removeItem("user");
     localStorage.removeItem("token");
@@ -239,7 +238,10 @@ const cartCount = useAppSelector((state) => state.cart.items.length);
         <div className={styles["header-row"]}>
           <div className={styles["logo-wrap"]}>
             <a href="/">
-              <img src="https://deploy-nodejs-vqqq.onrender.com/images/logoXP.png" alt="Mimi Bear Logo" />
+              <img
+                src="http://localhost:3000/images/logoXP.png"
+                alt="Mimi Bear Logo"
+              />
             </a>
             <div className={styles.slogan}>“Hug MimiBear-Unbox Love”</div>
           </div>
@@ -270,10 +272,10 @@ const cartCount = useAppSelector((state) => state.cart.items.length);
                     <li
                       key={prod._id}
                       className={styles.suggestionItem}
-                     onMouseDown={() => handleSuggestionClick(prod._id)}
+                      onMouseDown={() => handleSuggestionClick(prod._id)}
                     >
                       <img
-                        src={`https://deploy-nodejs-vqqq.onrender.com/images/${prod.images[0]}`}
+                        src={`http://localhost:3000/images/${prod.images[0]}`}
                         alt={prod.name}
                         className={styles.suggestionImg}
                       />
@@ -281,20 +283,24 @@ const cartCount = useAppSelector((state) => state.cart.items.length);
                     </li>
                   ))}
                 </ul>
-                <div className={styles.suggestionFooter} onMouseDown={handleSearchAction}>
+                <div
+                  className={styles.suggestionFooter}
+                  onMouseDown={handleSearchAction}
+                >
                   <span>Xem thêm</span>
                 </div>
               </div>
             )}
           </form>
           <div className={styles["header-icons"]}>
-
             <a
               href="/favorites"
               title="Xem danh sách yêu thích"
               className={styles.favoriteIconWrap}
             >
-              <HeartOutlined style={{ fontSize: 22, color: "#ff4d4f", position: "relative" }} />
+              <HeartOutlined
+                style={{ fontSize: 22, color: "#ff4d4f", position: "relative" }}
+              />
               {favoriteCount > 0 && (
                 <span className={styles.favoriteBadge}>{favoriteCount}</span>
               )}
@@ -328,31 +334,35 @@ const cartCount = useAppSelector((state) => state.cart.items.length);
                 />
               )}
             </a>
-             <div
+            <div
               className={styles["user-menu-wrap"]}
               onMouseEnter={() => setShowUserMenu(true)}
               onMouseLeave={() => setShowUserMenu(false)}
               ref={userMenuRef}
-              style={{ position: "relative", display: "inline-block", marginLeft: 8 }}
+              style={{
+                position: "relative",
+                display: "inline-block",
+                marginLeft: 8,
+              }}
             >
               {isLoggedIn && username ? (
                 <>
-                {username && (
-  <a href={`/userprofile/${encodeURIComponent(username)}`}>
-                  <span
-                    style={{
-                      fontWeight: 500,
-                      color: "#b94490",
-                      cursor: "pointer",
-                      padding: "4px 12px",
-                      borderRadius: "16px",
-                      background: "#fff",
-                    }}
-                  >
-                    Xin chào, {username}
-                  </span>
-                   </a>
-)}
+                  {username && (
+                    <a href={`/userprofile/${encodeURIComponent(username)}`}>
+                      <span
+                        style={{
+                          fontWeight: 500,
+                          color: "#b94490",
+                          cursor: "pointer",
+                          padding: "4px 12px",
+                          borderRadius: "16px",
+                          background: "#fff",
+                        }}
+                      >
+                        Xin chào, {username}
+                      </span>
+                    </a>
+                  )}
                   {showUserMenu && (
                     <div className={styles["user-menu-dropdown"]}>
                       <button
@@ -387,7 +397,6 @@ const cartCount = useAppSelector((state) => state.cart.items.length);
                 </>
               )}
             </div>
-   
           </div>
           <button className={styles["menu-btn"]} onClick={openMobileMenu}>
             <MenuOutlined />
@@ -413,10 +422,14 @@ const cartCount = useAppSelector((state) => state.cart.items.length);
               <li className={styles["has-submenu"]}>
                 <div className={styles["menu-item"]}>
                   <a href="/posts">Bài viết</a>
-                  <span className={styles["icon-down"]}><DownOutlined /></span>
+                  <span className={styles["icon-down"]}>
+                    <DownOutlined />
+                  </span>
                 </div>
                 <ul className={styles["submenu"]}>
-                  <li><a href="/posts">Tất cả bài viết</a></li>
+                  <li>
+                    <a href="/posts">Tất cả bài viết</a>
+                  </li>
                   {postCategories.map((cat) => (
                     <li key={cat._id}>
                       <a href={`/posts/categories/${cat.slug}`}>{cat.name}</a>
@@ -426,20 +439,30 @@ const cartCount = useAppSelector((state) => state.cart.items.length);
               </li>
 
               {visibleCategories.map((item) => {
-                const visibleSub = item.subcategories?.filter((sub) => !sub.hidden) || [];
+                const visibleSub =
+                  item.subcategories?.filter((sub) => !sub.hidden) || [];
                 const hasSub = visibleSub.length > 0;
 
                 return (
-                  <li key={item._id} className={hasSub ? styles["has-submenu"] : ""}>
+                  <li
+                    key={item._id}
+                    className={hasSub ? styles["has-submenu"] : ""}
+                  >
                     <div className={styles["menu-item"]}>
                       <a href={`/products?category=${item._id}`}>{item.name}</a>
-                      {hasSub && <span className={styles["icon-down"]}><DownOutlined /></span>}
+                      {hasSub && (
+                        <span className={styles["icon-down"]}>
+                          <DownOutlined />
+                        </span>
+                      )}
                     </div>
                     {hasSub && (
                       <ul className={styles.submenu}>
                         {visibleSub.map((sub) => (
                           <li key={sub._id}>
-                            <a href={`/products?subcategory=${sub._id}`}>{sub.name}</a>
+                            <a href={`/products?subcategory=${sub._id}`}>
+                              {sub.name}
+                            </a>
                           </li>
                         ))}
                       </ul>
@@ -452,12 +475,24 @@ const cartCount = useAppSelector((state) => state.cart.items.length);
         </nav>
       </Affix>
 
-      <div className={`${styles.overlay}${mobileMenuActive ? " " + styles.active : ""}`} onClick={handleOverlayClick}></div>
+      <div
+        className={`${styles.overlay}${
+          mobileMenuActive ? " " + styles.active : ""
+        }`}
+        onClick={handleOverlayClick}
+      ></div>
 
-      <div className={`${styles["mobile-menu"]}${mobileMenuActive ? " " + styles.active : ""}`}>
+      <div
+        className={`${styles["mobile-menu"]}${
+          mobileMenuActive ? " " + styles.active : ""
+        }`}
+      >
         <div className={styles["mobile-menu-header"]}>
           <span className={styles.title}>Danh mục</span>
-          <button className={styles["mobile-close-btn"]} onClick={closeMobileMenu}>
+          <button
+            className={styles["mobile-close-btn"]}
+            onClick={closeMobileMenu}
+          >
             <CloseOutlined />
           </button>
         </div>
@@ -467,9 +502,17 @@ const cartCount = useAppSelector((state) => state.cart.items.length);
               <UserOutlined /> Xin chào, {username}
             </a>
 
-            <a href="/favorites" className={styles.favoriteIconWrap} title="Yêu thích">
-              <HeartOutlined style={{ fontSize: 20, color: "#e87ebd", cursor: "pointer" }} />
-              {favoriteCount > 0 && <span className={styles.favoriteBadge}>{favoriteCount}</span>}
+            <a
+              href="/favorites"
+              className={styles.favoriteIconWrap}
+              title="Yêu thích"
+            >
+              <HeartOutlined
+                style={{ fontSize: 20, color: "#e87ebd", cursor: "pointer" }}
+              />
+              {favoriteCount > 0 && (
+                <span className={styles.favoriteBadge}>{favoriteCount}</span>
+              )}
             </a>
 
             <a href="/cart" title="Giỏ hàng" style={{ position: "relative" }}>
@@ -483,10 +526,18 @@ const cartCount = useAppSelector((state) => state.cart.items.length);
                     boxShadow: "0 0 0 2px #fff",
                   }}
                 >
-                  <ShoppingOutlined style={{ fontSize: 20, color: "#e87ebd", cursor: "pointer" }} />
+                  <ShoppingOutlined
+                    style={{
+                      fontSize: 20,
+                      color: "#e87ebd",
+                      cursor: "pointer",
+                    }}
+                  />
                 </Badge>
               ) : (
-                <ShoppingOutlined style={{ fontSize: 20, color: "#e87ebd", cursor: "pointer" }} />
+                <ShoppingOutlined
+                  style={{ fontSize: 20, color: "#e87ebd", cursor: "pointer" }}
+                />
               )}
             </a>
           </div>
@@ -497,7 +548,6 @@ const cartCount = useAppSelector((state) => state.cart.items.length);
             </div>
           </a>
         )}
-
 
         <div className={styles["mobile-search-box"]}>
           <form onSubmit={handleSearch} style={{ position: "relative" }}>
@@ -530,7 +580,7 @@ const cartCount = useAppSelector((state) => state.cart.items.length);
                     onClick={() => handleSuggestionClick(prod._id)}
                   >
                     <img
-                      src={`https://deploy-nodejs-vqqq.onrender.com/images/${prod.images[0]}`}
+                      src={`http://localhost:3000/images/${prod.images[0]}`}
                       alt={prod.name}
                       className={styles.suggestionImg}
                     />
@@ -538,7 +588,10 @@ const cartCount = useAppSelector((state) => state.cart.items.length);
                   </li>
                 ))}
               </ul>
-              <div className={styles.suggestionFooter} onClick={handleSearchAction}>
+              <div
+                className={styles.suggestionFooter}
+                onClick={handleSearchAction}
+              >
                 <span>Xem thêm</span>
               </div>
             </div>
@@ -548,13 +601,16 @@ const cartCount = useAppSelector((state) => state.cart.items.length);
         <div className={styles["mobile-menu-list"]}>
           <ul>
             {visibleCategories.map((item, idx) => {
-              const visibleSub = item.subcategories?.filter((sub) => !sub.hidden) || [];
+              const visibleSub =
+                item.subcategories?.filter((sub) => !sub.hidden) || [];
               const hasSub = visibleSub.length > 0;
 
               return (
                 <li
                   key={item._id}
-                  className={hasSub && mobileOpenIndex === idx ? styles.open : ""}
+                  className={
+                    hasSub && mobileOpenIndex === idx ? styles.open : ""
+                  }
                 >
                   {hasSub ? (
                     <>
@@ -583,7 +639,9 @@ const cartCount = useAppSelector((state) => state.cart.items.length);
                       <ul className={styles.submenu}>
                         {visibleSub.map((sub) => (
                           <li key={sub._id}>
-                            <a href={`/products?subcategory=${sub._id}`}>{sub.name}</a>
+                            <a href={`/products?subcategory=${sub._id}`}>
+                              {sub.name}
+                            </a>
                           </li>
                         ))}
                       </ul>

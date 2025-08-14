@@ -21,7 +21,9 @@ const PaymentReturnPage: React.FC = () => {
     const checkOrderStatus = async () => {
       try {
         // Gọi backend để kiểm tra trạng thái đơn hàng
-        const res = await axios.get(`https://deploy-nodejs-vqqq.onrender.com/orders/status/${orderId}?resultCode=${resultCode}`);
+        const res = await axios.get(
+          `http://localhost:3000/orders/status/${orderId}?resultCode=${resultCode}`
+        );
         const { status } = res.data;
         if (status === "paid") {
           Swal.fire({
@@ -70,7 +72,14 @@ const PaymentReturnPage: React.FC = () => {
   }, [resultCode, orderId, message, router, dispatch]);
 
   return (
-    <div style={{ minHeight: 200, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+    <div
+      style={{
+        minHeight: 200,
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+      }}
+    >
       <span>Đang xử lý kết quả thanh toán...</span>
     </div>
   );

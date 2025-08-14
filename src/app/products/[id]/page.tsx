@@ -6,7 +6,7 @@ import ProductTabs from "../ProductTabs";
 import ReviewList from "../ReviewList";
 import styles from "../../styles/productsDetail.module.css";
 import { Products } from "../../types/productD";
-import RelatedProductsSection from '@/app/components/RelatedProductsSection';
+import RelatedProductsSection from "@/app/components/RelatedProductsSection";
 import InstagramSection from "@/app/components/InstagramSection";
 import ReviewForm from "../ReviewForm";
 
@@ -24,16 +24,12 @@ export default async function ProductPage({
   // Lấy tất cả sản phẩm
   const allProducts = await getProducts();
 
- 
+  const currentCategoryId = product.categoryId?._id || product.categoryId;
 
-const currentCategoryId = product.categoryId?._id || product.categoryId;
-
-const relatedProducts = allProducts.filter((p) => {
-  const catId = p.categoryId?._id || p.categoryId;
-  return p._id !== product._id && catId === currentCategoryId;
-});
-
-
+  const relatedProducts = allProducts.filter((p) => {
+    const catId = p.categoryId?._id || p.categoryId;
+    return p._id !== product._id && catId === currentCategoryId;
+  });
 
   return (
     <div className={styles.container_tong}>
@@ -42,24 +38,24 @@ const relatedProducts = allProducts.filter((p) => {
           <Gallery
             images={
               Array.isArray(product.images)
-                ? product.images.map((img) => `https://deploy-nodejs-vqqq.onrender.com/images/${img}`)
+                ? product.images.map(
+                    (img) => `http://localhost:3000/images/${img}`
+                  )
                 : []
             }
           />
           <ProductInfo product={product} />
         </div>
         <div className={styles.content_container_tong}>
-           <ProductTabs product={product} />
-           <ReviewList productId={product._id} />
-
+          <ProductTabs product={product} />
+          <ReviewList productId={product._id} />
         </div>
-           <ReviewForm productId={product._id} />
-        
+        <ReviewForm productId={product._id} />
       </div>
 
       {/* --- Sản phẩm liên quan --- */}
-        <RelatedProductsSection relatedProducts={relatedProducts}/>
-         <InstagramSection />
+      <RelatedProductsSection relatedProducts={relatedProducts} />
+      <InstagramSection />
     </div>
   );
 }

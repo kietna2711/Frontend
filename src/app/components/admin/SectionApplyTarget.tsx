@@ -1,6 +1,10 @@
 "use client";
 import React from "react";
-import { PlusOutlined, DeleteOutlined, ExclamationCircleOutlined } from "@ant-design/icons";
+import {
+  PlusOutlined,
+  DeleteOutlined,
+  ExclamationCircleOutlined,
+} from "@ant-design/icons";
 import styles from "@/app/styles/admin/adddiscount.module.css";
 
 type Props = {
@@ -78,7 +82,9 @@ export default function SectionApplyTarget(props: Props) {
           </div>
           {touched && selectedCategoryIds.length === 0 && (
             <div className="text-danger mt-2" style={{ fontWeight: 500 }}>
-              <ExclamationCircleOutlined style={{ fontSize: 17, marginRight: 5 }} />
+              <ExclamationCircleOutlined
+                style={{ fontSize: 17, marginRight: 5 }}
+              />
               Vui lòng chọn ít nhất 1 danh mục áp dụng!
             </div>
           )}
@@ -135,7 +141,7 @@ export default function SectionApplyTarget(props: Props) {
                       <tr key={pid}>
                         <td>
                           <img
-                            src={`https://deploy-nodejs-vqqq.onrender.com/images/${p.image}`}
+                            src={`http://localhost:3000/images/${p.image}`}
                             alt={p.name}
                             style={{
                               width: 38,
@@ -183,7 +189,9 @@ export default function SectionApplyTarget(props: Props) {
           )}
           {touched && selectedProductIds.length === 0 && (
             <div className="text-danger mt-2" style={{ fontWeight: 500 }}>
-              <ExclamationCircleOutlined style={{ fontSize: 17, marginRight: 5 }} />
+              <ExclamationCircleOutlined
+                style={{ fontSize: 17, marginRight: 5 }}
+              />
               Vui lòng chọn ít nhất 1 sản phẩm áp dụng!
             </div>
           )}

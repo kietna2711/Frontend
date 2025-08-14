@@ -1,7 +1,7 @@
-'use client';
-import { useEffect, useState } from 'react';
-import './categories/[slug]/categorypage.css';
-import InstagramSection from '../components/InstagramSection';
+"use client";
+import { useEffect, useState } from "react";
+import "./categories/[slug]/categorypage.css";
+import InstagramSection from "../components/InstagramSection";
 
 interface Post {
   _id: string;
@@ -20,16 +20,16 @@ interface Post {
 
 export default function AllPostsPage() {
   const [posts, setPosts] = useState<Post[]>([]);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
 
   useEffect(() => {
     const fetchAllPosts = async () => {
       try {
-        const res = await fetch('https://deploy-nodejs-vqqq.onrender.com/api/posts', {
-          cache: 'no-store',
+        const res = await fetch("http://localhost:3000/api/posts", {
+          cache: "no-store",
         });
 
-        if (!res.ok) throw new Error('Failed to fetch posts');
+        if (!res.ok) throw new Error("Failed to fetch posts");
 
         const data = await res.json();
 
@@ -40,7 +40,7 @@ export default function AllPostsPage() {
 
         setPosts(visiblePosts);
       } catch (err: any) {
-        setError(err.message || 'Đã xảy ra lỗi');
+        setError(err.message || "Đã xảy ra lỗi");
       }
     };
 
@@ -52,17 +52,22 @@ export default function AllPostsPage() {
       <div className="services-container">
         <h2 className="services-title">Tất cả bài viết</h2>
 
-        {error && <div style={{ color: 'red' }}>{error}</div>}
+        {error && <div style={{ color: "red" }}>{error}</div>}
 
         <div className="services-grid">
           {posts.map((post) => (
             <div key={post._id} className="service-card">
               <img
                 className="service-img"
-                src={`https://deploy-nodejs-vqqq.onrender.com/images/${post.img || 'default.jpg'}`}
+                src={`http://localhost:3000/images/${
+                  post.img || "default.jpg"
+                }`}
                 alt={post.title}
               />
-              <a href={`/posts/detail/${post.slug}`} style={{ textDecoration: 'none' }}>
+              <a
+                href={`/posts/detail/${post.slug}`}
+                style={{ textDecoration: "none" }}
+              >
                 <div className="service-desc">{post.shortDesc}</div>
               </a>
               <div className="service-link-wrap">

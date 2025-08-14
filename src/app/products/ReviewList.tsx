@@ -22,7 +22,8 @@ function formatDate(dateString?: string) {
   if (!dateString) return "";
   const date = new Date(dateString);
   return `${date.getDate().toString().padStart(2, "0")}/${(date.getMonth() + 1)
-    .toString().padStart(2, "0")}/${date.getFullYear()}`;
+    .toString()
+    .padStart(2, "0")}/${date.getFullYear()}`;
 }
 
 const ReviewList: React.FC<ReviewListProps> = ({ productId }) => {
@@ -37,18 +38,22 @@ const ReviewList: React.FC<ReviewListProps> = ({ productId }) => {
     const fetchReviews = () => {
       if (isFirstLoad.current) setLoading(true);
 
-      fetch('https://deploy-nodejs-vqqq.onrender.com/reviews?productId=' + productId, {
+      fetch("http://localhost:3000/reviews?productId=" + productId, {
         headers: {
-          Authorization: 'Bearer ' + localStorage.getItem('token')
-        }
+          Authorization: "Bearer " + localStorage.getItem("token"),
+        },
       })
         .then((res) => res.json())
         .then((data) => {
           // Đảm bảo data.reviews luôn là mảng, tránh lỗi .length của undefined
-          let fetched: Review[] = Array.isArray(data.reviews) ? data.reviews : [];
+          let fetched: Review[] = Array.isArray(data.reviews)
+            ? data.reviews
+            : [];
           // Sắp xếp bình luận mới nhất lên đầu
-          fetched = fetched.sort((a, b) => 
-            (new Date(b.createdAt ?? 0).getTime()) - (new Date(a.createdAt ?? 0).getTime())
+          fetched = fetched.sort(
+            (a, b) =>
+              new Date(b.createdAt ?? 0).getTime() -
+              new Date(a.createdAt ?? 0).getTime()
           );
           console.log("Fetched reviews:", fetched);
           setReviews(fetched);
@@ -75,9 +80,10 @@ const ReviewList: React.FC<ReviewListProps> = ({ productId }) => {
     page * reviewsPerPage
   );
 
-  const avgRating = totalReviews === 0
-    ? 0
-    : reviews.reduce((sum, r) => sum + r.rating, 0) / totalReviews;
+  const avgRating =
+    totalReviews === 0
+      ? 0
+      : reviews.reduce((sum, r) => sum + r.rating, 0) / totalReviews;
   const avgRatingRounded = Math.round(avgRating * 10) / 10;
 
   return (
@@ -91,8 +97,8 @@ const ReviewList: React.FC<ReviewListProps> = ({ productId }) => {
               {avgRatingRounded >= idx + 1
                 ? "★"
                 : avgRatingRounded >= idx + 0.5
-                  ? "☆"
-                  : "☆"}
+                ? "☆"
+                : "☆"}
             </span>
           ))}
         </span>
@@ -104,11 +110,16 @@ const ReviewList: React.FC<ReviewListProps> = ({ productId }) => {
       ) : (
         <>
           <div id="review-list">
-            {reviewsToShow.length === 0 &&
+            {reviewsToShow.length === 0 && (
               <div style={{ margin: "auto", textAlign: "center" }}>
-                <img src="https://deploy-nodejs-vqqq.onrender.com/images/binhluan.jpg" alt="" width={400} />
+                <img
+                  src="http://localhost:3000/images/binhluan.jpg"
+                  alt=""
+                  width={400}
+                />
                 <p>Chưa có đánh giá nào.</p>
-              </div>}
+              </div>
+            )}
             {reviewsToShow.map((r, i) => (
               <div className={styles.review_item} key={r.createdAt || i}>
                 <div className={styles.reviewHeader}>
@@ -132,8 +143,9 @@ const ReviewList: React.FC<ReviewListProps> = ({ productId }) => {
             {Array.from({ length: totalPages }).map((_, idx) => (
               <button
                 key={idx}
-                className={`${styles.paginationBtn} ${page === idx + 1 ? styles.paginationBtn_active : ""
-                  }`}
+                className={`${styles.paginationBtn} ${
+                  page === idx + 1 ? styles.paginationBtn_active : ""
+                }`}
                 onClick={() => setPage(idx + 1)}
                 type="button"
                 disabled={page === idx + 1}

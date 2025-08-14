@@ -46,7 +46,15 @@ export default function Dashboard() {
   useEffect(() => {
     function updateClock() {
       const today = new Date();
-      const weekday = ["Chủ Nhật", "Thứ Hai", "Thứ Ba", "Thứ Tư", "Thứ Năm", "Thứ Sáu", "Thứ Bảy"];
+      const weekday = [
+        "Chủ Nhật",
+        "Thứ Hai",
+        "Thứ Ba",
+        "Thứ Tư",
+        "Thứ Năm",
+        "Thứ Sáu",
+        "Thứ Bảy",
+      ];
       const day = weekday[today.getDay()];
       let dd: string | number = today.getDate();
       let mm: string | number = today.getMonth() + 1;
@@ -69,9 +77,9 @@ export default function Dashboard() {
 
   // Lấy dữ liệu thống kê tổng hợp
   useEffect(() => {
-    fetch("https://deploy-nodejs-vqqq.onrender.com/api/statistics/summary")
-      .then(res => res.json())
-      .then(data => {
+    fetch("http://localhost:3000/api/statistics/summary")
+      .then((res) => res.json())
+      .then((data) => {
         console.log("summary data:", data); // Thêm dòng này để kiểm tra
         setSummary(data);
       });
@@ -79,26 +87,26 @@ export default function Dashboard() {
 
   // Lấy dữ liệu doanh thu từng tháng
   useEffect(() => {
-    fetch("https://deploy-nodejs-vqqq.onrender.com/api/statistics/revenue")
-      .then(res => res.json())
-      .then(data => {
+    fetch("http://localhost:3000/api/statistics/revenue")
+      .then((res) => res.json())
+      .then((data) => {
         // Tạo mảng doanh thu 6 tháng, mặc định 0
         const now = new Date();
         const currentMonth = now.getMonth() + 1; // getMonth() trả về 0-11
         const months = Array.from({ length: currentMonth }, (_, i) => i + 1);
-        const revenueArr = months.map(month => {
+        const revenueArr = months.map((month) => {
           const found = data.find((item: any) => item.month === month);
           return found ? found.total : 0; // Không chia cho 1_000_000
         });
         setRevenueData(revenueArr);
-        setLabels(months.map(m => `Tháng ${m}`));
+        setLabels(months.map((m) => `Tháng ${m}`));
       });
   }, []);
 
   useEffect(() => {
-    fetch("https://deploy-nodejs-vqqq.onrender.com/orders")
-      .then(res => res.json())
-      .then(data => setOrders(data));
+    fetch("http://localhost:3000/orders")
+      .then((res) => res.json())
+      .then((data) => setOrders(data));
   }, []);
 
   // Tạo mảng các tháng thực tế
@@ -107,8 +115,8 @@ export default function Dashboard() {
   const months = Array.from({ length: currentMonth }, (_, i) => i + 1);
 
   // Tạo mảng số đơn hàng từng tháng thực tế từ dữ liệu orders
-  const ordersCountByMonth = months.map(month => {
-    return orders.filter(order => {
+  const ordersCountByMonth = months.map((month) => {
+    return orders.filter((order) => {
       const orderDate = new Date(order.createdAt);
       return orderDate.getMonth() + 1 === month;
     }).length;
@@ -116,7 +124,7 @@ export default function Dashboard() {
 
   // Biểu đồ đơn hàng theo tháng thực tế
   const lineData = {
-    labels: months.map(m => `Tháng ${m}`),
+    labels: months.map((m) => `Tháng ${m}`),
     datasets: [
       {
         label: "Đơn hàng",
@@ -130,7 +138,9 @@ export default function Dashboard() {
 
   // Dữ liệu doanh thu cho bar chart
   const barData = {
-    labels: labels.length ? labels : ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6"],
+    labels: labels.length
+      ? labels
+      : ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6"],
     datasets: [
       {
         label: "Doanh thu (triệu)",
@@ -145,17 +155,69 @@ export default function Dashboard() {
 
   // Dữ liệu mẫu cho bảng đơn hàng và khách hàng (có thể fetch từ backend nếu muốn)
   const sampleOrders = [
-    { id: "AL3947", name: "Phạm Thị Ngọc", total: "19.770.000 đ", status: "Chờ xử lý", badge: "bg-info" },
-    { id: "ER3835", name: "Nguyễn Thị Mỹ Yến", total: "16.770.000 đ", status: "Đang vận chuyển", badge: "bg-warning" },
-    { id: "MD0837", name: "Triệu Thanh Phú", total: "9.400.000 đ", status: "Đã hoàn thành", badge: "bg-success" },
-    { id: "MT9835", name: "Đặng Hoàng Phúc", total: "40.650.000 đ", status: "Đã hủy", badge: "bg-danger" },
+    {
+      id: "AL3947",
+      name: "Phạm Thị Ngọc",
+      total: "19.770.000 đ",
+      status: "Chờ xử lý",
+      badge: "bg-info",
+    },
+    {
+      id: "ER3835",
+      name: "Nguyễn Thị Mỹ Yến",
+      total: "16.770.000 đ",
+      status: "Đang vận chuyển",
+      badge: "bg-warning",
+    },
+    {
+      id: "MD0837",
+      name: "Triệu Thanh Phú",
+      total: "9.400.000 đ",
+      status: "Đã hoàn thành",
+      badge: "bg-success",
+    },
+    {
+      id: "MT9835",
+      name: "Đặng Hoàng Phúc",
+      total: "40.650.000 đ",
+      status: "Đã hủy",
+      badge: "bg-danger",
+    },
   ];
 
   const sampleCustomers = [
-    { id: "#183", name: "Hột vịt muối", dob: "21/7/1992", phone: "0921387221", tag: "tag-success", createdAt: new Date().toISOString() },
-    { id: "#219", name: "Bánh tráng trộn", dob: "30/4/1975", phone: "0912376352", tag: "tag-warning", createdAt: new Date().toISOString() },
-    { id: "#627", name: "Cút rang bơ", dob: "12/3/1999", phone: "01287326654", tag: "tag-primary", createdAt: new Date().toISOString() },
-    { id: "#175", name: "Hủ tiếu nam vang", dob: "4/12/20000", phone: "0912376763", tag: "tag-danger", createdAt: new Date().toISOString() },
+    {
+      id: "#183",
+      name: "Hột vịt muối",
+      dob: "21/7/1992",
+      phone: "0921387221",
+      tag: "tag-success",
+      createdAt: new Date().toISOString(),
+    },
+    {
+      id: "#219",
+      name: "Bánh tráng trộn",
+      dob: "30/4/1975",
+      phone: "0912376352",
+      tag: "tag-warning",
+      createdAt: new Date().toISOString(),
+    },
+    {
+      id: "#627",
+      name: "Cút rang bơ",
+      dob: "12/3/1999",
+      phone: "01287326654",
+      tag: "tag-primary",
+      createdAt: new Date().toISOString(),
+    },
+    {
+      id: "#175",
+      name: "Hủ tiếu nam vang",
+      dob: "4/12/20000",
+      phone: "0912376763",
+      tag: "tag-danger",
+      createdAt: new Date().toISOString(),
+    },
   ];
 
   // State cho khách hàng mới
@@ -172,14 +234,14 @@ export default function Dashboard() {
   const [customers, setCustomers] = useState<Customer[]>(sampleCustomers);
 
   useEffect(() => {
-    fetch("https://deploy-nodejs-vqqq.onrender.com/users")
-      .then(res => res.json())
-      .then(data => setCustomers(data));
+    fetch("http://localhost:3000/users")
+      .then((res) => res.json())
+      .then((data) => setCustomers(data));
   }, []);
 
   // Tính số đơn hàng từng tháng
-  const ordersByMonth = months.map(month => {
-    return orders.filter(order => {
+  const ordersByMonth = months.map((month) => {
+    return orders.filter((order) => {
       const orderDate = new Date(order.createdAt);
       return orderDate.getMonth() + 1 === month;
     });
@@ -191,12 +253,18 @@ export default function Dashboard() {
         beginAtZero: true,
         ticks: {
           stepSize: 1, // Hiển thị từng đơn vị
-          callback: function(tickValue: string | number, index: number, ticks: any[]) {
-            return typeof tickValue === "number" && Number.isInteger(tickValue) ? tickValue : null;
-          }
-        }
-      }
-    }
+          callback: function (
+            tickValue: string | number,
+            index: number,
+            ticks: any[]
+          ) {
+            return typeof tickValue === "number" && Number.isInteger(tickValue)
+              ? tickValue
+              : null;
+          },
+        },
+      },
+    },
   };
 
   return (
@@ -205,7 +273,11 @@ export default function Dashboard() {
         <div className="col-md-12">
           <div className="app-title">
             <ul className="app-breadcrumb breadcrumb">
-              <li className="breadcrumb-item"><a href="#"><b>Bảng điều khiển</b></a></li>
+              <li className="breadcrumb-item">
+                <a href="#">
+                  <b>Bảng điều khiển</b>
+                </a>
+              </li>
             </ul>
             <div id="clock">{clock}</div>
           </div>
@@ -220,7 +292,9 @@ export default function Dashboard() {
                 <i className="icon bx bxs-user-account fa-3x"></i>
                 <div className="info">
                   <h4>Tổng khách hàng</h4>
-                  <p><b>{summary.totalCustomers} khách hàng</b></p>
+                  <p>
+                    <b>{summary.totalCustomers} khách hàng</b>
+                  </p>
                   <p className="info-tong">Tổng số khách hàng được quản lý.</p>
                 </div>
               </div>
@@ -230,7 +304,9 @@ export default function Dashboard() {
                 <i className="icon bx bxs-data fa-3x"></i>
                 <div className="info">
                   <h4>Tổng sản phẩm</h4>
-                  <p><b>{summary.totalProducts} sản phẩm</b></p>
+                  <p>
+                    <b>{summary.totalProducts} sản phẩm</b>
+                  </p>
                   <p className="info-tong">Tổng số sản phẩm được quản lý.</p>
                 </div>
               </div>
@@ -240,8 +316,12 @@ export default function Dashboard() {
                 <i className="icon bx bxs-shopping-bags fa-3x"></i>
                 <div className="info">
                   <h4>Tổng đơn hàng</h4>
-                  <p><b>{summary.totalOrders} đơn hàng</b></p>
-                  <p className="info-tong">Tổng số hóa đơn bán hàng trong tháng.</p>
+                  <p>
+                    <b>{summary.totalOrders} đơn hàng</b>
+                  </p>
+                  <p className="info-tong">
+                    Tổng số hóa đơn bán hàng trong tháng.
+                  </p>
                 </div>
               </div>
             </div>
@@ -250,8 +330,12 @@ export default function Dashboard() {
                 <i className="icon bx bxs-error-alt fa-3x"></i>
                 <div className="info">
                   <h4>Sắp hết hàng</h4>
-                  <p><b>{summary.lowStock} sản phẩm</b></p>
-                  <p className="info-tong">Số sản phẩm cảnh báo hết cần nhập thêm.</p>
+                  <p>
+                    <b>{summary.lowStock} sản phẩm</b>
+                  </p>
+                  <p className="info-tong">
+                    Số sản phẩm cảnh báo hết cần nhập thêm.
+                  </p>
                 </div>
               </div>
             </div>
@@ -271,31 +355,47 @@ export default function Dashboard() {
                     </thead>
                     <tbody>
                       {orders.length > 0 ? (
-                        orders.map(order => (
+                        orders.map((order) => (
                           <tr key={order._id}>
                             <td>{order.orderId || order._id}</td>
                             <td>{order.shippingInfo?.name}</td>
                             <td>{order.totalPrice?.toLocaleString()} đ</td>
                             <td>
-                              <span className={`badge ${
-                                order.orderStatus === "delivered" ? "bg-success" :
-                                order.orderStatus === "shipping" ? "bg-primary" :
-                                order.orderStatus === "processing" ? "bg-warning" :
-                                order.orderStatus === "waiting" ? "bg-info" :
-                                order.orderStatus === "cancelled" ? "bg-danger" : "bg-secondary"
-                              }`}>
-                                {order.orderStatus === "delivered" ? "Đã giao" :
-                                 order.orderStatus === "shipping" ? "Đang giao" :
-                                 order.orderStatus === "processing" ? "Đang chuẩn bị hàng" :
-                                 order.orderStatus === "waiting" ? "Chờ xác nhận" :
-                                 order.orderStatus === "cancelled" ? "Đã hủy" : order.orderStatus}
+                              <span
+                                className={`badge ${
+                                  order.orderStatus === "delivered"
+                                    ? "bg-success"
+                                    : order.orderStatus === "shipping"
+                                    ? "bg-primary"
+                                    : order.orderStatus === "processing"
+                                    ? "bg-warning"
+                                    : order.orderStatus === "waiting"
+                                    ? "bg-info"
+                                    : order.orderStatus === "cancelled"
+                                    ? "bg-danger"
+                                    : "bg-secondary"
+                                }`}
+                              >
+                                {order.orderStatus === "delivered"
+                                  ? "Đã giao"
+                                  : order.orderStatus === "shipping"
+                                  ? "Đang giao"
+                                  : order.orderStatus === "processing"
+                                  ? "Đang chuẩn bị hàng"
+                                  : order.orderStatus === "waiting"
+                                  ? "Chờ xác nhận"
+                                  : order.orderStatus === "cancelled"
+                                  ? "Đã hủy"
+                                  : order.orderStatus}
                               </span>
                             </td>
                           </tr>
                         ))
                       ) : (
                         <tr>
-                          <td colSpan={4} className="text-center">Không có đơn hàng nào.</td>
+                          <td colSpan={4} className="text-center">
+                            Không có đơn hàng nào.
+                          </td>
                         </tr>
                       )}
                     </tbody>
@@ -318,7 +418,7 @@ export default function Dashboard() {
                     </thead>
                     <tbody>
                       {customers.length > 0 ? (
-                        customers.map(c => (
+                        customers.map((c) => (
                           <tr key={c._id || c.id}>
                             <td>{c.name || c.username || c.email}</td>
                             <td>
@@ -331,7 +431,9 @@ export default function Dashboard() {
                         ))
                       ) : (
                         <tr>
-                          <td colSpan={3} className="text-center">Không có khách hàng mới trong tuần.</td>
+                          <td colSpan={3} className="text-center">
+                            Không có khách hàng mới trong tuần.
+                          </td>
                         </tr>
                       )}
                     </tbody>
@@ -342,62 +444,76 @@ export default function Dashboard() {
           </div>
         </div>
         {/* Right */}
-<div className="col-md-12 col-lg-6">
-  <div className="row">
-    <div className="col-md-12">
-      <div className="tile">
-        <h3 className="tile-title" style={{ textAlign: "center", marginTop: 12 }}>Dữ liệu 6 tháng đầu vào</h3>
-        <Line data={lineData} options={lineOptions} />
-      </div>
-    </div>
-    <div className="col-md-12">
-      <div className="tile">
-        <h3 className="tile-title" style={{ textAlign: "center", marginTop: 12 }}>Thống kê 6 tháng doanh thu</h3>
-        <Bar data={barData} />
-        <div style={{ textAlign: "center", marginTop: 10 }}>
-          <b>
-            Tổng doanh thu 6 tháng: {totalRevenue.toLocaleString()} đ
-          </b>
+        <div className="col-md-12 col-lg-6">
+          <div className="row">
+            <div className="col-md-12">
+              <div className="tile">
+                <h3
+                  className="tile-title"
+                  style={{ textAlign: "center", marginTop: 12 }}
+                >
+                  Dữ liệu 6 tháng đầu vào
+                </h3>
+                <Line data={lineData} options={lineOptions} />
+              </div>
+            </div>
+            <div className="col-md-12">
+              <div className="tile">
+                <h3
+                  className="tile-title"
+                  style={{ textAlign: "center", marginTop: 12 }}
+                >
+                  Thống kê 6 tháng doanh thu
+                </h3>
+                <Bar data={barData} />
+                <div style={{ textAlign: "center", marginTop: 10 }}>
+                  <b>
+                    Tổng doanh thu 6 tháng: {totalRevenue.toLocaleString()} đ
+                  </b>
+                </div>
+              </div>
+            </div>
+            {/* Bảng đơn hàng theo tháng */}
+            <div className="col-md-12">
+              <div className="tile">
+                <h3 className="tile-title">Tình trạng đơn hàng theo tháng</h3>
+                <div>
+                  <table className="table table-bordered">
+                    <thead>
+                      <tr>
+                        <th>Tháng</th>
+                        <th>Số đơn hàng</th>
+                        <th>Tổng tiền</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {months.map((month, idx) => {
+                        const monthOrders = ordersByMonth[idx];
+                        const totalMonth = monthOrders.reduce(
+                          (sum, order) => sum + (order.totalPrice || 0),
+                          0
+                        );
+                        return (
+                          <tr key={month}>
+                            <td>Tháng {month}</td>
+                            <td>{monthOrders.length}</td>
+                            <td>{totalMonth.toLocaleString()} đ</td>
+                          </tr>
+                        );
+                      })}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
-    {/* Bảng đơn hàng theo tháng */}
-    <div className="col-md-12">
-      <div className="tile">
-        <h3 className="tile-title">Tình trạng đơn hàng theo tháng</h3>
-        <div>
-          <table className="table table-bordered">
-            <thead>
-              <tr>
-                <th>Tháng</th>
-                <th>Số đơn hàng</th>
-                <th>Tổng tiền</th>
-              </tr>
-            </thead>
-            <tbody>
-              {months.map((month, idx) => {
-                const monthOrders = ordersByMonth[idx];
-                const totalMonth = monthOrders.reduce((sum, order) => sum + (order.totalPrice || 0), 0);
-                return (
-                  <tr key={month}>
-                    <td>Tháng {month}</td>
-                    <td>{monthOrders.length}</td>
-                    <td>{totalMonth.toLocaleString()} đ</td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
       </div>
       <div className="text-center" style={{ fontSize: 13 }}>
         <p>
           <b>
-            Copyright {new Date().getFullYear()} Phần mềm quản lý bán hàng | Dev By Trường
+            Copyright {new Date().getFullYear()} Phần mềm quản lý bán hàng | Dev
+            By Trường
           </b>
         </p>
       </div>

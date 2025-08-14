@@ -1,9 +1,11 @@
 import { SubCategory } from "../types/categoryD";
 
-const API_URL = "https://deploy-nodejs-vqqq.onrender.com/subcategory";
+const API_URL = "http://localhost:3000/subcategory";
 
 // Thêm danh mục con mới (C)
-export const createSubcategory = async (data: Omit<SubCategory, "_id">): Promise<SubCategory> => {
+export const createSubcategory = async (
+  data: Omit<SubCategory, "_id">
+): Promise<SubCategory> => {
   const res = await fetch(API_URL, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -14,7 +16,10 @@ export const createSubcategory = async (data: Omit<SubCategory, "_id">): Promise
 };
 
 // Cập nhật danh mục con (U)
-export const updateSubcategory = async (_id: string, data: Partial<SubCategory>): Promise<SubCategory> => {
+export const updateSubcategory = async (
+  _id: string,
+  data: Partial<SubCategory>
+): Promise<SubCategory> => {
   const res = await fetch(`${API_URL}/${_id}`, {
     method: "PATCH",
     headers: { "Content-Type": "application/json" },

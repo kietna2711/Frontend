@@ -1,6 +1,6 @@
-'use client';
-import { useEffect, useState } from 'react';
-import { useShowMessage } from '@/app/utils/useShowMessage';
+"use client";
+import { useEffect, useState } from "react";
+import { useShowMessage } from "@/app/utils/useShowMessage";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import "boxicons/css/boxicons.min.css";
@@ -15,18 +15,18 @@ interface PostCategory {
 
 export default function PostCategoriesPage() {
   const [categories, setCategories] = useState<PostCategory[]>([]);
-  const [title, setTitle] = useState('');
+  const [title, setTitle] = useState("");
   const [editingId, setEditingId] = useState<string | null>(null);
 
-  const showMessage = useShowMessage('','');
+  const showMessage = useShowMessage("", "");
 
   const fetchCategories = async () => {
     try {
-      const res = await fetch('https://deploy-nodejs-vqqq.onrender.com/api/postscategories');
+      const res = await fetch("http://localhost:3000/api/postscategories");
       const data = await res.json();
       setCategories(data);
     } catch (err) {
-      console.error('Error fetching categories:', err);
+      console.error("Error fetching categories:", err);
     }
   };
 
@@ -38,58 +38,70 @@ export default function PostCategoriesPage() {
     e.preventDefault();
     if (!title.trim()) return;
 
-    const method = editingId ? 'PUT' : 'POST';
+    const method = editingId ? "PUT" : "POST";
     const url = editingId
-      ? `https://deploy-nodejs-vqqq.onrender.com/api/postscategories/${editingId}`
-      : 'https://deploy-nodejs-vqqq.onrender.com/api/postscategories';
+      ? `http://localhost:3000/api/postscategories/${editingId}`
+      : "http://localhost:3000/api/postscategories";
 
     const body = JSON.stringify({ title });
 
     try {
       const res = await fetch(url, {
         method,
-        headers: { 'Content-Type': 'application/json' },
+        headers: { "Content-Type": "application/json" },
         body,
       });
 
-      if (!res.ok) throw new Error('Lỗi khi lưu danh mục');
+      if (!res.ok) throw new Error("Lỗi khi lưu danh mục");
 
-      setTitle('');
+      setTitle("");
       setEditingId(null);
       fetchCategories();
-      showMessage.success(editingId ? 'Cập nhật danh mục thành công' : 'Thêm danh mục thành công');
+      showMessage.success(
+        editingId ? "Cập nhật danh mục thành công" : "Thêm danh mục thành công"
+      );
     } catch (err) {
-      showMessage.error('Lỗi khi lưu danh mục');
+      showMessage.error("Lỗi khi lưu danh mục");
       console.error(err);
     }
   };
 
   const handleEdit = async (id: string) => {
     try {
-      const res = await fetch(`https://deploy-nodejs-vqqq.onrender.com/api/postscategories/${id}`);
+      const res = await fetch(
+        `http://localhost:3000/api/postscategories/${id}`
+      );
       const data = await res.json();
       setTitle(data.title);
       setEditingId(data._id);
     } catch (err) {
-      showMessage.error('Lỗi khi lấy chi tiết danh mục');
+      showMessage.error("Lỗi khi lấy chi tiết danh mục");
       console.error(err);
     }
   };
 
-  const toggleVisibility = async (id: string, currentHidden: boolean = false) => {
+  const toggleVisibility = async (
+    id: string,
+    currentHidden: boolean = false
+  ) => {
     try {
-      const res = await fetch(`https://deploy-nodejs-vqqq.onrender.com/api/postscategories/${id}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ hidden: !currentHidden }),
-      });
+      const res = await fetch(
+        `http://localhost:3000/api/postscategories/${id}`,
+        {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ hidden: !currentHidden }),
+        }
+      );
 
-      if (!res.ok) throw new Error('Lỗi khi cập nhật trạng thái hiển thị');
+      if (!res.ok) throw new Error("Lỗi khi cập nhật trạng thái hiển thị");
 
       fetchCategories();
-      showMessage.success(!currentHidden ? 'Danh mục đã được ẩn' : 'Danh mục đã được hiển thị');
+      showMessage.success(
+        !currentHidden ? "Danh mục đã được ẩn" : "Danh mục đã được hiển thị"
+      );
     } catch (err) {
-      showMessage.error('Lỗi khi cập nhật trạng thái hiển thị');
+      showMessage.error("Lỗi khi cập nhật trạng thái hiển thị");
       console.error(err);
     }
   };
@@ -108,7 +120,7 @@ export default function PostCategoriesPage() {
           required
         />
         <button className="btn btn-primary">
-          {editingId ? 'Lưu' : 'Thêm'}
+          {editingId ? "Lưu" : "Thêm"}
         </button>
       </form>
 
@@ -128,8 +140,12 @@ export default function PostCategoriesPage() {
               <td>{cat.title}</td>
               <td>{cat.slug}</td>
               <td>
-                <span className={`badge ${cat.hidden ? 'bg-secondary' : 'bg-success'}`}>
-                  {cat.hidden ? 'Đã ẩn' : 'Hiển thị'}
+                <span
+                  className={`badge ${
+                    cat.hidden ? "bg-secondary" : "bg-success"
+                  }`}
+                >
+                  {cat.hidden ? "Đã ẩn" : "Hiển thị"}
                 </span>
               </td>
               <td>
@@ -137,7 +153,9 @@ export default function PostCategoriesPage() {
                   className="btn btn-sm btn-light"
                   onClick={() => toggleVisibility(cat._id, cat.hidden)}
                 >
-                  <i className={`fas ${cat.hidden ? 'fa-eye-slash' : 'fa-eye'}`}></i>
+                  <i
+                    className={`fas ${cat.hidden ? "fa-eye-slash" : "fa-eye"}`}
+                  ></i>
                 </button>
               </td>
               <td>

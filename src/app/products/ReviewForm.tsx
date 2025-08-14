@@ -1,68 +1,79 @@
-'use client';
-import React, { useState } from 'react';
-import styles from '../styles/ReviewForm.module.css';
-import { ToastContainer, toast, Slide } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+"use client";
+import React, { useState } from "react";
+import styles from "../styles/ReviewForm.module.css";
+import { ToastContainer, toast, Slide } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const ReviewForm = ({ productId }: { productId: string }) => {
   const [rating, setRating] = useState<number>(0);
-  const [comment, setComment] = useState<string>('');
-  const [error, setError] = useState<string>('');
-  const token = localStorage.getItem('token');
+  const [comment, setComment] = useState<string>("");
+  const [error, setError] = useState<string>("");
+  const token = localStorage.getItem("token");
 
   const handleStarClick = (star: number) => {
     setRating(rating === star ? star - 1 : star);
-    setError('');
+    setError("");
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (!token) {
-      toast.warn('Vui lòng đăng nhập để đánh giá!', { position: 'top-center' });
+      toast.warn("Vui lòng đăng nhập để đánh giá!", { position: "top-center" });
       return;
     }
 
     if (rating === 0) {
-      setError('Vui lòng chọn số sao!');
-      toast.warn('Vui lòng chọn số sao!', { position: 'top-center' });
+      setError("Vui lòng chọn số sao!");
+      toast.warn("Vui lòng chọn số sao!", { position: "top-center" });
       return;
     }
 
     if (!comment.trim()) {
-      setError('Vui lòng nhập bình luận!');
-      toast.warn('Vui lòng nhập bình luận!', { position: 'top-center' });
+      setError("Vui lòng nhập bình luận!");
+      toast.warn("Vui lòng nhập bình luận!", { position: "top-center" });
       return;
     }
 
     try {
-      const res = await fetch('https://deploy-nodejs-vqqq.onrender.com/reviews', {
-        method: 'POST',
+      const res = await fetch("http://localhost:3000/reviews", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({ productId, rating, comment }),
       });
 
       if (res.ok) {
-        toast.success('Cảm ơn bạn đã gửi đánh giá >.<', { position: 'top-center' });
+        toast.success("Cảm ơn bạn đã gửi đánh giá >.<", {
+          position: "top-center",
+        });
         setRating(0);
-        setComment('');
+        setComment("");
       } else if (res.status === 401) {
-        toast.error('Bạn cần đăng nhập để đánh giá!', { position: 'top-center' });
+        toast.error("Bạn cần đăng nhập để đánh giá!", {
+          position: "top-center",
+        });
       } else if (res.status === 403) {
         const data = await res.json();
-        toast.error(data.error || 'Bạn chưa đủ điều kiện để đánh giá!', { position: 'top-center' });
+        toast.error(data.error || "Bạn chưa đủ điều kiện để đánh giá!", {
+          position: "top-center",
+        });
       } else if (res.status === 400) {
         const data = await res.json();
-        toast.error(data.error || 'Bạn đã đánh giá sản phẩm này rồi.', { position: 'top-center' });
+        toast.error(data.error || "Bạn đã đánh giá sản phẩm này rồi.", {
+          position: "top-center",
+        });
       } else {
-        toast.error('Đã có lỗi xảy ra! Xin thử lại.', { position: 'top-center' });
+        toast.error("Đã có lỗi xảy ra! Xin thử lại.", {
+          position: "top-center",
+        });
       }
-
     } catch (err) {
-      toast.error('Không thể gửi đánh giá. Kiểm tra kết nối mạng!', { position: 'top-center' });
+      toast.error("Không thể gửi đánh giá. Kiểm tra kết nối mạng!", {
+        position: "top-center",
+      });
     }
   };
 
@@ -87,13 +98,15 @@ const ReviewForm = ({ productId }: { productId: string }) => {
           {[1, 2, 3, 4, 5].map((star) => (
             <span
               key={star}
-              className={`${styles.star} ${rating >= star ? styles.filled : ''}`}
+              className={`${styles.star} ${
+                rating >= star ? styles.filled : ""
+              }`}
               onClick={() => handleStarClick(star)}
               role="button"
               tabIndex={0}
               aria-label={`${star} sao`}
               onKeyDown={(e) => {
-                if (e.key === 'Enter') handleStarClick(star);
+                if (e.key === "Enter") handleStarClick(star);
               }}
             >
               ★
@@ -110,7 +123,7 @@ const ReviewForm = ({ productId }: { productId: string }) => {
           value={comment}
           onChange={(e) => {
             setComment(e.target.value);
-            setError('');
+            setError("");
           }}
           placeholder="Bạn nghĩ gì về sản phẩm này?"
           rows={4}
@@ -119,11 +132,7 @@ const ReviewForm = ({ productId }: { productId: string }) => {
 
         {error && <div className={styles.errorMessage}>{error}</div>}
 
-        <button
-          className={styles.submitBtn}
-          type="submit"
-          disabled={!token}
-        >
+        <button className={styles.submitBtn} type="submit" disabled={!token}>
           Gửi đánh giá
         </button>
         {!token && (

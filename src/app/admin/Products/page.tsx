@@ -52,16 +52,24 @@ export default function ProductManagement() {
   });
   const [categories, setCategories] = useState<any[]>([]); // Danh mụ
   const [mainImageFile, setMainImageFile] = useState<File | null>(null); // Sửa
-  const [mainImagePreview, setMainImagePreview] = useState<string>("");   // Sửa
-  const [createMainImageFile, setCreateMainImageFile] = useState<File | null>(null); // Tạo
+  const [mainImagePreview, setMainImagePreview] = useState<string>(""); // Sửa
+  const [createMainImageFile, setCreateMainImageFile] = useState<File | null>(
+    null
+  ); // Tạo
   // Thumbnail
-  const [thumbnailInputs, setThumbnailInputs] = useState<{ file: File | null, url: string | null }[]>([]); // Tạo
+  const [thumbnailInputs, setThumbnailInputs] = useState<
+    { file: File | null; url: string | null }[]
+  >([]); // Tạo
   const [editThumbnails, setEditThumbnails] = useState<
-  { url: string; name: string; file: File | null; isNew: boolean }[]
->([]); // Sửa
+    { url: string; name: string; file: File | null; isNew: boolean }[]
+  >([]); // Sửa
   // Biến thể
-  const [editVariants, setEditVariants] = useState<{ size: string; price: number; quantity: number }[]>([]);
-  const [createVariants, setCreateVariants] = useState<{ size: string; price: number; quantity: number }[]>([]);
+  const [editVariants, setEditVariants] = useState<
+    { size: string; price: number; quantity: number }[]
+  >([]);
+  const [createVariants, setCreateVariants] = useState<
+    { size: string; price: number; quantity: number }[]
+  >([]);
   const [showDetailModal, setShowDetailModal] = useState(false);
   const [detailProduct, setDetailProduct] = useState<Product | null>(null);
 
@@ -69,7 +77,7 @@ export default function ProductManagement() {
   const fetchProducts = async () => {
     try {
       // SỬA DÒNG NÀY: thêm ?all=true để lấy cả sản phẩm Ẩn
-      const res = await fetch("https://deploy-nodejs-vqqq.onrender.com/products?all=true");
+      const res = await fetch("http://localhost:3000/products?all=true");
       const data = await res.json();
       console.log("Raw data from API:", data);
 
@@ -77,20 +85,24 @@ export default function ProductManagement() {
       const products = data.map((prod: any) => ({
         id: prod._id,
         name: prod.name,
-        price: prod.variants && prod.variants.length > 0
-          ? prod.variants[0].price
-          : prod.price, // lấy từ sản phẩm chính nếu không có variant
-        quantity: prod.variants && prod.variants.length > 0
-          ? prod.variants[0].quantity
-          : prod.quantity || 0, // lấy từ sản phẩm chính nếu không có variant
-        image: prod.images && prod.images.length > 0
-          ? `https://deploy-nodejs-vqqq.onrender.com/images/${prod.images[0]}`
-          : "",
+        price:
+          prod.variants && prod.variants.length > 0
+            ? prod.variants[0].price
+            : prod.price, // lấy từ sản phẩm chính nếu không có variant
+        quantity:
+          prod.variants && prod.variants.length > 0
+            ? prod.variants[0].quantity
+            : prod.quantity || 0, // lấy từ sản phẩm chính nếu không có variant
+        image:
+          prod.images && prod.images.length > 0
+            ? `http://localhost:3000/images/${prod.images[0]}`
+            : "",
         images: prod.images,
         desc: prod.description,
-        size: prod.variants && prod.variants.length > 0
-          ? prod.variants.map((v: any) => v.size).join(", ")
-          : "",
+        size:
+          prod.variants && prod.variants.length > 0
+            ? prod.variants.map((v: any) => v.size).join(", ")
+            : "",
         category: prod.categoryId?.name || "",
         categoryId: prod.categoryId?._id || prod.categoryId,
         status: prod.status || "Còn hàng",
@@ -113,7 +125,7 @@ export default function ProductManagement() {
   useEffect(() => {
     async function fetchCategories() {
       try {
-        const res = await fetch("https://deploy-nodejs-vqqq.onrender.com/categories");
+        const res = await fetch("http://localhost:3000/categories");
         const data = await res.json();
         setCategories(data);
       } catch (error) {
@@ -156,7 +168,6 @@ export default function ProductManagement() {
     return () => clearInterval(timer);
   }, []);
 
-
   // Mở modal sửa
   const openEditModal = (id: string) => {
     const p = products.find((p) => p.id === id);
@@ -165,7 +176,9 @@ export default function ProductManagement() {
     setMainImageFile(null); // reset file khi mở modal sửa
     setMainImagePreview(
       p.images && p.images.length > 0
-        ? (p.images[0].startsWith("http") ? p.images[0] : `https://deploy-nodejs-vqqq.onrender.com/images/${p.images[0]}`)
+        ? p.images[0].startsWith("http")
+          ? p.images[0]
+          : `http://localhost:3000/images/${p.images[0]}`
         : ""
     );
     setForm({
@@ -181,7 +194,9 @@ export default function ProductManagement() {
     });
     setEditThumbnails(
       p.images?.slice(1).map((img: string) => ({
-        url: img.startsWith("http") ? img : `https://deploy-nodejs-vqqq.onrender.com/images/${img}`,
+        url: img.startsWith("http")
+          ? img
+          : `http://localhost:3000/images/${img}`,
         name: img,
         file: null,
         isNew: false,
@@ -248,17 +263,16 @@ export default function ProductManagement() {
     setCurrentPage(page);
   };
 
-useEffect(() => {
-  const maxPage = Math.ceil(products.length / itemsPerPage);
-  if (currentPage > maxPage) {
-    setCurrentPage(maxPage > 0 ? maxPage : 1);
-  }
-}, [products]);
-
+  useEffect(() => {
+    const maxPage = Math.ceil(products.length / itemsPerPage);
+    if (currentPage > maxPage) {
+      setCurrentPage(maxPage > 0 ? maxPage : 1);
+    }
+  }, [products]);
 
   // Thay đổi ảnh thu nhỏ
   const handleThumbnailChange = (idx: number, file: File | null) => {
-    setThumbnailInputs(inputs =>
+    setThumbnailInputs((inputs) =>
       inputs.map((input, i) =>
         i === idx
           ? { file, url: file ? URL.createObjectURL(file) : null }
@@ -269,7 +283,7 @@ useEffect(() => {
 
   // Thêm input ảnh thumbnail mới
   const addThumbnailInput = () => {
-    setThumbnailInputs(inputs => [...inputs, { file: null, url: null }]);
+    setThumbnailInputs((inputs) => [...inputs, { file: null, url: null }]);
   };
 
   useEffect(() => {
@@ -292,7 +306,11 @@ useEffect(() => {
     // Ảnh chính (nếu có thay đổi)
     if (mainImageFile) {
       formData.append("img", mainImageFile);
-    } else if (form.image && !form.image.startsWith("blob:") && !form.image.startsWith("http")) {
+    } else if (
+      form.image &&
+      !form.image.startsWith("blob:") &&
+      !form.image.startsWith("http")
+    ) {
       // Nếu không upload mới, gửi tên file gốc (KHÔNG gửi URL)
       formData.append("image", form.image);
     }
@@ -305,11 +323,11 @@ useEffect(() => {
     });
 
     // Gửi danh sách tên ảnh thumbnail cũ giữ lại
-    const oldThumbs = editThumbnails.filter(t => !t.isNew).map(t => t.name);
+    const oldThumbs = editThumbnails.filter((t) => !t.isNew).map((t) => t.name);
     formData.append("oldThumbnails", JSON.stringify(oldThumbs));
 
     // Gửi request PATCH
-    const res = await fetch(`https://deploy-nodejs-vqqq.onrender.com/products/${form.id}`, {
+    const res = await fetch(`http://localhost:3000/products/${form.id}`, {
       method: "PATCH",
       body: formData,
       headers: {
@@ -329,7 +347,7 @@ useEffect(() => {
   const toggleProductStatus = async (id: string, currentStatus: string) => {
     try {
       const newStatus = currentStatus === "Ẩn" ? "Còn hàng" : "Ẩn";
-      const res = await fetch(`https://deploy-nodejs-vqqq.onrender.com/products/${id}`, {
+      const res = await fetch(`http://localhost:3000/products/${id}`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
@@ -387,7 +405,10 @@ useEffect(() => {
         <div className="col-md-12">
           <div className="tile">
             <div className="tile-body">
-              <table className="table table-hover table-bordered" id="sampleTable">
+              <table
+                className="table table-hover table-bordered"
+                id="sampleTable"
+              >
                 <thead>
                   <tr>
                     {/* <th style={{ width: "10px" }}>
@@ -409,92 +430,100 @@ useEffect(() => {
                   </tr>
                 </thead>
                 <tbody>
-                  {currentProducts.filter(p => p && typeof p.price === "number").map((p) => (
-                    <tr key={p.id}>
-                      {/* <td>
+                  {currentProducts
+                    .filter((p) => p && typeof p.price === "number")
+                    .map((p) => (
+                      <tr key={p.id}>
+                        {/* <td>
                         <input
                           type="checkbox"
                           checked={p.checked}
                           onChange={() => handleCheck(p.id)}
                         />
                       </td> */}
-                      <td>{p.name}</td>
-                      <td>
-                        {p.image ? (
-                          <img
-                            className="img-card-person"
-                            src={p.image}
-                            alt=""
-                            width={50}
-                          />
-                        ) : null}
-                      </td>
-                      <td>{p.desc}</td>
-                      <td>
-                        {p.variants && p.variants.length > 0
-                          ? p.variants[0].price.toLocaleString() + "đ"
-                          : (typeof p.price === "number" ? p.price.toLocaleString() + "đ" : "Không xác định")}
-                      </td>
-                      <td>
-                        {p.variants && p.variants.length > 0
-                          ? p.variants[0].quantity
-                          : p.quantity}
-                      </td>
-                      <td>
-                        {p.variants && p.variants.length > 0
-                          ? p.variants.map((v, idx) => (
-                              <div key={idx}>{v.size}</div>
-                            ))
-                          : p.size}
-                      </td>
-                      <td>{p.category}</td>
-                      <td>{p.status}</td>
-                      <td className="table-td-center">
-                        {p.status === "Ẩn" ? (
-                          <button
-                            className="btn btn-success btn-sm"
-                            type="button"
-                            title="Hiện sản phẩm"
-                            onClick={() => toggleProductStatus(p.id, p.status)}
-                          >
-                            Hiện
-                          </button>
-                        ) : (
-                          <>
+                        <td>{p.name}</td>
+                        <td>
+                          {p.image ? (
+                            <img
+                              className="img-card-person"
+                              src={p.image}
+                              alt=""
+                              width={50}
+                            />
+                          ) : null}
+                        </td>
+                        <td>{p.desc}</td>
+                        <td>
+                          {p.variants && p.variants.length > 0
+                            ? p.variants[0].price.toLocaleString() + "đ"
+                            : typeof p.price === "number"
+                            ? p.price.toLocaleString() + "đ"
+                            : "Không xác định"}
+                        </td>
+                        <td>
+                          {p.variants && p.variants.length > 0
+                            ? p.variants[0].quantity
+                            : p.quantity}
+                        </td>
+                        <td>
+                          {p.variants && p.variants.length > 0
+                            ? p.variants.map((v, idx) => (
+                                <div key={idx}>{v.size}</div>
+                              ))
+                            : p.size}
+                        </td>
+                        <td>{p.category}</td>
+                        <td>{p.status}</td>
+                        <td className="table-td-center">
+                          {p.status === "Ẩn" ? (
                             <button
-                              className="btn btn-info btn-sm"
+                              className="btn btn-success btn-sm"
                               type="button"
-                              title="Xem chi tiết"
-                              onClick={() => {
-                                setDetailProduct(p);
-                                setShowDetailModal(true);
-                              }}
-                              style={{ marginRight: 6 }}
+                              title="Hiện sản phẩm"
+                              onClick={() =>
+                                toggleProductStatus(p.id, p.status)
+                              }
                             >
-                              <i className="fas fa-eye"></i>
+                              Hiện
                             </button>
-                            <button
-                              className="btn btn-primary btn-sm edit"
-                              type="button"
-                              title="Sửa"
-                              onClick={() => openEditModal(p.id)}
-                            >
-                              <i className="fas fa-edit"></i>
-                            </button>
-                            <button
-                              className="btn btn-warning btn-sm"
-                              type="button"
-                              title="Ẩn sản phẩm"
-                              onClick={() => toggleProductStatus(p.id, p.status)}
-                              style={{ marginLeft: 6 }}
-                            >
-                              Ẩn
-                            </button>
-                          </>
-                        )}
-                      </td>
-                    </tr>
-                  ))}
+                          ) : (
+                            <>
+                              <button
+                                className="btn btn-info btn-sm"
+                                type="button"
+                                title="Xem chi tiết"
+                                onClick={() => {
+                                  setDetailProduct(p);
+                                  setShowDetailModal(true);
+                                }}
+                                style={{ marginRight: 6 }}
+                              >
+                                <i className="fas fa-eye"></i>
+                              </button>
+                              <button
+                                className="btn btn-primary btn-sm edit"
+                                type="button"
+                                title="Sửa"
+                                onClick={() => openEditModal(p.id)}
+                              >
+                                <i className="fas fa-edit"></i>
+                              </button>
+                              <button
+                                className="btn btn-warning btn-sm"
+                                type="button"
+                                title="Ẩn sản phẩm"
+                                onClick={() =>
+                                  toggleProductStatus(p.id, p.status)
+                                }
+                                style={{ marginLeft: 6 }}
+                              >
+                                Ẩn
+                              </button>
+                            </>
+                          )}
+                        </td>
+                      </tr>
+                    ))}
                   {currentProducts.length === 0 && (
                     <tr>
                       <td colSpan={11} className="text-center">
@@ -506,34 +535,44 @@ useEffect(() => {
               </table>
               {/* Modal Sửa Sản Phẩm */}
               {showModal && (
-  <div className="modal d-block" tabIndex={-1} role="dialog" style={{ background: "rgba(0,0,0,0.3)" }}>
-    <div className="modal-dialog modal-dialog-centered" role="document">
-      <div className="modal-content">
-        <form onSubmit={handleEditSubmit}>
-          <div className="modal-header">
-            <h5 className="modal-title">Chỉnh sửa sản phẩm</h5>
-            <button
-              type="button"
-              className="close"
-              onClick={() => setShowModal(false)}
-            >
-              <span>&times;</span>
-            </button>
-          </div>
-          <div className="modal-body">
-            <div className="row">
-              <div className="form-group col-md-6">
-                <label className="control-label">Tên sản phẩm</label>
-                <input
-                  className="form-control"
-                  type="text"
-                  required
-                  name="name"
-                  value={form.name}
-                  onChange={handleChange}
-                />
-              </div>
-              {/* <div className="form-group col-md-6">
+                <div
+                  className="modal d-block"
+                  tabIndex={-1}
+                  role="dialog"
+                  style={{ background: "rgba(0,0,0,0.3)" }}
+                >
+                  <div
+                    className="modal-dialog modal-dialog-centered"
+                    role="document"
+                  >
+                    <div className="modal-content">
+                      <form onSubmit={handleEditSubmit}>
+                        <div className="modal-header">
+                          <h5 className="modal-title">Chỉnh sửa sản phẩm</h5>
+                          <button
+                            type="button"
+                            className="close"
+                            onClick={() => setShowModal(false)}
+                          >
+                            <span>&times;</span>
+                          </button>
+                        </div>
+                        <div className="modal-body">
+                          <div className="row">
+                            <div className="form-group col-md-6">
+                              <label className="control-label">
+                                Tên sản phẩm
+                              </label>
+                              <input
+                                className="form-control"
+                                type="text"
+                                required
+                                name="name"
+                                value={form.name}
+                                onChange={handleChange}
+                              />
+                            </div>
+                            {/* <div className="form-group col-md-6">
                 <label className="control-label">Giá</label>
                 <input
                   className="form-control"
@@ -544,184 +583,228 @@ useEffect(() => {
                   onChange={handleChange}
                 />
               </div> */}
-              <div className="form-group col-md-6">
-                <label className="control-label">Danh mục</label>
-                <select
-                  className="form-control"
-                  name="category"
-                  value={form.category}
-                  onChange={handleChange}
-                >
-                  <option value="">--Chọn danh mục--</option>
-                  {categories.map((cat) => (
-                    <option key={cat._id} value={cat._id}>
-                      {cat.name}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              <div className="form-group col-md-6">
-                <label className="control-label">Trạng thái</label>
-                <select
-                  className="form-control"
-                  name="status"
-                  value={form.status}
-                  onChange={handleChange}
-                >
-                  <option value="">--Chọn trạng thái--</option>
-                  <option>Còn hàng</option>
-                  <option>Hết hàng</option>
-                  <option>Ngừng kinh doanh</option>
-                </select>
-              </div>
-              <div className="form-group col-md-6">
-                <label className="control-label">Ảnh</label>
-                <input
-                  className="form-control"
-                  type="file"
-                  name="image"
-                  onChange={e => {
-                    const file = e.target.files?.[0];
-                    if (file) {
-                      setMainImageFile(file);
-                      setMainImagePreview(URL.createObjectURL(file));
-                      setForm({
-                        ...form,
-                        image: file.name,
-                      });
-                    }
-                  }}
-                />
-                {mainImagePreview && (
-                  <img
-                    src={mainImagePreview}
-                    alt="preview"
-                    className="mt-2"
-                    width={100}
-                  />
-                )}
-              </div>
-              <div className="form-group col-md-6">
-                <label className="control-label">Ảnh thumbnail</label>
-                {editThumbnails.map((thumb, idx) => (
-                  <div key={idx} style={{ display: "flex", alignItems: "center", marginBottom: 8 }}>
-                    {thumb.url && (
-                      <img src={thumb.url} alt="thumb" width={50} style={{ marginRight: 8 }} />
-                    )}
-                    <button
-                      type="button"
-                      className="btn btn-danger btn-sm"
-                      onClick={() => {
-                        setEditThumbnails(editThumbnails.filter((_, i) => i !== idx));
-                      }}
-                      style={{ marginLeft: 8 }}
-                    >
-                      X
-                    </button>
+                            <div className="form-group col-md-6">
+                              <label className="control-label">Danh mục</label>
+                              <select
+                                className="form-control"
+                                name="category"
+                                value={form.category}
+                                onChange={handleChange}
+                              >
+                                <option value="">--Chọn danh mục--</option>
+                                {categories.map((cat) => (
+                                  <option key={cat._id} value={cat._id}>
+                                    {cat.name}
+                                  </option>
+                                ))}
+                              </select>
+                            </div>
+                            <div className="form-group col-md-6">
+                              <label className="control-label">
+                                Trạng thái
+                              </label>
+                              <select
+                                className="form-control"
+                                name="status"
+                                value={form.status}
+                                onChange={handleChange}
+                              >
+                                <option value="">--Chọn trạng thái--</option>
+                                <option>Còn hàng</option>
+                                <option>Hết hàng</option>
+                                <option>Ngừng kinh doanh</option>
+                              </select>
+                            </div>
+                            <div className="form-group col-md-6">
+                              <label className="control-label">Ảnh</label>
+                              <input
+                                className="form-control"
+                                type="file"
+                                name="image"
+                                onChange={(e) => {
+                                  const file = e.target.files?.[0];
+                                  if (file) {
+                                    setMainImageFile(file);
+                                    setMainImagePreview(
+                                      URL.createObjectURL(file)
+                                    );
+                                    setForm({
+                                      ...form,
+                                      image: file.name,
+                                    });
+                                  }
+                                }}
+                              />
+                              {mainImagePreview && (
+                                <img
+                                  src={mainImagePreview}
+                                  alt="preview"
+                                  className="mt-2"
+                                  width={100}
+                                />
+                              )}
+                            </div>
+                            <div className="form-group col-md-6">
+                              <label className="control-label">
+                                Ảnh thumbnail
+                              </label>
+                              {editThumbnails.map((thumb, idx) => (
+                                <div
+                                  key={idx}
+                                  style={{
+                                    display: "flex",
+                                    alignItems: "center",
+                                    marginBottom: 8,
+                                  }}
+                                >
+                                  {thumb.url && (
+                                    <img
+                                      src={thumb.url}
+                                      alt="thumb"
+                                      width={50}
+                                      style={{ marginRight: 8 }}
+                                    />
+                                  )}
+                                  <button
+                                    type="button"
+                                    className="btn btn-danger btn-sm"
+                                    onClick={() => {
+                                      setEditThumbnails(
+                                        editThumbnails.filter(
+                                          (_, i) => i !== idx
+                                        )
+                                      );
+                                    }}
+                                    style={{ marginLeft: 8 }}
+                                  >
+                                    X
+                                  </button>
+                                </div>
+                              ))}
+                              {/* Thêm input để upload thumbnail mới */}
+                              <input
+                                type="file"
+                                accept="image/*"
+                                onChange={(e) => {
+                                  const file = e.target.files?.[0];
+                                  if (file) {
+                                    setEditThumbnails([
+                                      ...editThumbnails,
+                                      {
+                                        url: URL.createObjectURL(file),
+                                        name: file.name,
+                                        file,
+                                        isNew: true,
+                                      },
+                                    ]);
+                                  }
+                                }}
+                              />
+                            </div>
+                            <div className="form-group col-md-12">
+                              <label className="control-label">Mô tả</label>
+                              <textarea
+                                className="form-control"
+                                required
+                                name="desc"
+                                value={form.desc}
+                                onChange={handleChange}
+                              />
+                            </div>
+                            <div className="form-group col-md-12">
+                              <label>Biến thể (Size/Giá/Số lượng)</label>
+                              {editVariants.map((v, idx) => (
+                                <div
+                                  key={idx}
+                                  style={{
+                                    display: "flex",
+                                    gap: 8,
+                                    marginBottom: 8,
+                                  }}
+                                >
+                                  <input
+                                    type="text"
+                                    className="form-control"
+                                    placeholder="Size"
+                                    value={v.size}
+                                    style={{ width: 80 }}
+                                    onChange={(e) => {
+                                      const arr = [...editVariants];
+                                      arr[idx].size = e.target.value;
+                                      setEditVariants(arr);
+                                    }}
+                                  />
+                                  <input
+                                    type="number"
+                                    className="form-control"
+                                    placeholder="Giá"
+                                    value={v.price}
+                                    style={{ width: 120 }}
+                                    onChange={(e) => {
+                                      const arr = [...editVariants];
+                                      arr[idx].price = Number(e.target.value);
+                                      setEditVariants(arr);
+                                    }}
+                                  />
+                                  <input
+                                    type="number"
+                                    className="form-control"
+                                    placeholder="Số lượng"
+                                    value={v.quantity}
+                                    style={{ width: 100 }}
+                                    onChange={(e) => {
+                                      const arr = [...editVariants];
+                                      arr[idx].quantity = Number(
+                                        e.target.value
+                                      );
+                                      setEditVariants(arr);
+                                    }}
+                                  />
+                                  <button
+                                    type="button"
+                                    className="btn btn-danger btn-sm"
+                                    onClick={() =>
+                                      setEditVariants(
+                                        editVariants.filter((_, i) => i !== idx)
+                                      )
+                                    }
+                                  >
+                                    X
+                                  </button>
+                                </div>
+                              ))}
+                              <button
+                                type="button"
+                                className="btn btn-primary btn-sm"
+                                onClick={() =>
+                                  setEditVariants([
+                                    ...editVariants,
+                                    { size: "", price: 0, quantity: 0 },
+                                  ])
+                                }
+                              >
+                                + Thêm biến thể
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="modal-footer">
+                          <button className="btn btn-save" type="submit">
+                            Lưu thay đổi
+                          </button>
+                          <button
+                            className="btn btn-cancel"
+                            type="button"
+                            onClick={() => setShowModal(false)}
+                          >
+                            Hủy bỏ
+                          </button>
+                        </div>
+                      </form>
+                    </div>
                   </div>
-                ))}
-                {/* Thêm input để upload thumbnail mới */}
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={e => {
-                    const file = e.target.files?.[0];
-                    if (file) {
-                      setEditThumbnails([
-                        ...editThumbnails,
-                        {
-                          url: URL.createObjectURL(file),
-                          name: file.name,
-                          file,
-                          isNew: true,
-                        },
-                      ]);
-                    }
-                  }}
-                />
-              </div>
-              <div className="form-group col-md-12">
-                <label className="control-label">Mô tả</label>
-                <textarea
-                  className="form-control"
-                  required
-                  name="desc"
-                  value={form.desc}
-                  onChange={handleChange}
-                />
-              </div>
-              <div className="form-group col-md-12">
-  <label>Biến thể (Size/Giá/Số lượng)</label>
-  {editVariants.map((v, idx) => (
-    <div key={idx} style={{ display: "flex", gap: 8, marginBottom: 8 }}>
-      <input
-        type="text"
-        className="form-control"
-        placeholder="Size"
-        value={v.size}
-        style={{ width: 80 }}
-        onChange={e => {
-          const arr = [...editVariants];
-          arr[idx].size = e.target.value;
-          setEditVariants(arr);
-        }}
-      />
-      <input
-        type="number"
-        className="form-control"
-        placeholder="Giá"
-        value={v.price}
-        style={{ width: 120 }}
-        onChange={e => {
-          const arr = [...editVariants];
-          arr[idx].price = Number(e.target.value);
-          setEditVariants(arr);
-        }}
-      />
-      <input
-        type="number"
-        className="form-control"
-        placeholder="Số lượng"
-        value={v.quantity}
-        style={{ width: 100 }}
-        onChange={e => {
-          const arr = [...editVariants];
-          arr[idx].quantity = Number(e.target.value);
-          setEditVariants(arr);
-        }}
-      />
-      <button
-        type="button"
-        className="btn btn-danger btn-sm"
-        onClick={() => setEditVariants(editVariants.filter((_, i) => i !== idx))}
-      >X</button>
-    </div>
-  ))}
-  <button
-    type="button"
-    className="btn btn-primary btn-sm"
-    onClick={() => setEditVariants([...editVariants, { size: "", price: 0, quantity: 0 }])}
-  >+ Thêm biến thể</button>
-</div>
-            </div>
-          </div>
-          <div className="modal-footer">
-            <button className="btn btn-save" type="submit">
-              Lưu thay đổi
-            </button>
-            <button
-              className="btn btn-cancel"
-              type="button"
-              onClick={() => setShowModal(false)}
-            >
-              Hủy bỏ
-            </button>
-          </div>
-        </form>
-      </div>
-    </div>
-  </div>
-)}
+                </div>
+              )}
 
               {/* End Modal */}
               {/* Modal Tạo Sản Phẩm Mới */}
@@ -732,7 +815,10 @@ useEffect(() => {
                   role="dialog"
                   style={{ background: "rgba(0,0,0,0.3)" }}
                 >
-                  <div className="modal-dialog modal-dialog-centered" role="document">
+                  <div
+                    className="modal-dialog modal-dialog-centered"
+                    role="document"
+                  >
                     <div className="modal-content">
                       <form
                         onSubmit={async (e) => {
@@ -743,7 +829,10 @@ useEffect(() => {
                             formData.append("description", createForm.desc);
                             formData.append("categoryId", createForm.category);
                             formData.append("status", createForm.status);
-                            formData.append("variants", JSON.stringify(createVariants));
+                            formData.append(
+                              "variants",
+                              JSON.stringify(createVariants)
+                            );
                             formData.append("price", String(createForm.price)); // Đừng quên price!
 
                             // Ảnh chính
@@ -758,13 +847,17 @@ useEffect(() => {
                               }
                             });
 
-                            const res = await fetch("https://deploy-nodejs-vqqq.onrender.com/products", {
-                              method: "POST",
-                              body: formData,
-                              headers: {
-                                Authorization: "Bearer " + localStorage.getItem("token"),
-                              },
-                            });
+                            const res = await fetch(
+                              "http://localhost:3000/products",
+                              {
+                                method: "POST",
+                                body: formData,
+                                headers: {
+                                  Authorization:
+                                    "Bearer " + localStorage.getItem("token"),
+                                },
+                              }
+                            );
 
                             if (res.ok) {
                               notify("Tạo sản phẩm thành công!", "");
@@ -793,7 +886,9 @@ useEffect(() => {
                         <div className="modal-body">
                           <div className="row">
                             <div className="form-group col-md-6">
-                              <label className="control-label">Tên sản phẩm</label>
+                              <label className="control-label">
+                                Tên sản phẩm
+                              </label>
                               <input
                                 className="form-control"
                                 type="text"
@@ -814,24 +909,34 @@ useEffect(() => {
                                 className="form-control"
                                 name="category"
                                 value={createForm.category}
-                                onChange={e =>
-                                  setCreateForm({ ...createForm, category: e.target.value })
+                                onChange={(e) =>
+                                  setCreateForm({
+                                    ...createForm,
+                                    category: e.target.value,
+                                  })
                                 }
                               >
                                 <option value="">--Chọn danh mục--</option>
-                                {categories.map(c => (
-                                  <option key={c._id} value={c._id}>{c.name}</option>
+                                {categories.map((c) => (
+                                  <option key={c._id} value={c._id}>
+                                    {c.name}
+                                  </option>
                                 ))}
                               </select>
                             </div>
                             <div className="form-group col-md-6">
-                              <label className="control-label">Trạng thái</label>
+                              <label className="control-label">
+                                Trạng thái
+                              </label>
                               <select
                                 className="form-control"
                                 name="status"
                                 value={createForm.status}
-                                onChange={e =>
-                                  setCreateForm({ ...createForm, status: e.target.value })
+                                onChange={(e) =>
+                                  setCreateForm({
+                                    ...createForm,
+                                    status: e.target.value,
+                                  })
                                 }
                               >
                                 <option value="">--Chọn trạng thái--</option>
@@ -865,13 +970,15 @@ useEffect(() => {
                               )}
                             </div>
                             <div className="form-group col-md-6">
-                              <label className="control-label">Ảnh thumbnail</label>
+                              <label className="control-label">
+                                Ảnh thumbnail
+                              </label>
                               {thumbnailInputs.map((input, idx) => (
                                 <div key={idx} style={{ marginBottom: 8 }}>
                                   <input
                                     type="file"
                                     accept="image/*"
-                                    onChange={e => {
+                                    onChange={(e) => {
                                       const file = e.target.files?.[0] || null;
                                       handleThumbnailChange(idx, file);
                                     }}
@@ -909,66 +1016,93 @@ useEffect(() => {
                                 required
                                 name="desc"
                                 value={createForm.desc}
-                                onChange={e =>
-                                  setCreateForm({ ...createForm, desc: e.target.value })
+                                onChange={(e) =>
+                                  setCreateForm({
+                                    ...createForm,
+                                    desc: e.target.value,
+                                  })
                                 }
                               />
                             </div>
                           </div>
                           <div className="row">
                             <div className="form-group col-md-12">
-  <label>Biến thể (Size/Giá/Số lượng)</label>
-  {createVariants.map((v, idx) => (
-    <div key={idx} style={{ display: "flex", gap: 8, marginBottom: 8 }}>
-      <input
-        type="text"
-        className="form-control"
-        placeholder="Size"
-        value={v.size}
-        style={{ width: 80 }}
-        onChange={e => {
-          const arr = [...createVariants];
-          arr[idx].size = e.target.value;
-          setCreateVariants(arr);
-        }}
-      />
-      <input
-        type="number"
-        className="form-control"
-        placeholder="Giá"
-        value={v.price}
-        style={{ width: 120 }}
-        onChange={e => {
-          const arr = [...createVariants];
-          arr[idx].price = Number(e.target.value);
-          setCreateVariants(arr);
-        }}
-      />
-      <input
-        type="number"
-        className="form-control"
-        placeholder="Số lượng"
-        value={v.quantity}
-        style={{ width: 100 }}
-        onChange={e => {
-          const arr = [...createVariants];
-          arr[idx].quantity = Number(e.target.value);
-          setCreateVariants(arr);
-        }}
-      />
-      <button
-        type="button"
-        className="btn btn-danger btn-sm"
-        onClick={() => setCreateVariants(createVariants.filter((_, i) => i !== idx))}
-      >X</button>
-    </div>
-  ))}
-  <button
-    type="button"
-    className="btn btn-primary btn-sm"
-    onClick={() => setCreateVariants([...createVariants, { size: "", price: 0, quantity: 0 }])}
-  >+ Thêm biến thể</button>
-</div>
+                              <label>Biến thể (Size/Giá/Số lượng)</label>
+                              {createVariants.map((v, idx) => (
+                                <div
+                                  key={idx}
+                                  style={{
+                                    display: "flex",
+                                    gap: 8,
+                                    marginBottom: 8,
+                                  }}
+                                >
+                                  <input
+                                    type="text"
+                                    className="form-control"
+                                    placeholder="Size"
+                                    value={v.size}
+                                    style={{ width: 80 }}
+                                    onChange={(e) => {
+                                      const arr = [...createVariants];
+                                      arr[idx].size = e.target.value;
+                                      setCreateVariants(arr);
+                                    }}
+                                  />
+                                  <input
+                                    type="number"
+                                    className="form-control"
+                                    placeholder="Giá"
+                                    value={v.price}
+                                    style={{ width: 120 }}
+                                    onChange={(e) => {
+                                      const arr = [...createVariants];
+                                      arr[idx].price = Number(e.target.value);
+                                      setCreateVariants(arr);
+                                    }}
+                                  />
+                                  <input
+                                    type="number"
+                                    className="form-control"
+                                    placeholder="Số lượng"
+                                    value={v.quantity}
+                                    style={{ width: 100 }}
+                                    onChange={(e) => {
+                                      const arr = [...createVariants];
+                                      arr[idx].quantity = Number(
+                                        e.target.value
+                                      );
+                                      setCreateVariants(arr);
+                                    }}
+                                  />
+                                  <button
+                                    type="button"
+                                    className="btn btn-danger btn-sm"
+                                    onClick={() =>
+                                      setCreateVariants(
+                                        createVariants.filter(
+                                          (_, i) => i !== idx
+                                        )
+                                      )
+                                    }
+                                  >
+                                    X
+                                  </button>
+                                </div>
+                              ))}
+                              <button
+                                type="button"
+                                className="btn btn-primary btn-sm"
+                                onClick={() =>
+                                  setCreateVariants([
+                                    ...createVariants,
+                                    { size: "", price: 0, quantity: 0 },
+                                  ])
+                                }
+                              >
+                                + Thêm biến thể
+                              </button>
+                            </div>
                           </div>
                           <a
                             href="#"
@@ -1002,8 +1136,7 @@ useEffect(() => {
               {/* Phân trang và tổng số */}
               <div className="d-flex justify-content-between align-items-center mt-3">
                 <div>
-                  Hiện{" "}
-                  {totalItems === 0 ? 0 : startIdx + 1} đến{" "}
+                  Hiện {totalItems === 0 ? 0 : startIdx + 1} đến{" "}
                   {Math.min(endIdx, totalItems)} của {totalItems} sản phẩm
                 </div>
                 <nav>
@@ -1068,76 +1201,117 @@ useEffect(() => {
       </div>
       {/* Modal Chi Tiết Sản Phẩm */}
       {showDetailModal && detailProduct && (
-  <div className="modal d-block" tabIndex={-1} role="dialog" style={{ background: "rgba(0,0,0,0.3)" }}>
-    <div className="modal-dialog modal-dialog-centered" role="document">
-      <div className="modal-content">
-        <div className="modal-header">
-          <h5 className="modal-title">Chi tiết sản phẩm</h5>
-          <button
-            type="button"
-            className="close"
-            onClick={() => setShowDetailModal(false)}
-          >
-            <span>&times;</span>
-          </button>
-        </div>
-        <div className="modal-body">
-          <div><b>Tên:</b> {detailProduct.name}</div>
-          <div><b>Giá:</b> {detailProduct.price.toLocaleString()}đ</div>
-          <div><b>Danh mục:</b> {detailProduct.category}</div>
-          <div><b>Trạng thái:</b> {detailProduct.status}</div>
-          <div><b>Mô tả:</b> {detailProduct.desc}</div>
-          <div>
-            <b>Ảnh chính:</b><br />
-            {detailProduct.images && detailProduct.images.length > 0 && (
-              <img
-                src={detailProduct.images[0].startsWith("http") ? detailProduct.images[0] : `https://deploy-nodejs-vqqq.onrender.com/images/${detailProduct.images[0]}`}
-                alt="Ảnh chính"
-                width={100}
-                style={{ marginRight: 8, marginBottom: 8, border: "2px solid #d16ba5" }}
-              />
-            )}
+        <div
+          className="modal d-block"
+          tabIndex={-1}
+          role="dialog"
+          style={{ background: "rgba(0,0,0,0.3)" }}
+        >
+          <div className="modal-dialog modal-dialog-centered" role="document">
+            <div className="modal-content">
+              <div className="modal-header">
+                <h5 className="modal-title">Chi tiết sản phẩm</h5>
+                <button
+                  type="button"
+                  className="close"
+                  onClick={() => setShowDetailModal(false)}
+                >
+                  <span>&times;</span>
+                </button>
+              </div>
+              <div className="modal-body">
+                <div>
+                  <b>Tên:</b> {detailProduct.name}
+                </div>
+                <div>
+                  <b>Giá:</b> {detailProduct.price.toLocaleString()}đ
+                </div>
+                <div>
+                  <b>Danh mục:</b> {detailProduct.category}
+                </div>
+                <div>
+                  <b>Trạng thái:</b> {detailProduct.status}
+                </div>
+                <div>
+                  <b>Mô tả:</b> {detailProduct.desc}
+                </div>
+                <div>
+                  <b>Ảnh chính:</b>
+                  <br />
+                  {detailProduct.images && detailProduct.images.length > 0 && (
+                    <img
+                      src={
+                        detailProduct.images[0].startsWith("http")
+                          ? detailProduct.images[0]
+                          : `http://localhost:3000/images/${detailProduct.images[0]}`
+                      }
+                      alt="Ảnh chính"
+                      width={100}
+                      style={{
+                        marginRight: 8,
+                        marginBottom: 8,
+                        border: "2px solid #d16ba5",
+                      }}
+                    />
+                  )}
+                </div>
+                <div>
+                  <b>Ảnh thumbnail:</b>
+                  <br />
+                  {detailProduct.images && detailProduct.images.length > 1 ? (
+                    detailProduct.images
+                      .slice(1)
+                      .map((img, idx) => (
+                        <img
+                          key={idx}
+                          src={
+                            img.startsWith("http")
+                              ? img
+                              : `http://localhost:3000/images/${img}`
+                          }
+                          alt={`thumb-${idx}`}
+                          width={60}
+                          style={{
+                            marginRight: 8,
+                            marginBottom: 8,
+                            border: "1px solid #ccc",
+                          }}
+                        />
+                      ))
+                  ) : (
+                    <span>Không có</span>
+                  )}
+                </div>
+                <div>
+                  <b>Biến thể:</b>
+                  {detailProduct.variants &&
+                  detailProduct.variants.length > 0 ? (
+                    <ul>
+                      {detailProduct.variants.map((v, idx) => (
+                        <li key={idx}>
+                          Size: {v.size}, Giá: {v.price.toLocaleString()}đ, SL:{" "}
+                          {v.quantity}
+                        </li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <span>Không có</span>
+                  )}
+                </div>
+              </div>
+              <div className="modal-footer">
+                <button
+                  className="btn btn-cancel"
+                  type="button"
+                  onClick={() => setShowDetailModal(false)}
+                >
+                  Đóng
+                </button>
+              </div>
+            </div>
           </div>
-          <div>
-            <b>Ảnh thumbnail:</b><br />
-            {detailProduct.images && detailProduct.images.length > 1 ? (
-              detailProduct.images.slice(1).map((img, idx) => (
-                <img
-                  key={idx}
-                  src={img.startsWith("http") ? img : `https://deploy-nodejs-vqqq.onrender.com/images/${img}`}
-                  alt={`thumb-${idx}`}
-                  width={60}
-                  style={{ marginRight: 8, marginBottom: 8, border: "1px solid #ccc" }}
-                />
-              ))
-            ) : (
-              <span>Không có</span>
-            )}
-          </div>
-          <div>
-            <b>Biến thể:</b>
-            {detailProduct.variants && detailProduct.variants.length > 0 ? (
-              <ul>
-                {detailProduct.variants.map((v, idx) => (
-                  <li key={idx}>
-                    Size: {v.size}, Giá: {v.price.toLocaleString()}đ, SL: {v.quantity}
-                  </li>
-                ))}
-              </ul>
-            ) : (
-              <span>Không có</span>
-            )}
-          </div>
         </div>
-        <div className="modal-footer">
-          <button className="btn btn-cancel" type="button" onClick={() => setShowDetailModal(false)}>
-            Đóng
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
-)}
+      )}
       {/* End Modal Chi Tiết */}
     </div>
   );

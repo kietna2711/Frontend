@@ -13,8 +13,13 @@ export default function ResetPassword() {
 
   const [password, setPassword] = useState("");
   const [confirm, setConfirm] = useState("");
-  const [errors, setErrors] = useState<{ password?: string; confirm?: string }>({});
-  const [message, setMessage] = useState<{ type: "error" | "success"; text: string } | null>(null);
+  const [errors, setErrors] = useState<{ password?: string; confirm?: string }>(
+    {}
+  );
+  const [message, setMessage] = useState<{
+    type: "error" | "success";
+    text: string;
+  } | null>(null);
 
   // Kiểm tra từng trường khi thay đổi
   const validateField = (name: string, value: string) => {
@@ -27,7 +32,7 @@ export default function ResetPassword() {
       if (!value) error = "Vui lòng nhập lại mật khẩu!";
       else if (value !== password) error = "Mật khẩu xác nhận không khớp!";
     }
-    setErrors(prev => ({ ...prev, [name]: error }));
+    setErrors((prev) => ({ ...prev, [name]: error }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -62,18 +67,26 @@ export default function ResetPassword() {
     // Debug log
     console.log("RESET PASSWORD gửi:", { email, otp, password });
 
-    const res = await fetch("https://deploy-nodejs-vqqq.onrender.com/users/reset-password", {
+    const res = await fetch("http://localhost:3000/users/reset-password", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email, otp, password }),
     });
     const data = await res.json();
     if (res.ok) {
-      setMessage({ type: "success", text: "Đổi mật khẩu thành công! Đang chuyển đến trang đăng nhập..." });
-      showMessage.success("Đổi mật khẩu thành công! Đang chuyển đến trang đăng nhập...");
+      setMessage({
+        type: "success",
+        text: "Đổi mật khẩu thành công! Đang chuyển đến trang đăng nhập...",
+      });
+      showMessage.success(
+        "Đổi mật khẩu thành công! Đang chuyển đến trang đăng nhập..."
+      );
       setTimeout(() => router.push("/login"), 2000);
     } else {
-      setMessage({ type: "error", text: data.message || "Đổi mật khẩu thất bại!" });
+      setMessage({
+        type: "error",
+        text: data.message || "Đổi mật khẩu thất bại!",
+      });
       showMessage.error(data.message || "Đổi mật khẩu thất bại!");
     }
   };
@@ -94,7 +107,7 @@ export default function ResetPassword() {
             type="password"
             placeholder="Mật khẩu mới"
             value={password}
-            onChange={e => {
+            onChange={(e) => {
               setPassword(e.target.value);
               validateField("password", e.target.value);
               // Nếu đã nhập xác nhận thì kiểm tra lại xác nhận luôn
@@ -102,21 +115,27 @@ export default function ResetPassword() {
             }}
             className="input"
           />
-          {errors.password && <div className="input-error">{errors.password}</div>}
+          {errors.password && (
+            <div className="input-error">{errors.password}</div>
+          )}
           <input
             type="password"
             placeholder="Nhập lại mật khẩu"
             value={confirm}
-            onChange={e => {
+            onChange={(e) => {
               setConfirm(e.target.value);
               validateField("confirm", e.target.value);
             }}
             className="input"
           />
-          {errors.confirm && <div className="input-error">{errors.confirm}</div>}
+          {errors.confirm && (
+            <div className="input-error">{errors.confirm}</div>
+          )}
           {message && (
             <div
-              className={message.type === "error" ? "input-error" : "input-success"}
+              className={
+                message.type === "error" ? "input-error" : "input-success"
+              }
               style={{ textAlign: "center", margin: "10px 0" }}
             >
               {message.text}
@@ -128,4 +147,3 @@ export default function ResetPassword() {
     </div>
   );
 }
-

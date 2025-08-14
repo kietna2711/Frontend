@@ -25,12 +25,16 @@ const CheckoutPayment: React.FC<Props> = ({
 
     <input
       className="nhaptt"
-      value={isShippingInfoFilled ? "Thông tin đã nhập đầy đủ" : "Vui lòng nhập thông tin giao hàng"}
+      value={
+        isShippingInfoFilled
+          ? "Thông tin đã nhập đầy đủ"
+          : "Vui lòng nhập thông tin giao hàng"
+      }
       readOnly
       style={{
         backgroundColor: isShippingInfoFilled ? "#e3f7e3" : "#fdf0f0",
         color: isShippingInfoFilled ? "#2e7d32" : "#c62828",
-        fontWeight: "bold"
+        fontWeight: "bold",
       }}
     />
 
@@ -47,7 +51,7 @@ const CheckoutPayment: React.FC<Props> = ({
       <label>Thanh toán khi giao hàng</label>
       <div className="cod">
         <img
-          src="https://deploy-nodejs-vqqq.onrender.com/images/icon-tien.png"
+          src="http://localhost:3000/images/icon-tien.png"
           alt="cod"
           style={{
             filter:
@@ -57,7 +61,10 @@ const CheckoutPayment: React.FC<Props> = ({
       </div>
     </div>
 
-    <div className="payment-method" onClick={() => handlePaymentChange("vnpay")}>
+    <div
+      className="payment-method"
+      onClick={() => handlePaymentChange("vnpay")}
+    >
       <input
         type="radio"
         name="pay"
@@ -66,7 +73,11 @@ const CheckoutPayment: React.FC<Props> = ({
       />
       <label>Thanh toán qua VnPay</label>
       <div className="cod">
-        <img src="https://deploy-nodejs-vqqq.onrender.com/images/vnpay.png" alt="VnPay" style={{ width: 85 }} />
+        <img
+          src="http://localhost:3000/images/vnpay.png"
+          alt="VnPay"
+          style={{ width: 85 }}
+        />
       </div>
     </div>
     <div className="payment-method" onClick={() => handlePaymentChange("momo")}>
@@ -79,7 +90,7 @@ const CheckoutPayment: React.FC<Props> = ({
       <label>Thanh toán qua Momo</label>
       <div className="cod">
         <img
-          src="https://deploy-nodejs-vqqq.onrender.com/images/momo.png"
+          src="http://localhost:3000/images/momo.png"
           alt="Momo"
           style={{ width: 35, height: 35 }}
         />
