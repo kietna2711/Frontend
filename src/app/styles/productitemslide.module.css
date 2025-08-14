@@ -237,6 +237,14 @@
   z-index: 4;
 }
 
+@media (max-width: 480px) {
+  .mimi_product {
+    margin: 0 auto;
+    width: 60%; /* để hai bên có khoảng trắng */
+  }
+}
+
+
 .mimi_heartIcon {
   position: absolute;
   top: 15px;

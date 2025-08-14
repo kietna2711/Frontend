@@ -183,7 +183,6 @@ const toggleFavorite = async () => {
               className={styles.logo_left}
               alt="Logo"
             />
-            <div className={styles.saleTag}>30%</div>
           </div>
         </a>
 
