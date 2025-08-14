@@ -85,3 +85,27 @@
   background: linear-gradient(90deg, #ffe0ea 0%, #ffb6c1 100%);
   color: #d81b60;
 }
+.textarea {
+  width: 100%;
+  border: 1.5px solid #ffe0ea;
+  border-radius: 8px;
+  font-size: 1rem;
+  padding: 0.85rem;
+  resize: vertical;
+  min-height: 90px;
+  background: #fff;
+  color: #ba68c8;
+  outline: none;
+  font-family: inherit;
+  box-sizing: border-box; /* Thêm dòng này */
+}
+@media (max-width: 600px) {
+  .reviewForm {
+    max-width: 94vw;
+    width: 100%;
+    min-width: 0;
+    padding: 1.1rem 0.5rem;
+    margin: 20px  auto;
+    box-sizing: border-box;
+  }
+}

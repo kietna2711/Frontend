@@ -119,7 +119,7 @@ const ReviewList: React.FC<ReviewListProps> = ({ productId }) => {
                 <img
                   src="https://deploy-nodejs-vqqq.onrender.com/images/binhluan.jpg"
                   alt=""
-                  width={400}
+                  width={400} className={styles.review_img}
                 />
                 <p>Chưa có đánh giá nào.</p>
               </div>

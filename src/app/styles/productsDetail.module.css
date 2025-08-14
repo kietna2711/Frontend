@@ -1212,3 +1212,32 @@
     font-size: 13px;
   }
 }
+
+@media (max-width: 480px) {
+.review_img{
+width: 200px;
+height: 200px;
+}
+}
+/* ...existing code... */
+
+/* Responsive cho phần điểm đánh giá trung bình */
+
+/* ...existing code... */
+
+@media (max-width: 600px) {
+  .avg_rating {
+    margin-top: 20px;
+    margin-bottom: 12px;
+    padding: 8px 0;
+  }
+  .avg_rating_number {
+    font-size: 1.4rem;
+  }
+  .star_icons {
+    font-size: 1rem;
+  }
+}
+
+/* ...existing code... */
+
