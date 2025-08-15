@@ -75,7 +75,7 @@ const CheckoutPage: React.FC = () => {
 
   useEffect(() => {
     if (productId) {
-      fetch(`https://deploy-nodejs-vqqq.onrender.com/products/${productId}`)
+      fetch(`https://backend-nm2q.onrender.com/products/${productId}`)
         .then((res) => res.json())
         .then((data) => {
           setLuckyProduct({
@@ -128,7 +128,7 @@ const CheckoutPage: React.FC = () => {
         setFullName(parsedUser.username || "");
 
         fetch(
-          `https://deploy-nodejs-vqqq.onrender.com/api/usersProfile/username/${parsedUser.username}`,
+          `https://backend-nm2q.onrender.com/api/usersProfile/username/${parsedUser.username}`,
           {
             headers: { Authorization: `Bearer ${token}` },
           }
@@ -291,7 +291,7 @@ const CheckoutPage: React.FC = () => {
     const token = localStorage.getItem("token");
     // Gửi API POST lên backend (có gửi token)
     const res = await axios.post(
-      "https://deploy-nodejs-vqqq.onrender.com/orders",
+      "https://backend-nm2q.onrender.com/orders",
       {
         items,
         shippingInfo,
@@ -342,7 +342,7 @@ const CheckoutPage: React.FC = () => {
 
     try {
       const res = await axios.post(
-        "https://deploy-nodejs-vqqq.onrender.com/payment/momo",
+        "https://backend-nm2q.onrender.com/payment/momo",
         {
           amount: totalWithShipping,
           orderId, // Dùng biến này!
@@ -363,8 +363,6 @@ const CheckoutPage: React.FC = () => {
       Swal.fire("Lỗi", "Không thể tạo thanh toán Momo!", "error");
     }
   };
-
-
 
   // Khi bấm nút đăng nhập ở trang thanh toán
   const handleLoginRedirect = () => {

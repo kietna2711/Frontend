@@ -377,7 +377,7 @@ const UserProfile: React.FC = () => {
 
     // Gọi API để luôn lấy user + profile mới nhất từ server
     fetch(
-      `https://deploy-nodejs-vqqq.onrender.com/api/usersProfile/username/${username}`,
+      `https://backend-nm2q.onrender.com/api/usersProfile/username/${username}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -727,17 +727,14 @@ const UserProfile: React.FC = () => {
 
     const method = hasProfile ? "PUT" : "POST";
 
-    fetch(
-      `https://deploy-nodejs-vqqq.onrender.com/api/usersProfile/${username}`,
-      {
-        method,
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify(profilePayload),
-      }
-    )
+    fetch(`https://backend-nm2q.onrender.com/api/usersProfile/${username}`, {
+      method,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(profilePayload),
+    })
       .then(async (res) => {
         if (!res.ok) {
           const err = await res.json().catch(() => ({}));
@@ -748,7 +745,7 @@ const UserProfile: React.FC = () => {
       .then(() => {
         // ✅ Gọi lại API để lấy user mới nhất từ server
         return fetch(
-          `https://deploy-nodejs-vqqq.onrender.com/api/usersProfile/username/${username}`,
+          `https://backend-nm2q.onrender.com/api/usersProfile/username/${username}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -807,7 +804,7 @@ const UserProfile: React.FC = () => {
       return;
     }
 
-    fetch(`https://deploy-nodejs-vqqq.onrender.com/users/change-password`, {
+    fetch(`https://backend-nm2q.onrender.com/users/change-password`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

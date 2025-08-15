@@ -65,7 +65,7 @@ const UserOrders: React.FC<UserOrdersProps> = ({ username }) => {
   const fetchOrders = async () => {
     try {
       const res = await fetch(
-        `https://deploy-nodejs-vqqq.onrender.com/api/usersProfile/by-username-ordername/${username}`
+        `https://backend-nm2q.onrender.com/api/usersProfile/by-username-ordername/${username}`
       );
       if (!res.ok) throw new Error("Không lấy được đơn hàng");
       const data = await res.json();
@@ -110,7 +110,7 @@ const UserOrders: React.FC<UserOrdersProps> = ({ username }) => {
   const handleUpdateOrder = async (orderId: string) => {
     try {
       const res = await fetch(
-        `https://deploy-nodejs-vqqq.onrender.com/api/usersProfile/update-status/${orderId}`,
+        `https://backend-nm2q.onrender.com/api/usersProfile/update-status/${orderId}`,
         {
           method: "PUT",
         }
@@ -218,7 +218,7 @@ const UserOrders: React.FC<UserOrdersProps> = ({ username }) => {
                           src={
                             product.image.startsWith("http")
                               ? product.image
-                              : `https://deploy-nodejs-vqqq.onrender.com/images/${product.image}`
+                              : `https://backend-nm2q.onrender.com/images/${product.image}`
                           }
                           alt={product.productName}
                         />

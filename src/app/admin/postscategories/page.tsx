@@ -23,7 +23,7 @@ export default function PostCategoriesPage() {
   const fetchCategories = async () => {
     try {
       const res = await fetch(
-        "https://deploy-nodejs-vqqq.onrender.com/api/postscategories"
+        "https://backend-nm2q.onrender.com/api/postscategories"
       );
       const data = await res.json();
       setCategories(data);
@@ -42,8 +42,8 @@ export default function PostCategoriesPage() {
 
     const method = editingId ? "PUT" : "POST";
     const url = editingId
-      ? `https://deploy-nodejs-vqqq.onrender.com/api/postscategories/${editingId}`
-      : "https://deploy-nodejs-vqqq.onrender.com/api/postscategories";
+      ? `https://backend-nm2q.onrender.com/api/postscategories/${editingId}`
+      : "https://backend-nm2q.onrender.com/api/postscategories";
 
     const body = JSON.stringify({ title });
 
@@ -71,7 +71,7 @@ export default function PostCategoriesPage() {
   const handleEdit = async (id: string) => {
     try {
       const res = await fetch(
-        `https://deploy-nodejs-vqqq.onrender.com/api/postscategories/${id}`
+        `https://backend-nm2q.onrender.com/api/postscategories/${id}`
       );
       const data = await res.json();
       setTitle(data.title);
@@ -88,7 +88,7 @@ export default function PostCategoriesPage() {
   ) => {
     try {
       const res = await fetch(
-        `https://deploy-nodejs-vqqq.onrender.com/api/postscategories/${id}`,
+        `https://backend-nm2q.onrender.com/api/postscategories/${id}`,
         {
           method: "PUT",
           headers: { "Content-Type": "application/json" },

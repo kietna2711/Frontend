@@ -6,7 +6,7 @@ export async function getFavoritesByUser(
   token: string
 ): Promise<Products[]> {
   const res = await fetch(
-    `https://deploy-nodejs-vqqq.onrender.com/favorites?userId=${userId}`,
+    `https://backend-nm2q.onrender.com/favorites?userId=${userId}`,
     {
       headers: { Authorization: `Bearer ${token}` },
     }
@@ -21,7 +21,7 @@ export async function addFavorite(
   userId: string,
   token: string
 ) {
-  const res = await fetch("https://deploy-nodejs-vqqq.onrender.com/favorites", {
+  const res = await fetch("https://backend-nm2q.onrender.com/favorites", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -40,7 +40,7 @@ export async function removeFavorite(
   token: string
 ) {
   const res = await fetch(
-    `https://deploy-nodejs-vqqq.onrender.com/favorites/${productId}?userId=${userId}`,
+    `https://backend-nm2q.onrender.com/favorites/${productId}?userId=${userId}`,
     {
       method: "DELETE",
       headers: { Authorization: `Bearer ${token}` },

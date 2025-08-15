@@ -69,7 +69,7 @@ function ReviewDetailModal({
       setLoading(true);
       try {
         const res = await fetch(
-          `https://deploy-nodejs-vqqq.onrender.com/reviews/admin?productId=${productId}`,
+          `https://backend-nm2q.onrender.com/reviews/admin?productId=${productId}`,
           {
             headers: {
               Authorization: "Bearer " + (localStorage.getItem("token") || ""),
@@ -110,7 +110,7 @@ function ReviewDetailModal({
   async function fetchProductName(productId: string): Promise<string> {
     try {
       const res = await fetch(
-        `https://deploy-nodejs-vqqq.onrender.com/products/${productId}`
+        `https://backend-nm2q.onrender.com/products/${productId}`
       );
       if (!res.ok) return productId;
       const data = await res.json();
@@ -123,7 +123,7 @@ function ReviewDetailModal({
   const handleToggleVisibility = async (reviewId: string) => {
     try {
       const res = await fetch(
-        `https://deploy-nodejs-vqqq.onrender.com/reviews/${reviewId}/toggle-status`,
+        `https://backend-nm2q.onrender.com/reviews/${reviewId}/toggle-status`,
         {
           method: "PATCH",
           headers: {
@@ -259,7 +259,7 @@ export default function ReviewManagement() {
   const fetchReviews = async () => {
     try {
       const res = await fetch(
-        "https://deploy-nodejs-vqqq.onrender.com/reviews/admin/reviews-latest",
+        "https://backend-nm2q.onrender.com/reviews/admin/reviews-latest",
         {
           headers: {
             Authorization: "Bearer " + (localStorage.getItem("token") || ""),

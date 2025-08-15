@@ -27,7 +27,7 @@ export default function CategoryPage({
     const fetchPostsByCategory = async () => {
       try {
         const res = await fetch(
-          `https://deploy-nodejs-vqqq.onrender.com/api/posts/by-category-slug/${slug}`,
+          `https://backend-nm2q.onrender.com/api/posts/by-category-slug/${slug}`,
           {
             cache: "no-store",
           }
@@ -64,7 +64,7 @@ export default function CategoryPage({
             <div key={post._id} className="service-card">
               <img
                 className="service-img"
-                src={`https://deploy-nodejs-vqqq.onrender.com/images/${
+                src={`https://backend-nm2q.onrender.com/images/${
                   post.img || "default.jpg"
                 }`}
                 alt={post.title}

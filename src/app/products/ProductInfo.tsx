@@ -35,12 +35,9 @@ const ProductInfo = ({ product }: { product: Products }) => {
   useEffect(() => {
     if (isLoggedIn && userId && token) {
       // Kiểm tra từ backend
-      fetch(
-        `https://deploy-nodejs-vqqq.onrender.com/favorites?userId=${userId}`,
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      )
+      fetch(`https://backend-nm2q.onrender.com/favorites?userId=${userId}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
         .then((res) => (res.ok ? res.json() : []))
         .then((favList) => {
           setIsFavorite(

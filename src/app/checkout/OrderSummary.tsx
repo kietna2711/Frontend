@@ -57,7 +57,7 @@ const CheckoutOrderSummary: React.FC<Props> = ({
             <div className="soSP" style={{ position: "relative" }}>
               <img
                 className="anhGH"
-                src={`https://deploy-nodejs-vqqq.onrender.com/images/${item.product.images[0]}`}
+                src={`https://backend-nm2q.onrender.com/images/${item.product.images[0]}`}
                 alt={item.product.name}
               />
               <span

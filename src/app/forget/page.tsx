@@ -28,7 +28,7 @@ export default function Forget() {
     if (errors.email) return;
 
     const res = await fetch(
-      "https://deploy-nodejs-vqqq.onrender.com/users/forgot-password",
+      "https://backend-nm2q.onrender.com/users/forgot-password",
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },

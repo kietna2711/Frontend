@@ -77,7 +77,7 @@ export default function Dashboard() {
 
   // Lấy dữ liệu thống kê tổng hợp
   useEffect(() => {
-    fetch("https://deploy-nodejs-vqqq.onrender.com/api/statistics/summary")
+    fetch("https://backend-nm2q.onrender.com/api/statistics/summary")
       .then((res) => res.json())
       .then((data) => {
         console.log("summary data:", data); // Thêm dòng này để kiểm tra
@@ -87,7 +87,7 @@ export default function Dashboard() {
 
   // Lấy dữ liệu doanh thu từng tháng
   useEffect(() => {
-    fetch("https://deploy-nodejs-vqqq.onrender.com/api/statistics/revenue")
+    fetch("https://backend-nm2q.onrender.com/api/statistics/revenue")
       .then((res) => res.json())
       .then((data) => {
         // Tạo mảng doanh thu 6 tháng, mặc định 0
@@ -104,7 +104,7 @@ export default function Dashboard() {
   }, []);
 
   useEffect(() => {
-    fetch("https://deploy-nodejs-vqqq.onrender.com/orders")
+    fetch("https://backend-nm2q.onrender.com/orders")
       .then((res) => res.json())
       .then((data) => setOrders(data));
   }, []);
@@ -234,7 +234,7 @@ export default function Dashboard() {
   const [customers, setCustomers] = useState<Customer[]>(sampleCustomers);
 
   useEffect(() => {
-    fetch("https://deploy-nodejs-vqqq.onrender.com/users")
+    fetch("https://backend-nm2q.onrender.com/users")
       .then((res) => res.json())
       .then((data) => setCustomers(data));
   }, []);

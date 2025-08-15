@@ -85,7 +85,7 @@ export default function Register() {
     try {
       // Thay đổi URL backend đúng với server của bạn
       const res = await fetch(
-        "https://deploy-nodejs-vqqq.onrender.com/users/register",
+        "https://backend-nm2q.onrender.com/users/register",
         {
           method: "POST",
           headers: {
@@ -260,7 +260,7 @@ export default function Register() {
               type="button"
               onClick={() =>
                 (window.location.href =
-                  "https://deploy-nodejs-vqqq.onrender.com/users/auth/google")
+                  "https://backend-nm2q.onrender.com/users/auth/google")
               }
             >
               <img

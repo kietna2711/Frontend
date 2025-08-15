@@ -139,7 +139,7 @@ export default function HomePage() {
               ×
             </button>
             <img
-              src="https://deploy-nodejs-vqqq.onrender.com/images/bannervqmm.png"
+              src="https://backend-nm2q.onrender.com/images/bannervqmm.png"
               alt="Vòng quay may mắn"
               style={{ width: "100%", display: "block" }}
             />
@@ -173,8 +173,7 @@ export default function HomePage() {
           category: categories.find(
             (cat) => cat._id === "6837d13c62e4059224b126af"
           ),
-          image:
-            "https://deploy-nodejs-vqqq.onrender.com/images/bannerTeddy.jpg",
+          image: "https://backend-nm2q.onrender.com/images/bannerTeddy.jpg",
           product: products,
         }}
       />

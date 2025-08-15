@@ -35,7 +35,7 @@ export default function Verify() {
     }
     // Gọi API gửi lại OTP
     const res = await fetch(
-      "https://deploy-nodejs-vqqq.onrender.com/users/forgot-password",
+      "https://backend-nm2q.onrender.com/users/forgot-password",
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -90,7 +90,7 @@ export default function Verify() {
     const email = new URLSearchParams(window.location.search).get("email");
     // Gửi OTP lên backend để xác thực (không gửi email)
     const res = await fetch(
-      "https://deploy-nodejs-vqqq.onrender.com/users/verify-otp",
+      "https://backend-nm2q.onrender.com/users/verify-otp",
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },

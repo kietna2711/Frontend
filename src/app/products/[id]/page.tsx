@@ -39,8 +39,7 @@ export default async function ProductPage({
             images={
               Array.isArray(product.images)
                 ? product.images.map(
-                    (img) =>
-                      `https://deploy-nodejs-vqqq.onrender.com/images/${img}`
+                    (img) => `https://backend-nm2q.onrender.com/images/${img}`
                   )
                 : []
             }

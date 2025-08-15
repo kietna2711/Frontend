@@ -18,7 +18,7 @@ function adjustImageSrc(html: string): string {
   return html.replace(
     /<img\s+[^>]*src="(?!http)([^"]+)"[^>]*>/g,
     (match, src) => {
-      const fullSrc = `https://deploy-nodejs-vqqq.onrender.com${
+      const fullSrc = `https://backend-nm2q.onrender.com${
         src.startsWith("/") ? "" : "/"
       }${src}`;
       return match.replace(src, fullSrc);
@@ -28,7 +28,7 @@ function adjustImageSrc(html: string): string {
 
 async function getPost(slug: string): Promise<Post | null> {
   const res = await fetch(
-    `https://deploy-nodejs-vqqq.onrender.com/api/posts/slug/${slug}`,
+    `https://backend-nm2q.onrender.com/api/posts/slug/${slug}`,
     {
       cache: "no-store",
     }
@@ -38,7 +38,7 @@ async function getPost(slug: string): Promise<Post | null> {
 }
 
 async function getRecentPosts(): Promise<Post[]> {
-  const res = await fetch("https://deploy-nodejs-vqqq.onrender.com/api/posts", {
+  const res = await fetch("https://backend-nm2q.onrender.com/api/posts", {
     cache: "no-store",
   });
   const data = await res.json();

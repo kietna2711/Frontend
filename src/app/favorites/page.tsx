@@ -87,7 +87,7 @@ const FavoritePage = () => {
       {favorites.length === 0 ? (
         <div className={styles.emptyFavorite}>
           <img
-            src="https://deploy-nodejs-vqqq.onrender.com/images/fvr.jpg" // Đường dẫn ảnh của bạn
+            src="https://backend-nm2q.onrender.com/images/fvr.jpg" // Đường dẫn ảnh của bạn
             alt="Danh sách yêu thích trống"
             style={{ width: 250, height: "auto", marginBottom: 16 }}
           />

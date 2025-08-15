@@ -1,6 +1,6 @@
 import { SubCategory } from "../types/categoryD";
 
-const API_URL = "https://deploy-nodejs-vqqq.onrender.com/subcategory";
+const API_URL = "https://backend-nm2q.onrender.com/subcategory";
 
 // Thêm danh mục con mới (C)
 export const createSubcategory = async (

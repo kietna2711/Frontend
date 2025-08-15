@@ -132,11 +132,10 @@ export default function ProductSelectModal(props: ProductSelectModalProps) {
   }, [filteredProducts, page, pageSize]);
 
   const getImageUrl = (image: string) => {
-    if (!image)
-      return "https://deploy-nodejs-vqqq.onrender.com/images/no-image.png";
+    if (!image) return "https://backend-nm2q.onrender.com/images/no-image.png";
     if (/^https?:\/\//.test(image)) return image;
     const fileName = image.split("/").pop();
-    return `https://deploy-nodejs-vqqq.onrender.com/images/${fileName}`;
+    return `https://backend-nm2q.onrender.com/images/${fileName}`;
   };
 
   const priceFilters: { text: string; value: PriceFilterType }[] = [
@@ -168,7 +167,7 @@ export default function ProductSelectModal(props: ProductSelectModalProps) {
               className={styles["psm-product-img"]}
               onError={(e) => {
                 (e.target as HTMLImageElement).src =
-                  "https://deploy-nodejs-vqqq.onrender.com/images/no-image.png";
+                  "https://backend-nm2q.onrender.com/images/no-image.png";
               }}
             />
             <div>

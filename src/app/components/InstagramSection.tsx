@@ -24,7 +24,7 @@ export default function InstagramSection() {
     const fetchPosts = async () => {
       try {
         const res = await fetch(
-          "https://deploy-nodejs-vqqq.onrender.com/api/posts/by-category-slug/chuyen-nha-gau",
+          "https://backend-nm2q.onrender.com/api/posts/by-category-slug/chuyen-nha-gau",
           { cache: "no-store" }
         );
         if (!res.ok) throw new Error("Không thể tải bài viết");
@@ -93,7 +93,7 @@ export default function InstagramSection() {
             {latestPost && (
               <a href={`/posts/detail/${latestPost.slug}`}>
                 <img
-                  src={`https://deploy-nodejs-vqqq.onrender.com/images/${
+                  src={`https://backend-nm2q.onrender.com/images/${
                     latestPost.img || "default.jpg"
                   }`}
                   alt={latestPost.title}
@@ -107,7 +107,7 @@ export default function InstagramSection() {
               {otherPosts.map((post) => (
                 <a key={post._id} href={`/posts/detail/${post.slug}`}>
                   <img
-                    src={`https://deploy-nodejs-vqqq.onrender.com/images/${
+                    src={`https://backend-nm2q.onrender.com/images/${
                       post.img || "default.jpg"
                     }`}
                     alt={post.title}

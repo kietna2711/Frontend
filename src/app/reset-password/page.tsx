@@ -68,7 +68,7 @@ export default function ResetPassword() {
     console.log("RESET PASSWORD gửi:", { email, otp, password });
 
     const res = await fetch(
-      "https://deploy-nodejs-vqqq.onrender.com/users/reset-password",
+      "https://backend-nm2q.onrender.com/users/reset-password",
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },

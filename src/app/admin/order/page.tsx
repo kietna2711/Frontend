@@ -92,14 +92,14 @@ export default function OrderManagement() {
   // Lấy danh sách đơn hàng từ backend
   useEffect(() => {
     axios
-      .get("https://deploy-nodejs-vqqq.onrender.com/orders")
+      .get("https://backend-nm2q.onrender.com/orders")
       .then((res) => setOrders(res.data))
       .catch(() => setOrders([]));
   }, []);
   useEffect(() => {
     const interval = setInterval(() => {
       axios
-        .get("https://deploy-nodejs-vqqq.onrender.com/orders")
+        .get("https://backend-nm2q.onrender.com/orders")
         .then((res) => setOrders(res.data))
         .catch(() => setOrders([]));
     }, 3000); // mỗi 3 giây gọi lại
@@ -154,7 +154,7 @@ export default function OrderManagement() {
   };
   const updateOrderStatus = (id: string, status: string) => {
     axios
-      .put(`https://deploy-nodejs-vqqq.onrender.com/orders/${id}`, {
+      .put(`https://backend-nm2q.onrender.com/orders/${id}`, {
         orderStatus: status,
       })
       .then((res) => {

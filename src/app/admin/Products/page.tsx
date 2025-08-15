@@ -78,7 +78,7 @@ export default function ProductManagement() {
     try {
       // SỬA DÒNG NÀY: thêm ?all=true để lấy cả sản phẩm Ẩn
       const res = await fetch(
-        "https://deploy-nodejs-vqqq.onrender.com/products?all=true"
+        "https://backend-nm2q.onrender.com/products?all=true"
       );
       const data = await res.json();
       console.log("Raw data from API:", data);
@@ -97,7 +97,7 @@ export default function ProductManagement() {
             : prod.quantity || 0, // lấy từ sản phẩm chính nếu không có variant
         image:
           prod.images && prod.images.length > 0
-            ? `https://deploy-nodejs-vqqq.onrender.com/images/${prod.images[0]}`
+            ? `https://backend-nm2q.onrender.com/images/${prod.images[0]}`
             : "",
         images: prod.images,
         desc: prod.description,
@@ -127,9 +127,7 @@ export default function ProductManagement() {
   useEffect(() => {
     async function fetchCategories() {
       try {
-        const res = await fetch(
-          "https://deploy-nodejs-vqqq.onrender.com/categories"
-        );
+        const res = await fetch("https://backend-nm2q.onrender.com/categories");
         const data = await res.json();
         setCategories(data);
       } catch (error) {
@@ -182,7 +180,7 @@ export default function ProductManagement() {
       p.images && p.images.length > 0
         ? p.images[0].startsWith("http")
           ? p.images[0]
-          : `https://deploy-nodejs-vqqq.onrender.com/images/${p.images[0]}`
+          : `https://backend-nm2q.onrender.com/images/${p.images[0]}`
         : ""
     );
     setForm({
@@ -200,7 +198,7 @@ export default function ProductManagement() {
       p.images?.slice(1).map((img: string) => ({
         url: img.startsWith("http")
           ? img
-          : `https://deploy-nodejs-vqqq.onrender.com/images/${img}`,
+          : `https://backend-nm2q.onrender.com/images/${img}`,
         name: img,
         file: null,
         isNew: false,
@@ -332,7 +330,7 @@ export default function ProductManagement() {
 
     // Gửi request PATCH
     const res = await fetch(
-      `https://deploy-nodejs-vqqq.onrender.com/products/${form.id}`,
+      `https://backend-nm2q.onrender.com/products/${form.id}`,
       {
         method: "PATCH",
         body: formData,
@@ -355,7 +353,7 @@ export default function ProductManagement() {
     try {
       const newStatus = currentStatus === "Ẩn" ? "Còn hàng" : "Ẩn";
       const res = await fetch(
-        `https://deploy-nodejs-vqqq.onrender.com/products/${id}`,
+        `https://backend-nm2q.onrender.com/products/${id}`,
         {
           method: "PATCH",
           headers: {
@@ -858,7 +856,7 @@ export default function ProductManagement() {
                             });
 
                             const res = await fetch(
-                              "https://deploy-nodejs-vqqq.onrender.com/products",
+                              "https://backend-nm2q.onrender.com/products",
                               {
                                 method: "POST",
                                 body: formData,
@@ -1253,7 +1251,7 @@ export default function ProductManagement() {
                       src={
                         detailProduct.images[0].startsWith("http")
                           ? detailProduct.images[0]
-                          : `https://deploy-nodejs-vqqq.onrender.com/images/${detailProduct.images[0]}`
+                          : `https://backend-nm2q.onrender.com/images/${detailProduct.images[0]}`
                       }
                       alt="Ảnh chính"
                       width={100}
@@ -1275,7 +1273,7 @@ export default function ProductManagement() {
                         src={
                           img.startsWith("http")
                             ? img
-                            : `https://deploy-nodejs-vqqq.onrender.com/images/${img}`
+                            : `https://backend-nm2q.onrender.com/images/${img}`
                         }
                         alt={`thumb-${idx}`}
                         width={60}

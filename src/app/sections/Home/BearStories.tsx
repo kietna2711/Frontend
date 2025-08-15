@@ -21,7 +21,7 @@ export default function BearStories() {
     const fetchPosts = async () => {
       try {
         const res = await fetch(
-          "https://deploy-nodejs-vqqq.onrender.com/api/posts/by-category-slug/chuyen-nha-gau",
+          "https://backend-nm2q.onrender.com/api/posts/by-category-slug/chuyen-nha-gau",
           {
             cache: "no-store",
           }
@@ -64,7 +64,7 @@ export default function BearStories() {
           <div key={post._id} className={styles.bgsSlide}>
             <a href={`/posts/detail/${post.slug}`}>
               <img
-                src={`https://deploy-nodejs-vqqq.onrender.com/images/${
+                src={`https://backend-nm2q.onrender.com/images/${
                   post.img || "default.jpg"
                 }`}
                 alt={post.title}

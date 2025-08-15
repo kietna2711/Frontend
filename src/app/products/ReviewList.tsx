@@ -39,8 +39,7 @@ const ReviewList: React.FC<ReviewListProps> = ({ productId }) => {
       if (isFirstLoad.current) setLoading(true);
 
       fetch(
-        "https://deploy-nodejs-vqqq.onrender.com/reviews?productId=" +
-          productId,
+        "https://backend-nm2q.onrender.com/reviews?productId=" + productId,
         {
           headers: {
             Authorization: "Bearer " + localStorage.getItem("token"),
@@ -117,9 +116,10 @@ const ReviewList: React.FC<ReviewListProps> = ({ productId }) => {
             {reviewsToShow.length === 0 && (
               <div style={{ margin: "auto", textAlign: "center" }}>
                 <img
-                  src="https://deploy-nodejs-vqqq.onrender.com/images/binhluan.jpg"
+                  src="https://backend-nm2q.onrender.com/images/binhluan.jpg"
                   alt=""
-                  width={400} className={styles.review_img}
+                  width={400}
+                  className={styles.review_img}
                 />
                 <p>Chưa có đánh giá nào.</p>
               </div>

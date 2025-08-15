@@ -141,7 +141,7 @@ export default function SectionApplyTarget(props: Props) {
                       <tr key={pid}>
                         <td>
                           <img
-                            src={`https://deploy-nodejs-vqqq.onrender.com/images/${p.image}`}
+                            src={`https://backend-nm2q.onrender.com/images/${p.image}`}
                             alt={p.name}
                             style={{
                               width: 38,

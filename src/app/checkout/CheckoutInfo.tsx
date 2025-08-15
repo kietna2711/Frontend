@@ -116,7 +116,7 @@ const CheckoutInfo: React.FC<Props> = ({
           <div className="log-dn">
             <a href="#" tabIndex={-1}>
               <img
-                src="https://deploy-nodejs-vqqq.onrender.com/images/icon-dn.png"
+                src="https://backend-nm2q.onrender.com/images/icon-dn.png"
                 alt=""
               />
             </a>

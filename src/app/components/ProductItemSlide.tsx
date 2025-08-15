@@ -67,12 +67,9 @@ export default function ProductItemSlide({ product }: { product: Products }) {
 
   useEffect(() => {
     if (isLoggedIn && userId && token) {
-      fetch(
-        `https://deploy-nodejs-vqqq.onrender.com/favorites?userId=${userId}`,
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      )
+      fetch(`https://backend-nm2q.onrender.com/favorites?userId=${userId}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
         .then((res) => (res.ok ? res.json() : []))
         .then((favList) => {
           setIsFavorite(
@@ -96,7 +93,7 @@ export default function ProductItemSlide({ product }: { product: Products }) {
     userId: string,
     token: string
   ) => {
-    await fetch("https://deploy-nodejs-vqqq.onrender.com/favorites", {
+    await fetch("https://backend-nm2q.onrender.com/favorites", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -112,7 +109,7 @@ export default function ProductItemSlide({ product }: { product: Products }) {
     token: string
   ) => {
     await fetch(
-      `https://deploy-nodejs-vqqq.onrender.com/favorites/${productId}?userId=${userId}`,
+      `https://backend-nm2q.onrender.com/favorites/${productId}?userId=${userId}`,
       {
         method: "DELETE",
         headers: {
@@ -176,16 +173,16 @@ export default function ProductItemSlide({ product }: { product: Products }) {
         <a href={`/products/${product._id}`}>
           <div className={styles.mimi_image_link}>
             <img
-              src={`https://deploy-nodejs-vqqq.onrender.com/images/${product.images[0]}`}
+              src={`https://backend-nm2q.onrender.com/images/${product.images[0]}`}
               alt={product.name}
             />
             <img
-              src={`https://deploy-nodejs-vqqq.onrender.com/images/${product.images[1]}`}
+              src={`https://backend-nm2q.onrender.com/images/${product.images[1]}`}
               className={styles.mimi_image_hover}
               alt={`${product.name} Hover`}
             />
             <img
-              src="https://deploy-nodejs-vqqq.onrender.com/images/logoXP.png"
+              src="https://backend-nm2q.onrender.com/images/logoXP.png"
               className={styles.mimi_logo_left}
               alt="Logo"
             />
@@ -194,13 +191,13 @@ export default function ProductItemSlide({ product }: { product: Products }) {
 
         <button className={styles.mimi_buy_now_btn} onClick={handleBuyNow}>
           <img
-            src="https://deploy-nodejs-vqqq.onrender.com/images/button.png"
+            src="https://backend-nm2q.onrender.com/images/button.png"
             className={styles.mimi_bear_left}
             alt="Bear Left"
           />
           MUA NGAY
           <img
-            src="https://deploy-nodejs-vqqq.onrender.com/images/button.png"
+            src="https://backend-nm2q.onrender.com/images/button.png"
             className={styles.mimi_bear_right}
             alt="Bear Right"
           />

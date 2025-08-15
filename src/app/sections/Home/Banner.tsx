@@ -15,25 +15,25 @@ export default function Banner() {
   }, []);
 
   const images = [
-    "https://deploy-nodejs-vqqq.onrender.com/images/banner1.jpg",
-    "https://deploy-nodejs-vqqq.onrender.com/images/banner2.jpg",
+    "https://backend-nm2q.onrender.com/images/banner1.jpg",
+    "https://backend-nm2q.onrender.com/images/banner2.jpg",
   ];
 
   const features = [
     {
-      icon: "https://deploy-nodejs-vqqq.onrender.com/images/icon-menu2.png",
+      icon: "https://backend-nm2q.onrender.com/images/icon-menu2.png",
       label: "GIAO HÀNG SIÊU TỐC",
     },
     {
-      icon: "https://deploy-nodejs-vqqq.onrender.com/images/icon-menu1.png",
+      icon: "https://backend-nm2q.onrender.com/images/icon-menu1.png",
       label: "BỌC HỘP QUÀ XINH",
     },
     {
-      icon: "https://deploy-nodejs-vqqq.onrender.com/images/icon-menu3.png",
+      icon: "https://backend-nm2q.onrender.com/images/icon-menu3.png",
       label: "TẶNG THIỆP Ý NGHĨA",
     },
     {
-      icon: "https://deploy-nodejs-vqqq.onrender.com/images/icon-menu5.png",
+      icon: "https://backend-nm2q.onrender.com/images/icon-menu5.png",
       label: "NÉN NHỜ GẤU BÔNG",
     },
   ];

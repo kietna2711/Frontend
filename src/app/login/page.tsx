@@ -31,14 +31,11 @@ export default function Login() {
     }
 
     try {
-      const res = await fetch(
-        "https://deploy-nodejs-vqqq.onrender.com/users/login",
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email, password }),
-        }
-      );
+      const res = await fetch("https://backend-nm2q.onrender.com/users/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+      });
       const data = await res.json();
 
       if (!res.ok) {
@@ -144,7 +141,7 @@ export default function Login() {
             type="button"
             onClick={() =>
               (window.location.href =
-                "https://deploy-nodejs-vqqq.onrender.com/users/auth/google")
+                "https://backend-nm2q.onrender.com/users/auth/google")
             }
           >
             <img

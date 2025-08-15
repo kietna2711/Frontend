@@ -54,7 +54,7 @@ export default function PostManagement() {
   useEffect(() => {
     const token = localStorage.getItem("token"); // hoặc từ cookie nếu bạn dùng cookie
 
-    fetch("https://deploy-nodejs-vqqq.onrender.com/api/postscategories", {
+    fetch("https://backend-nm2q.onrender.com/api/postscategories", {
       headers: {
         Authorization: `Bearer ${token || ""}`,
       },
@@ -83,7 +83,7 @@ export default function PostManagement() {
   // Fetch posts
   const fetchPosts = () => {
     setLoading(true);
-    fetch("https://deploy-nodejs-vqqq.onrender.com/api/posts")
+    fetch("https://backend-nm2q.onrender.com/api/posts")
       .then((res) => res.json())
       .then((data) => {
         let arr: Post[] = Array.isArray(data) ? data : data.items || [];
@@ -157,7 +157,7 @@ export default function PostManagement() {
     const isVisible =
       typeof post.visible === "boolean" ? post.visible : !post.hidden;
 
-    await fetch(`https://deploy-nodejs-vqqq.onrender.com/api/posts/${id}`, {
+    await fetch(`https://backend-nm2q.onrender.com/api/posts/${id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -178,7 +178,7 @@ export default function PostManagement() {
   const confirmDeletePost = async () => {
     if (!postToDelete) return;
     await fetch(
-      `https://deploy-nodejs-vqqq.onrender.com/api/posts/${postToDelete._id}`,
+      `https://backend-nm2q.onrender.com/api/posts/${postToDelete._id}`,
       {
         method: "DELETE",
       }
@@ -247,16 +247,13 @@ export default function PostManagement() {
     });
 
     if (editingId) {
-      await fetch(
-        `https://deploy-nodejs-vqqq.onrender.com/api/posts/${editingId}`,
-        {
-          method: "PUT",
-          body: formData,
-        }
-      );
+      await fetch(`https://backend-nm2q.onrender.com/api/posts/${editingId}`, {
+        method: "PUT",
+        body: formData,
+      });
       showMessage.success("Cập nhật bài viết thành công");
     } else {
-      await fetch("https://deploy-nodejs-vqqq.onrender.com/api/posts", {
+      await fetch("https://backend-nm2q.onrender.com/api/posts", {
         method: "POST",
         body: formData,
       });

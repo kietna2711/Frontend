@@ -34,7 +34,7 @@ export default function Verify() {
       return;
     }
     // Gửi lại OTP cho đăng ký
-    await fetch("https://deploy-nodejs-vqqq.onrender.com/users/send-otp", {
+    await fetch("https://backend-nm2q.onrender.com/users/send-otp", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email, type: "register" }),
@@ -86,7 +86,7 @@ export default function Verify() {
     }
     // Gửi OTP lên backend để xác thực email đăng ký
     const res = await fetch(
-      "https://deploy-nodejs-vqqq.onrender.com/users/verify-otp-register",
+      "https://backend-nm2q.onrender.com/users/verify-otp-register",
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
